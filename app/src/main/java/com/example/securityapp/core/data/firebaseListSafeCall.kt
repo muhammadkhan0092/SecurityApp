@@ -11,10 +11,14 @@ suspend fun <T> firebaseListSafeCall(
     }
 }
 suspend fun <T> firebaseGetSafeCall(
-    action: suspend () -> T
+    action: suspend () -> T?
 ) :  com.example.securityapp.utils.Result<T> {
     return try {
-        com.example.securityapp.utils.Result.Success(action())
+        val result = action()
+        when(result){
+            null -> com.example.securityapp.utils.Result.Error("")
+            else ->  com.example.securityapp.utils.Result.Success(result)
+        }
     }
     catch (e : Exception){
         com.example.securityapp.utils.Result.Error("")

@@ -17,10 +17,10 @@ class ControllerUserRepository(
             }
         )
     }
-    suspend fun getUser(email : String,password: String) : Result<DtoControllerUser>{
+    suspend fun getUser(email : String) : Result<DtoControllerUser>{
         return firebaseGetSafeCall<DtoControllerUser>(
             action = {
-                source.queryCollection<DtoControllerUser>(documentId = email, collectionPath = collectionId)!!
+                source.queryCollection<DtoControllerUser>(documentId = email, collectionPath = collectionId)
             }
         )
     }
