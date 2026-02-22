@@ -1,7 +1,8 @@
 package com.example.securityapp.firebase
 
 data class DtoDevice(
+    val email : String,
     val barcodeId : String,
     val phoneNumbers : List<String>,
-    val blockedParents : List<String>
+    val connectedDevices : List<String>
 )

@@ -1,9 +1,7 @@
 package com.example.securityapp.core.data.sources
 
 import com.example.securityapp.utils.Result
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 
 
@@ -20,13 +18,10 @@ class FirebaseRemoteDataSource(
     }
     suspend inline fun <reified T : Any> queryCollection(
         collectionPath: String,
-        crossinline queryBuilder: (CollectionReference) -> Query
-    ): List<T> {
-        val query = queryBuilder(firestore.collection(collectionPath))
-        val snapshot = query.get().await()
-        return snapshot.documents.mapNotNull {
-            it.toObject(T::class.java)
-        }
+        documentId: String
+    ): T? {
+        val snapshot = firestore.collection(collectionPath).document(documentId).get().await()
+        return snapshot.toObject(T::class.java)
     }
     suspend inline fun <reified T : Any> get(
         collectionPath: String,
