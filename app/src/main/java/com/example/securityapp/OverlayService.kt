@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
+import com.example.securityapp.databinding.OverlayLayoutBinding
 
 class OverlayService : Service() {
 
@@ -30,7 +31,8 @@ class OverlayService : Service() {
                 textSize = 22f
                 setPadding(50, 50, 50, 50)
             }
-            addView(textView)
+            val overlay = OverlayLayoutBinding.inflate(LayoutInflater.from(context))
+            addView(overlay.root)
         }
 
         // Layout params for overlay

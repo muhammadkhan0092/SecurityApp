@@ -5,8 +5,9 @@ import com.example.securityapp.core.data.firebaseUpsertSafeCall
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.firebase.DtoDevice
 import com.example.securityapp.utils.Result
+import javax.inject.Inject
 
-class DeviceRepository(
+class DeviceRepository @Inject constructor(
     private val firebaseRemoteDataSource: FirebaseRemoteDataSource
 ) {
     private val dtoDeviceCollection = "device"

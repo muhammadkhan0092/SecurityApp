@@ -3,12 +3,18 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
+    id("com.google.protobuf") version "0.9.4"
+    id ("com.google.dagger.hilt.android")
+    id ("kotlin-kapt")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.example.securityapp"
     compileSdk = 36
-
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "com.example.securityapp"
         minSdk = 24
@@ -38,6 +44,20 @@ android {
     buildFeatures {
         compose = true
     }
+    protobuf {
+        protoc {
+            artifact = "com.google.protobuf:protoc:3.24.0"
+        }
+        generateProtoTasks {
+            all().forEach { task ->
+                task.builtins {
+                    create("java") {
+                        option("lite") // <-- this ensures JavaLite classes are generated
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -51,6 +71,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.navigation.compose.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,4 +87,9 @@ dependencies {
     implementation ("androidx.activity:activity-compose:1.9.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.2")
+    implementation("androidx.datastore:datastore:1.1.0")
+    implementation("com.google.protobuf:protobuf-javalite:3.24.0")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    kapt("com.google.dagger:hilt-compiler:2.48.1")
 }

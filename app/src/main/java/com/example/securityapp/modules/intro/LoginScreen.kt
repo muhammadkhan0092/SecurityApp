@@ -12,7 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    state: LoginState,
+    onAction : (LoginAction)-> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -22,17 +25,23 @@ fun LoginScreen() {
             placeholder = {
             Text("Email")
         },
-            value = "",
-            onValueChange = {}
+            value = state.email,
+            onValueChange = {
+                onAction(LoginAction.OnEmailChanged(it))
+            }
         )
         TextField(
             placeholder = {
                 Text("Password")
             },
-            value = "",
-            onValueChange = {}
+            value = state.password,
+            onValueChange = {
+                onAction(LoginAction.OnPasswordChanged(it))
+            }
         )
-        Button(onClick = {}){
+        Button(onClick = {
+            onAction(LoginAction.OnLoginClicked(state.email,state.password))
+        }){
             Text("Login")
         }
     }

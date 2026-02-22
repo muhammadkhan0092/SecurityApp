@@ -3,9 +3,10 @@ package com.example.securityapp.core.data.sources
 import com.example.securityapp.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
 
-class FirebaseRemoteDataSource(
+class FirebaseRemoteDataSource @Inject constructor(
     val firestore: FirebaseFirestore
 ) {
     suspend fun <T : Any> addData(

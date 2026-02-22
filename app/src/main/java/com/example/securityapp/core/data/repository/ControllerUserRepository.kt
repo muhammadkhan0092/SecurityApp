@@ -5,8 +5,9 @@ import com.example.securityapp.core.data.firebaseUpsertSafeCall
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.firebase.DtoControllerUser
 import com.example.securityapp.utils.Result
+import javax.inject.Inject
 
-class ControllerUserRepository(
+class ControllerUserRepository @Inject constructor(
     private val source : FirebaseRemoteDataSource
 ) {
     private val collectionId = "controller_user"
