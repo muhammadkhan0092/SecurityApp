@@ -14,26 +14,18 @@ class LoginControllerVm @Inject constructor(
     private val repository: ControllerUserRepository,
     private val datastore : DataStoreRepositoryImplementation
 ) : ViewModel() {
-    fun onLoginClicked(email : String,password : String){
-        viewModelScope.launch {
-            val result = repository.createUser(email,password)
-            Log.d("KHAN","RESULT OF CREATING USER IS $result")
-            Log.d("KHAN","SETUP AFTER ${datastore.getIsSetupCompleted()}")
-            datastore.setIsSetupCompleted(true)
-            Log.d("KHAN","SETUP AFTER ${datastore.getIsSetupCompleted()}")
-        }
-    }
-
     fun onAction(action: LoginAction) {
         when(action){
             is LoginAction.OnEmailChanged -> Unit
             is LoginAction.OnLoginClicked ->{
                 viewModelScope.launch {
                     val result = repository.createUser(action.email,action.password)
-                    Log.d("KHAN","RESULT OF CREATING USER IS $result")
-                    Log.d("KHAN","SETUP AFTER ${datastore.getIsSetupCompleted()}")
+//                    Log.d("KHAN","RESULT OF CREATING USER IS $result")
+//                    Log.d("KHAN","SETUP AFTER ${datastore.getIsSetupCompleted()}")
                     datastore.setIsSetupCompleted(true)
-                    Log.d("KHAN","SETUP AFTER ${datastore.getIsSetupCompleted()}")
+                    datastore.setEmail(action.email)
+                    //datastore.setIsSetupCompleted()
+                    //Log.d("KHAN","SETUP AFTER ${datastore.getIsSetupCompleted()}")
                 }
             }
             is LoginAction.OnPasswordChanged -> Unit

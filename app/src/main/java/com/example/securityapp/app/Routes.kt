@@ -10,4 +10,12 @@ sealed interface Route {
     data object UserType: Route
     @Serializable
     data object Login: Route
+    @Serializable
+    data object RouteGate: Route
+
+
+    @Serializable
+    data object ControlledHomeGraph: Route
+    @Serializable
+    data object ControlledBarcode: Route
 }

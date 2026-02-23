@@ -7,9 +7,12 @@ option java_multiple_files = true;
 
 message AppSettings {
     enum UserType {
-        controller = 0;
-        controlled =1;
+        not_set = 0;
+        controller = 1;
+        controlled =2;
     }
     string email = 1;
     bool isSetupComplete = 2;
+    string barcode = 3;
+    UserType userType = 4;
 }
