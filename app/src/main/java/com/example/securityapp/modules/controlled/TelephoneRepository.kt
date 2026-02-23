@@ -2,6 +2,7 @@ package com.example.securityapp.modules.controlled
 
 import android.Manifest
 import android.content.Context
+import android.provider.Settings
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresPermission
@@ -25,5 +26,12 @@ class TelephoneRepository @Inject constructor(
             }
         }
         return simNumbers
+    }
+    override fun isAirplaneModeOn(): Boolean {
+        return try {
+            Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON) != 0
+        } catch (e: Settings.SettingNotFoundException) {
+            false
+        }
     }
 }
