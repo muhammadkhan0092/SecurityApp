@@ -21,6 +21,7 @@ import com.example.securityapp.modules.intro.LoginCommonVm
 import com.example.securityapp.modules.intro.LoginScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
+import com.example.securityapp.modules.controlled.ControlledBarcodeVm
 import com.example.securityapp.modules.controlled.ControllerBarcodeScreen
 import com.example.securityapp.modules.intro.GateScreen
 import com.example.securityapp.modules.intro.IntroVm
@@ -57,57 +58,59 @@ fun App() {
                         }
                     )
                 }
-            }
-            composable<Route.Login>(
-                enterTransition = {
-                    slideInHorizontally { offset ->
-                        offset
+                composable<Route.Login>(
+                    enterTransition = {
+                        slideInHorizontally { offset ->
+                            offset
+                        }
+                    },
+                    exitTransition = {
+                        slideOutHorizontally { offset ->
+                            offset
+                        }
                     }
-                },
-                exitTransition = {
-                    slideOutHorizontally { offset ->
-                        offset
-                    }
-                }
-            ) { entry ->
-                val sharedVm = entry.sharedHiltViewModel<IntroSharedVm>(navController)
-                val userType = sharedVm.userType
-                val loginCommonVm: LoginCommonVm = hiltViewModel()
-                val loginControllerVm: LoginControllerVm = hiltViewModel()
-                val loginControlledByVm: LoginControlledVm = hiltViewModel()
-                val loginState by loginCommonVm.state.collectAsStateWithLifecycle()
-                LaunchedEffect(Unit) {
-                    loginControlledByVm.events.collectLatest {
-                        when (it) {
-                            LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControlledHomeGraph) {
-                                popUpTo(Route.IntroGraph) { inclusive = true }
-                                launchSingleTop = true
-                            }
+                ) { entry ->
+                    val sharedVm = entry.sharedHiltViewModel<IntroSharedVm>(navController)
+                    val userType = sharedVm.userType
+                    val loginCommonVm: LoginCommonVm = hiltViewModel()
+                    val loginControllerVm: LoginControllerVm = hiltViewModel()
+                    val loginControlledByVm: LoginControlledVm = hiltViewModel()
+                    val loginState by loginCommonVm.state.collectAsStateWithLifecycle()
+                    LaunchedEffect(Unit) {
+                        loginControlledByVm.events.collectLatest {
+                            when (it) {
+                                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControlledHomeGraph) {
+                                    popUpTo(Route.IntroGraph) { inclusive = true }
+                                    launchSingleTop = true
+                                }
 
-                            is LoginEvents.Toast -> {
-                                Log.d("KHAN", "TOAST ${it.str}")
+                                is LoginEvents.Toast -> {
+                                    Log.d("KHAN", "TOAST ${it.str}")
+                                }
                             }
                         }
                     }
-                }
-                LoginScreen(
-                    loginState,
-                    {
-                        loginCommonVm.onAction(it)
-                        when (userType) {
-                            controller -> loginControllerVm.onAction(it)
-                            controlled -> loginControlledByVm.onAction(it)
-                            UNRECOGNIZED -> Unit
-                            not_set -> Unit
+                    LoginScreen(
+                        loginState,
+                        {
+                            loginCommonVm.onAction(it)
+                            when (userType) {
+                                controller -> loginControllerVm.onAction(it)
+                                controlled -> loginControlledByVm.onAction(it)
+                                UNRECOGNIZED -> Unit
+                                not_set -> Unit
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
             navigation<Route.ControlledHomeGraph>(startDestination = Route.ControlledBarcode) {
                 Log.d("KHAN", "IN CONTROLLED HOME GRAPH")
                 composable<Route.ControlledBarcode>(
                 ) { entry ->
-                    ControllerBarcodeScreen()
+                    val vm = hiltViewModel<ControlledBarcodeVm>()
+                    val state by vm.bitmap.collectAsStateWithLifecycle()
+                    ControllerBarcodeScreen(state)
                 }
             }
         }
