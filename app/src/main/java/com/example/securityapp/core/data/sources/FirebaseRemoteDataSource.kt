@@ -36,6 +36,29 @@ class FirebaseRemoteDataSource @Inject constructor(
         return result.toObject(T::class.java)?:throw Exception("User Null")
     }
 
+    suspend inline fun <reified T : Any> getDocumentByEqualFilter(
+        collectionPath: String,
+        key : String,
+        value : String
+    ): T{
+        val result = firestore
+            .collection(collectionPath)
+            .whereEqualTo(key,value)
+            .get()
+            .await()
+        return result.toObjects(T::class.java).first()?:throw Exception("User Null")
+    }
+
+    suspend inline fun <reified T : Any> getAllDocuments(
+        collectionPath: String,
+    ): List<T>{
+        val result = firestore
+            .collection(collectionPath)
+            .get()
+            .await()
+        return result.toObjects(T::class.java)
+    }
+
     suspend fun getString(collectionId: String,documentId: String): List<String> {
         val result = firestore.collection(collectionId)
             .get()
