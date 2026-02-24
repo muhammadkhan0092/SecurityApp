@@ -1,11 +1,13 @@
 package com.example.securityapp.utils
 
+import com.example.securityapp.firebase.DtoDevice
+
 sealed interface Result<out D> {
     data class Success<out D>(val data: D): Result<D>
     data class Error<out D>(val error: String): Result<D>
 }
 
-inline fun <T, E: Error, R> Result<T>.map(map: (T) -> R): Result<R> {
+inline fun <T, R> Result<T>.map(map: (T) -> R): Result<R> {
     return when(this) {
         is Result.Error -> Result.Error(error)
         is Result.Success -> Result.Success(map(data))

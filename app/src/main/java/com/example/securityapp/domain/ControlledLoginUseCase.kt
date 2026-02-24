@@ -1,20 +1,17 @@
 package com.example.securityapp.domain
 
-import android.util.Log
-import com.example.securityapp.core.data.DataStoreRepositoryImplementation
 import com.example.securityapp.core.data.repository.DeviceRepository
-import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.firebase.DtoDevice
 import com.example.securityapp.modules.controlled.PhoneRepository
-import javax.inject.Inject
 import com.example.securityapp.utils.Result
+import javax.inject.Inject
 
 class ControlledLoginUseCase @Inject constructor(
     private val phoneRepository: PhoneRepository,
     private val deviceRepository: DeviceRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
+    private val storeControlledInfoUseCase: StoreControlledInfoUseCase
 ) {
-    suspend operator fun invoke(email: String, password: String,id : String): Result<Unit> {
+    suspend operator fun invoke(email: String, password: String, id: String): Result<Unit> {
         val isAirplaneOn = phoneRepository.isAirplaneModeOn()
         if (isAirplaneOn) {
             return Result.Error("Disable Airplane Mode")
@@ -22,6 +19,21 @@ class ControlledLoginUseCase @Inject constructor(
         val sims = phoneRepository.getSimNumbers()
         if (sims.isEmpty()) {
             return Result.Error("Insert A Sim to Continue")
+        }
+        val alreadyDevice = deviceRepository.getDevice(email)
+        when (alreadyDevice) {
+            is Result.Error<*> -> return Result.Error("Server Error")
+            is Result.Success -> {
+                when (alreadyDevice.data) {
+                    null -> Unit
+                    else -> {
+                        return when (alreadyDevice.data.password == password) {
+                            true -> Result.Success(Unit)
+                            false -> Result.Error("Invalid Password")
+                        }
+                    }
+                }
+            }
         }
         val result = deviceRepository.insertDeviceInfo(
             DtoDevice(
@@ -36,19 +48,9 @@ class ControlledLoginUseCase @Inject constructor(
             is Result.Error<*> -> {
                 Result.Error(result.error)
             }
+
             is Result.Success<*> -> {
-                val emailResult = dataStoreRepositoryImplementation.setEmail(email)
-                val isSetupResult = dataStoreRepositoryImplementation.setIsSetupCompleted(true)
-                val userTypeResult =
-                    dataStoreRepositoryImplementation.setUserType(AppSettings.UserType.controlled)
-                val barcodeResult = dataStoreRepositoryImplementation.setBarcode(id)
-                Log.d("KHAN", "SUCCESS")
-                when (emailResult && isSetupResult && userTypeResult && barcodeResult) {
-                    true -> {
-                        Result.Success(Unit)
-                    }
-                    false -> Result.Error("Datastore Error")
-                }
+                storeControlledInfoUseCase(email, id)
             }
         }
     }
