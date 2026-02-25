@@ -15,9 +15,7 @@ import com.example.securityapp.datastore.AppSettings
 fun GateScreen(navController: NavHostController, state:AppSettings.UserType?) {
     Log.d("KHAN","STATE RECEIVED IS $state")
     when(state){
-        AppSettings.UserType.controller -> {
-
-        }
+        AppSettings.UserType.controller -> navController.navigate(Route.ControllerHomeGraph)
         AppSettings.UserType.controlled -> navController.navigate(Route.ControlledHomeGraph)
         AppSettings.UserType.UNRECOGNIZED -> Unit
         null -> {

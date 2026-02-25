@@ -8,7 +8,7 @@ import com.example.securityapp.core.data.repository.ControllerDeviceInController
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 
-class InsertNewDevice @Inject constructor(
+class InsertConnection @Inject constructor(
     private val controlledRepository: ControlledRepository,
     private val connectionRepository: ConnectionRepository
 ) {
@@ -30,8 +30,7 @@ class InsertNewDevice @Inject constructor(
                             )
                         )
                         val newControlledData = oldControlledData.copy(controllers = list)
-                        val controlledDevicesInControlledData =
-                            controllerData.devices.toMutableList()
+                        val controlledDevicesInControlledData = controllerData.devices.toMutableList()
                         controlledDevicesInControlledData.add(
                             ControlledDeviceForController(
                                 barcode = barcode,
@@ -39,8 +38,7 @@ class InsertNewDevice @Inject constructor(
                                 number = numbers
                             )
                         )
-                        val newControllerData =
-                            controllerData.copy(devices = controlledDevicesInControlledData)
+                        val newControllerData = controllerData.copy(devices = controlledDevicesInControlledData)
                         connectionRepository.insertControllerAndControllerData(
                             controlledData = newControlledData,
                             controllerData = newControllerData

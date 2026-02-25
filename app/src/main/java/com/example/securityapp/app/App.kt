@@ -22,7 +22,8 @@ import com.example.securityapp.modules.intro.LoginScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
 import com.example.securityapp.modules.controlled.ControlledBarcodeVm
-import com.example.securityapp.modules.controlled.ControllerBarcodeScreen
+import com.example.securityapp.modules.controlled.ControlleDBarcodeScreen
+import com.example.securityapp.modules.controller.ControllerBarcodeScreen
 import com.example.securityapp.modules.intro.GateScreen
 import com.example.securityapp.modules.intro.IntroVm
 import com.example.securityapp.modules.intro.LoginControlledVm
@@ -90,9 +91,24 @@ fun App() {
                             }
                         }
                     }
+                    LaunchedEffect(Unit) {
+                        loginControlledByVm.events.collectLatest {
+                            when (it) {
+                                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControlledHomeGraph) {
+                                    popUpTo(Route.IntroGraph) { inclusive = true }
+                                    launchSingleTop = true
+                                }
+
+                                is LoginEvents.Toast -> {
+                                    Log.d("KHAN", "TOAST ${it.str}")
+                                }
+                            }
+                        }
+                    }
                     LoginScreen(
                         loginState,
                         {
+                            Log.d("KHAN","ON ACTION USER TYPE IS $userType")
                             loginCommonVm.onAction(it)
                             when (userType) {
                                 controller -> loginControllerVm.onAction(it)
@@ -105,12 +121,19 @@ fun App() {
                 }
             }
             navigation<Route.ControlledHomeGraph>(startDestination = Route.ControlledBarcode) {
-                Log.d("KHAN", "IN CONTROLLED HOME GRAPH")
                 composable<Route.ControlledBarcode>(
                 ) { entry ->
                     val vm = hiltViewModel<ControlledBarcodeVm>()
                     val state by vm.bitmap.collectAsStateWithLifecycle()
-                    ControllerBarcodeScreen(state)
+                    ControlleDBarcodeScreen(state)
+                }
+            }
+            navigation<Route.ControllerHomeGraph>(startDestination = Route.ControllerBarcode) {
+                composable<Route.ControllerBarcode>(
+                ) { entry ->
+                    ControllerBarcodeScreen {
+                        Log.d("KHAN","Barcode is $it")
+                    }
                 }
             }
         }

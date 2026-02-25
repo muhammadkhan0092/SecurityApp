@@ -18,4 +18,9 @@ sealed interface Route {
     data object ControlledHomeGraph: Route
     @Serializable
     data object ControlledBarcode: Route
+
+    @Serializable
+    data object ControllerHomeGraph: Route
+    @Serializable
+    data object ControllerBarcode: Route
 }

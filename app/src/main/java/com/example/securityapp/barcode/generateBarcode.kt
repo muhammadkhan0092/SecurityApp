@@ -7,9 +7,10 @@ import com.google.zxing.MultiFormatWriter
 import androidx.core.graphics.set
 import androidx.core.graphics.createBitmap
 
-fun generateBarcode(data: String, width: Int = 800, height: Int = 300): Bitmap {
+fun generateBarcode(data: String, width: Int = 1200, height: Int = 500): Bitmap{
+    val clean = data.replace("-", "")
     val bitMatrix = MultiFormatWriter().encode(
-        data,
+        clean,
         BarcodeFormat.CODE_128,
         width,
         height
