@@ -1,7 +1,7 @@
 package com.example.securityapp.domain.usecase
 
 import com.example.securityapp.core.data.repository.ControlledDeviceInControlled
-import com.example.securityapp.core.data.repository.ControlledRepository
+import com.example.securityapp.core.data.controlled.ControlledRepository
 import com.example.securityapp.core.data.repository.DeviceRepository
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.domain.DomainDevice
