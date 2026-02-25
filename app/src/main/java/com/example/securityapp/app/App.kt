@@ -16,20 +16,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.securityapp.modules.intro.IntroSharedVm
-import com.example.securityapp.modules.intro.LoginCommonVm
-import com.example.securityapp.modules.intro.LoginScreen
+import com.example.securityapp.modules.intro.presentation.vm.IntroSharedVm
+import com.example.securityapp.modules.intro.presentation.vm.LoginCommonVm
+import com.example.securityapp.modules.intro.presentation.composables.LoginScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
-import com.example.securityapp.modules.controlled.ControlledBarcodeVm
-import com.example.securityapp.modules.controlled.ControlleDBarcodeScreen
-import com.example.securityapp.modules.controller.ControllerBarcodeScreen
-import com.example.securityapp.modules.intro.GateScreen
-import com.example.securityapp.modules.intro.IntroVm
-import com.example.securityapp.modules.intro.LoginControlledVm
-import com.example.securityapp.modules.intro.LoginControllerVm
-import com.example.securityapp.modules.intro.LoginEvents
-import com.example.securityapp.modules.intro.UserTypeScreen
+import com.example.securityapp.modules.controlled.presentation.ControlledBarcodeVm
+import com.example.securityapp.modules.controlled.presentation.ControlleDBarcodeScreen
+import com.example.securityapp.modules.controller.presentation.ControllerBarcodeScreen
+import com.example.securityapp.modules.intro.presentation.composables.GateScreen
+import com.example.securityapp.modules.intro.presentation.vm.IntroVm
+import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
+import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
+import com.example.securityapp.modules.intro.presentation.models.LoginEvents
+import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

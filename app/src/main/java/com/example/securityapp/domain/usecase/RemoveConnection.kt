@@ -2,7 +2,7 @@ package com.example.securityapp.domain.usecase
 
 import com.example.securityapp.core.data.repository.ConnectionRepository
 import com.example.securityapp.core.data.repository.ControlledDeviceForController
-import com.example.securityapp.core.data.controlled.ControlledRepository
+import com.example.securityapp.modules.controlled.data.ControlledRepository
 import com.example.securityapp.core.data.repository.ControllerDeviceForControlled
 import com.example.securityapp.core.data.repository.ControllerDeviceInController
 import com.example.securityapp.utils.Result

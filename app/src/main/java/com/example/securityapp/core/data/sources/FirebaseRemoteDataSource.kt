@@ -2,6 +2,9 @@ package com.example.securityapp.core.data.sources
 
 import com.example.securityapp.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -66,5 +69,21 @@ class FirebaseRemoteDataSource @Inject constructor(
         return result.documents.mapNotNull {document->
             document.getString(documentId)
         }
+    }
+
+    inline fun <reified T : Any> listenDocument(
+        collectionPath: String,
+        documentId: String
+    ): Flow<T?> = callbackFlow {
+        val docRef = firestore.collection(collectionPath).document(documentId)
+        val listener = docRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                close(error)
+                return@addSnapshotListener
+            }
+            val data = snapshot?.toObject(T::class.java)
+            trySend(data).isSuccess
+        }
+        awaitClose { listener.remove() }
     }
 }

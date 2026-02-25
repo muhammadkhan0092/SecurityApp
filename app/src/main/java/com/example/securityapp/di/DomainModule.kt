@@ -1,7 +1,7 @@
 package com.example.securityapp.di
 
-import com.example.securityapp.modules.controlled.PhoneRepository
-import com.example.securityapp.modules.controlled.TelephoneRepository
+import com.example.securityapp.modules.controlled.presentation.PhoneRepository
+import com.example.securityapp.modules.controlled.presentation.TelephoneRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
