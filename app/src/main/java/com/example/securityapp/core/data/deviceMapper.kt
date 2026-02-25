@@ -8,8 +8,7 @@ fun DtoDevice.toDomainDevice(): DomainDevice {
         email = email,
         password = password,
         barcodeId = barcodeId,
-        phoneNumbers = phoneNumbers,
-        connectedDevices = connectedDevices
+        phoneNumbers = phoneNumbers
     )
 }
 fun DomainDevice.toDtoDevice(): DtoDevice {
@@ -17,7 +16,6 @@ fun DomainDevice.toDtoDevice(): DtoDevice {
         email = email,
         password = password,
         barcodeId = barcodeId,
-        phoneNumbers = phoneNumbers,
-        connectedDevices = connectedDevices
+        phoneNumbers = phoneNumbers
     )
 }

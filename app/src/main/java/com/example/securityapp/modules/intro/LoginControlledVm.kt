@@ -2,7 +2,7 @@ package com.example.securityapp.modules.intro
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.domain.ControlledLoginUseCase
+import com.example.securityapp.domain.usecase.ControlledLoginUseCase
 import com.example.securityapp.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

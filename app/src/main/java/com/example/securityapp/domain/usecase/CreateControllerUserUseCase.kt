@@ -1,4 +1,4 @@
-package com.example.securityapp.domain
+package com.example.securityapp.domain.usecase
 
 import com.example.securityapp.core.data.repository.ControllerUserRepository
 import com.example.securityapp.utils.Result
@@ -18,7 +18,7 @@ class CreateControllerUserUseCase(
             }
             is Result.Success -> {
                 val existingUser = doesUserExist.data
-                when(existingUser.password==password){
+                when(existingUser?.password==password){
                     true -> Result.Success("")
                     false -> Result.Error("")
                 }

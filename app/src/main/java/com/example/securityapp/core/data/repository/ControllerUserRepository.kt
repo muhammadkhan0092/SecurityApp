@@ -18,7 +18,7 @@ class ControllerUserRepository @Inject constructor(
             }
         )
     }
-    suspend fun getUser(email : String) : Result<DtoControllerUser>{
+    suspend fun getUser(email : String) : Result<DtoControllerUser?>{
         return firebaseGetSafeCall<DtoControllerUser>(
             action = {
                 source.queryCollection<DtoControllerUser>(documentId = email, collectionPath = collectionId)
