@@ -14,10 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+
 @Composable
 fun ControlleDBarcodeScreen(
     state: Bitmap?
 ){
+    val vm = hiltViewModel<ControlledVm>()
     when(state){
         null-> CircularProgressIndicator()
         else -> {

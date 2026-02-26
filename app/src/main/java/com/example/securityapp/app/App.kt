@@ -24,6 +24,7 @@ import com.example.securityapp.datastore.AppSettings.UserType.*
 import com.example.securityapp.modules.controlled.presentation.ControlledBarcodeVm
 import com.example.securityapp.modules.controlled.presentation.ControlleDBarcodeScreen
 import com.example.securityapp.modules.controller.presentation.ControllerBarcodeScreen
+import com.example.securityapp.modules.controller.presentation.ControllerVm
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
 import com.example.securityapp.modules.intro.presentation.vm.IntroVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
@@ -131,8 +132,10 @@ fun App() {
             navigation<Route.ControllerHomeGraph>(startDestination = Route.ControllerBarcode) {
                 composable<Route.ControllerBarcode>(
                 ) { entry ->
+                    val controllerVm = hiltViewModel<ControllerVm>()
                     ControllerBarcodeScreen {
                         Log.d("KHAN","Barcode is $it")
+                        controllerVm.connect(it)
                     }
                 }
             }

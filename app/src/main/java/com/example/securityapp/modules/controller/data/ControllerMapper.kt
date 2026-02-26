@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controller.data
 
+import com.example.securityapp.core.data.repository.ControlledDeviceForController
 import com.example.securityapp.core.data.repository.ControllerDeviceInController
 import com.example.securityapp.modules.controlled.data.ControlledEntity
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
@@ -15,6 +16,13 @@ fun ControllerDomain.mapToControllerEntity(): ControllerEntity {
     return ControllerEntity(
         email = email,
         numbers = numbers
+    )
+}
+fun ControllerDomain.mapToControlledDeviceForController(barcode : String): ControlledDeviceForController {
+    return ControlledDeviceForController(
+        email = email,
+        barcode = barcode,
+        number = numbers,
     )
 }
 fun ControllerDeviceInController.mapToDomainController(): List<ControllerDomain> {

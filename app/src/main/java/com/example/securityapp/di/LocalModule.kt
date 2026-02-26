@@ -8,6 +8,8 @@ import androidx.room.Room
 import com.example.securityapp.core.data.AppSettingsSerializer
 import com.example.securityapp.core.data.db.SecurityDb
 import com.example.securityapp.datastore.AppSettings
+import com.example.securityapp.modules.controlled.data.ControlledDao
+import com.example.securityapp.modules.controller.data.ControllerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +37,19 @@ object LocalModule {
         return Room.databaseBuilder(
             context = context,
             SecurityDb::class.java,
-            ""
+            "security_db"
         ).build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun returnControllerDao(db : SecurityDb) : ControllerDao{
+        return db.controllerDao()
+    }
+    @Provides
+    @Singleton
+    fun returnControlledDao(db : SecurityDb) : ControlledDao{
+        return db.controlledDao()
     }
 }

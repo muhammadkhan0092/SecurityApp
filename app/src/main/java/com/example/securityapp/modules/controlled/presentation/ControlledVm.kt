@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controlled.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
@@ -32,6 +33,7 @@ class ControlledVm @Inject constructor(
         viewModelScope.launch {
             controlledRepository.listenData(dataStoreRepositoryImplementation.getEmail())
                 .collectLatest {
+                    Log.d("KHAN","NEW DATA RECEIVED IN CONTROLLED IS $it")
                     it?.let {
                         syncControlled(it)
                     }

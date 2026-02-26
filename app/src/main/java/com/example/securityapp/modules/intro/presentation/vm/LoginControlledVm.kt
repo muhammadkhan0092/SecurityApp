@@ -42,6 +42,6 @@ class LoginControlledVm @Inject constructor(
         }
     }
     fun randomId(): String {
-        return UUID.randomUUID().toString()
+        return UUID.randomUUID().toString().replace("-", "")
     }
 }
