@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.controller.presentation
+package com.example.securityapp.modules.controller.presentation.screens
 
 import androidx.compose.runtime.Composable
 
@@ -19,7 +19,8 @@ import com.journeyapps.barcodescanner.ScanOptions
 @Composable
 fun ControllerBarcodeScreen(
     onBarcodeScanned: (String) -> Unit,
-    state: ControllerHomeState
+    state: ControllerHomeState,
+    onItemClicked: (String) -> Unit
 ) {
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract()
@@ -38,7 +39,7 @@ fun ControllerBarcodeScreen(
                     Box(modifier = Modifier.fillMaxWidth().weight(1f)){
                         when(state.isEmpty){
                             true -> Text("No Devices Yet", modifier = Modifier.align(Alignment.Center))
-                            false ->  ControlledDevicesComponent(state.controlledEmails)
+                            false ->  ControlledDevicesComponent(state.controlledEmails,onItemClicked)
                         }
                     }
                     Button(

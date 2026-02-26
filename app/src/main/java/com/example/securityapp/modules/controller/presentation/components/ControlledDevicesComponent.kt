@@ -5,11 +5,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ControlledDevicesComponent(data: List<String>){
+fun ControlledDevicesComponent(data: List<String>, onItemClicked: (String) -> Unit){
     LazyColumn(
     ) {
         items(data){
-            ControlledDevicesItem(email = it)
+            ControlledDevicesItem(email = it, onItemClick = onItemClicked)
         }
     }
 }

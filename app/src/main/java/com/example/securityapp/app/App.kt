@@ -23,8 +23,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
 import com.example.securityapp.modules.controlled.presentation.ControlledBarcodeVm
 import com.example.securityapp.modules.controlled.presentation.ControlleDBarcodeScreen
-import com.example.securityapp.modules.controller.presentation.ControllerBarcodeScreen
-import com.example.securityapp.modules.controller.presentation.ControllerVm
+import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
+import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
+import com.example.securityapp.modules.controller.presentation.screens.ControllerActionsScreen
+import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
+import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
 import com.example.securityapp.modules.intro.presentation.vm.IntroVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
@@ -132,13 +135,36 @@ fun App() {
             navigation<Route.ControllerHomeGraph>(startDestination = Route.ControllerBarcode) {
                 composable<Route.ControllerBarcode>(
                 ) { entry ->
-                    val controllerVm = hiltViewModel<ControllerVm>()
-                    val state=  controllerVm.state.collectAsStateWithLifecycle()
+                    val commonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
+                    val vm = hiltViewModel<ControllerHomeVm>()
+                    val state=  commonVm.state.collectAsStateWithLifecycle(null)
+                    val homeState = vm.state.collectAsStateWithLifecycle()
+                    when(val value =state.value){
+                        null-> Unit
+                        else -> vm.onStateChanged(value)
+                    }
                     ControllerBarcodeScreen(
                         onBarcodeScanned = {
-                            Log.d("KHAN","Barcode is $it")
-                            controllerVm.connect("d87d81dc8cf0405da48927db201fbffb")
+                            vm.connect("d87d81dc8cf0405da48927db201fbffb",state.value)
                         },
+                        onItemClicked ={it: String->
+                            commonVm.onItemClicked(it)
+                            navController.navigate(Route.ControllerActions)
+                        },
+                        state = homeState.value
+                    )
+                }
+                composable<Route.ControllerActions>(
+                ) { entry ->
+                    val commonControllerCommonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
+                    val commonState=  commonControllerCommonVm.state.collectAsStateWithLifecycle()
+                    val vm = hiltViewModel<ControllerActionsVm>()
+                    val state = vm.state.collectAsStateWithLifecycle()
+                    when(commonState.value){
+                        null-> Unit
+                        else -> vm.onNumberReceived(commonControllerCommonVm.selectedController)
+                    }
+                    ControllerActionsScreen(
                         state = state.value
                     )
                 }
