@@ -133,10 +133,14 @@ fun App() {
                 composable<Route.ControllerBarcode>(
                 ) { entry ->
                     val controllerVm = hiltViewModel<ControllerVm>()
-                    ControllerBarcodeScreen {
-                        Log.d("KHAN","Barcode is $it")
-                        controllerVm.connect(it)
-                    }
+                    val state=  controllerVm.state.collectAsStateWithLifecycle()
+                    ControllerBarcodeScreen(
+                        onBarcodeScanned = {
+                            Log.d("KHAN","Barcode is $it")
+                            controllerVm.connect("d87d81dc8cf0405da48927db201fbffb")
+                        },
+                        state = state.value?:emptyList()
+                    )
                 }
             }
         }

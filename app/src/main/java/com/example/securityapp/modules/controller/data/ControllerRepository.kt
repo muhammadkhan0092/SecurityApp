@@ -2,15 +2,13 @@ package com.example.securityapp.modules.controller.data
 
 import com.example.securityapp.core.data.firebaseGetSafeCall
 import com.example.securityapp.core.data.firebaseUpsertSafeCall
-import com.example.securityapp.core.data.repository.ControllerDeviceInController
+import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.core.data.repository.mapToControllerDomain
 import com.example.securityapp.core.data.roomSafeFlow
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
-import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 import com.example.securityapp.utils.Result
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -19,7 +17,7 @@ class ControllerRepository @Inject constructor(
     private val controllerDao: ControllerDao
 ) {
     val collectionId = "controllers"
-    suspend fun upsertData(data: ControllerDeviceInController): Result<Unit> {
+    suspend fun upsertData(data: ControllerDeviceDto): Result<Unit> {
         return firebaseUpsertSafeCall(
             action = {
                 source.addData(documentId = data.email, collectionId = collectionId, data)
@@ -27,8 +25,8 @@ class ControllerRepository @Inject constructor(
         )
     }
 
-    suspend fun getData(email: String): Result<ControllerDeviceInController?> {
-        return firebaseGetSafeCall<ControllerDeviceInController>(
+    suspend fun getData(email: String): Result<ControllerDeviceDto?> {
+        return firebaseGetSafeCall<ControllerDeviceDto>(
             action = {
                 source.get(collectionPath = collectionId, documentId = email)
             }
@@ -60,11 +58,11 @@ class ControllerRepository @Inject constructor(
     }
 
     fun listenData(email: String): Flow<List<ControllerDomain>?> {
-        return source.listenDocument<ControllerDeviceInController>(
+        return source.listenDocument<ControllerDeviceDto>(
             documentId = email,
             collectionPath = collectionId
         ).map { list ->
-            list?.devices?.map {
+            list?.controlled?.map {
                 it.mapToControllerDomain()
             }
         }

@@ -2,13 +2,11 @@ package com.example.securityapp.modules.controlled.data
 
 import com.example.securityapp.core.data.firebaseGetSafeCall
 import com.example.securityapp.core.data.firebaseUpsertSafeCall
-import com.example.securityapp.core.data.repository.ControlledDeviceInControlled
-import com.example.securityapp.core.data.repository.ControllerDeviceInController
+import com.example.securityapp.core.data.repository.ControlledDeviceDto
 import com.example.securityapp.core.data.repository.mapToControlledDomain
 import com.example.securityapp.core.data.roomSafeFlow
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
-import com.example.securityapp.modules.controller.data.mapToDomainController
 import com.example.securityapp.utils.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,23 +17,23 @@ class ControlledRepository @Inject constructor(
     private val controlledDao: ControlledDao
 ) {
     val collectionId = "controlled"
-    suspend fun upsertData(data : ControlledDeviceInControlled): Result<Unit> {
+    suspend fun upsertData(data : ControlledDeviceDto): Result<Unit> {
         return firebaseUpsertSafeCall(
             action = {
                 source.addData(documentId = data.email, collectionId = collectionId, data)
             }
         )
     }
-    suspend fun getData(email : String) : Result<ControlledDeviceInControlled?> {
-        return firebaseGetSafeCall<ControlledDeviceInControlled>(
+    suspend fun getData(email : String) : Result<ControlledDeviceDto?> {
+        return firebaseGetSafeCall<ControlledDeviceDto>(
             action = {
                 source.get(collectionPath = collectionId, documentId = email)
             }
         )
     }
     val barcodeKey = "barcode"
-    suspend fun getDataByBarcode(string: String): Result<ControlledDeviceInControlled?> {
-        return firebaseGetSafeCall<ControlledDeviceInControlled>(
+    suspend fun getDataByBarcode(string: String): Result<ControlledDeviceDto?> {
+        return firebaseGetSafeCall<ControlledDeviceDto>(
             action = {
                 source.getDocumentByEqualFilter(collectionId, barcodeKey, string)
             }
@@ -72,7 +70,7 @@ class ControlledRepository @Inject constructor(
     }
 
     fun listenData(email: String): Flow<List<ControlledDomain>?> {
-        return source.listenDocument<ControlledDeviceInControlled>(
+        return source.listenDocument<ControlledDeviceDto>(
             documentId = email,
             collectionPath = collectionId
         ).map { list ->

@@ -1,7 +1,6 @@
 package com.example.securityapp.core.data.repository
 
 import com.example.securityapp.domain.DomainDevice
-import com.example.securityapp.firebase.DtoControllerDevice
 import com.example.securityapp.firebase.DtoControllerUser
 import com.example.securityapp.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +14,7 @@ class LoginRepository @Inject constructor(
     val controlledDataCollection = "controlled"
     val controlledUserCollection = "controlled_user"
     suspend fun insertControlledUser(
-        controlledData : ControlledDeviceInControlled,
+        controlledData : ControlledDeviceDto,
         user : DomainDevice
     ): Result<Unit> {
         return try {
@@ -35,7 +34,7 @@ class LoginRepository @Inject constructor(
     val controllerUserCollection = "controller_user"
     val controllerDataCollection = "controllers"
     suspend fun insertControllerUser(
-        controllerData : ControllerDeviceInController,
+        controllerData : ControllerDeviceDto,
         user : DtoControllerUser
     ): Result<Unit> {
         return try {

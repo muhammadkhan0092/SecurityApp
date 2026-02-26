@@ -1,13 +1,25 @@
 package com.example.securityapp.modules.controller.data
 
-import com.example.securityapp.core.data.repository.ControlledDeviceForController
-import com.example.securityapp.core.data.repository.ControllerDeviceInController
-import com.example.securityapp.modules.controlled.data.ControlledEntity
+import com.example.securityapp.core.data.repository.ControlledDeviceDto
+import com.example.securityapp.core.data.repository.ControllerDeviceDto
+import com.example.securityapp.core.data.repository.DevicesDto
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 
 fun ControllerEntity.mapToDomainController(): ControllerDomain {
     return ControllerDomain(
+        email = email,
+        numbers = numbers
+    )
+}
+fun ControllerDomain.mapToDevicesDto(): DevicesDto {
+    return DevicesDto(
+        email = email,
+        numbers = numbers
+    )
+}
+fun ControlledDomain.mapToDevicesDto(): DevicesDto {
+    return DevicesDto(
         email = email,
         numbers = numbers
     )
@@ -18,18 +30,18 @@ fun ControllerDomain.mapToControllerEntity(): ControllerEntity {
         numbers = numbers
     )
 }
-fun ControllerDomain.mapToControlledDeviceForController(barcode : String): ControlledDeviceForController {
-    return ControlledDeviceForController(
+fun ControllerDomain.mapToControlledDto(barcode : String): ControlledDeviceDto {
+    return ControlledDeviceDto(
         email = email,
         barcode = barcode,
-        number = numbers,
+        numbers = numbers
     )
 }
-fun ControllerDeviceInController.mapToDomainController(): List<ControllerDomain> {
-    return devices.map {device->
+fun ControllerDeviceDto.mapToDomainController(): List<ControllerDomain> {
+    return controlled.map {device->
         ControllerDomain(
             email = device.email,
-            numbers = device.number
+            numbers = device.numbers
         )
     }
 }

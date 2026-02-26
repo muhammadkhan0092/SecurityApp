@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.intro.domain
 
-import com.example.securityapp.core.data.repository.ControllerDeviceInController
+import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.domain.StoreControllerInfoUseCase
 import com.example.securityapp.firebase.DtoControllerUser
@@ -24,10 +24,9 @@ class ControllerLoginUseCase @Inject constructor(
             return Error("Insert A Sim to Continue")
         }
         val result = loginRepository.insertControllerUser(
-            controllerData = ControllerDeviceInController(
+            controllerData = ControllerDeviceDto(
                 email = email,
-                numbers = sims,
-                devices = emptyList()
+                numbers = sims
             ),
             user = DtoControllerUser(
                 email = email,

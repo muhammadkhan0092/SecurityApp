@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.intro.domain
 
-import com.example.securityapp.core.data.repository.ControlledDeviceInControlled
+import com.example.securityapp.core.data.repository.ControlledDeviceDto
 import com.example.securityapp.modules.controlled.data.ControlledRepository
 import com.example.securityapp.core.data.repository.DeviceRepository
 import com.example.securityapp.core.data.repository.LoginRepository
@@ -23,10 +23,11 @@ class ControlledLoginUseCase @Inject constructor(
         if (isAirplaneOn) {
             return Error("Disable Airplane Mode")
         }
-        val sims = phoneRepository.getSimNumbers()
-        if (sims.isEmpty()) {
-            return Error("Insert A Sim to Continue")
-        }
+//        val sims = phoneRepository.getSimNumbers()
+//        if (sims.isEmpty()) {
+//            return Error("Insert A Sim to Continue")
+//        }
+        val sims = listOf("0092","0082")
         val alreadyDevice = deviceRepository.getDevice(email)
         when (alreadyDevice) {
             is Error<*> -> return Error("Server Error")
@@ -43,7 +44,7 @@ class ControlledLoginUseCase @Inject constructor(
             }
         }
         val result = loginRepository.insertControlledUser(
-            controlledData =  ControlledDeviceInControlled(
+            controlledData =  ControlledDeviceDto(
                 email = email,
                 numbers = sims,
                 barcode = id,

@@ -3,17 +3,13 @@ package com.example.securityapp.core.data.repository
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 
-data class ControlledDeviceInControlled(
+data class ControlledDeviceDto(
     val email : String = "",
     val barcode : String = "",
     val numbers : List<String> = emptyList(),
-    val controllers : List<ControllerDeviceForControlled> = emptyList()
+    val controllers : List<DevicesDto> = emptyList()
 )
-data class ControllerDeviceForControlled(
-    val email : String = "",
-    val numbers : List<String> = emptyList()
-)
-fun ControllerDeviceForControlled.mapToControlledDomain(): ControlledDomain {
+fun DevicesDto.mapToControlledDomain(): ControlledDomain {
     return ControlledDomain(
         email = email,
         numbers = numbers
@@ -21,24 +17,19 @@ fun ControllerDeviceForControlled.mapToControlledDomain(): ControlledDomain {
 }
 
 
-fun ControlledDeviceForController.mapToControllerDomain() : ControllerDomain{
+fun DevicesDto.mapToControllerDomain() : ControllerDomain{
     return ControllerDomain(
         email = email,
-        numbers = number
+        numbers = numbers
     )
 }
 data class DevicesDto(
     val email : String = "",
-    val number : List<String> = emptyList()
+    val numbers : List<String> = emptyList()
 )
 
-data class ControllerDeviceInController(
+data class ControllerDeviceDto(
     val email: String= "",
     val numbers : List<String> = emptyList(),
-    val devices : List<ControlledDeviceForController> = emptyList()
-)
-data class ControlledDeviceForController(
-    val barcode : String = "",
-    val email : String = "",
-    val number : List<String> = emptyList()
+    val controlled : List<DevicesDto> = emptyList()
 )

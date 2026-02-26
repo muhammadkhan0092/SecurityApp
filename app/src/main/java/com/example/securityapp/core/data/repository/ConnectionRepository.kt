@@ -12,8 +12,8 @@ class ConnectionRepository @Inject constructor(
     val controlledCollection = "controlled"
     val controllerCollection = "controllers"
     suspend fun insertControllerAndControllerData(
-        controllerData : ControllerDeviceInController,
-        controlledData : ControlledDeviceInControlled
+        controllerData : ControllerDeviceDto,
+        controlledData : ControlledDeviceDto
     ): Result<Unit> {
         return try {
             val batch = firestore.batch()

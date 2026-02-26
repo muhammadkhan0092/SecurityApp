@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
-import com.example.securityapp.core.data.repository.ControllerDeviceInController
+import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.domain.usecase.InsertConnection
 import com.example.securityapp.modules.controlled.presentation.PhoneRepository
 import com.example.securityapp.modules.controller.data.ControllerRepository
-import com.example.securityapp.modules.controller.data.mapToControlledDeviceForController
+import com.example.securityapp.modules.controller.data.mapToControlledDto
+import com.example.securityapp.modules.controller.data.mapToDevicesDto
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 import com.example.securityapp.modules.controller.domain.SyncController
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +25,7 @@ class ControllerVm @Inject constructor(
     private val controllerRepository: ControllerRepository,
     private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
     private val syncController : SyncController,
-    private val insertConnection: InsertConnection,
-    private val phoneRepository : PhoneRepository
+    private val insertConnection: InsertConnection
 ) : ViewModel() {
 
     val state: StateFlow<List<ControllerDomain>?> = controllerRepository.getFlow()
@@ -37,15 +37,12 @@ class ControllerVm @Inject constructor(
 
     fun connect(barcode : String)  {
         viewModelScope.launch {
+            val deviceDto = state.value?.map {
+                it.mapToDevicesDto()
+            }?:emptyList()
             insertConnection(
                 barcode,
-                controllerData = ControllerDeviceInController(
-                    email = dataStoreRepositoryImplementation.getEmail(),
-                    numbers = phoneRepository.getSimNumbers(),
-                    devices = state.value?.map {
-                        it.mapToControlledDeviceForController(barcode)
-                    }?:emptyList()
-                )
+                controllerDevicesDto = deviceDto
             )
         }
     }
