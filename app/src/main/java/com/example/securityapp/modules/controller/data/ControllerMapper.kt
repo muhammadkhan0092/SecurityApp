@@ -17,9 +17,9 @@ fun ControllerDomain.mapToControllerEntity(): ControllerEntity {
         numbers = numbers
     )
 }
-fun ControllerDeviceInController.mapToDomainController(): List<ControlledDomain> {
+fun ControllerDeviceInController.mapToDomainController(): List<ControllerDomain> {
     return devices.map {device->
-        ControlledDomain(
+        ControllerDomain(
             email = device.email,
             numbers = device.number
         )

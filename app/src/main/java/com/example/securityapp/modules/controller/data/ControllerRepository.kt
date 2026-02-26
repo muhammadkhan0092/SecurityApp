@@ -3,6 +3,7 @@ package com.example.securityapp.modules.controller.data
 import com.example.securityapp.core.data.firebaseGetSafeCall
 import com.example.securityapp.core.data.firebaseUpsertSafeCall
 import com.example.securityapp.core.data.repository.ControllerDeviceInController
+import com.example.securityapp.core.data.repository.mapToControllerDomain
 import com.example.securityapp.core.data.roomSafeFlow
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
@@ -58,12 +59,14 @@ class ControllerRepository @Inject constructor(
         }
     }
 
-    fun listenData(email: String): Flow<List<ControlledDomain>> {
-        return source.listenDocument<List<ControllerDeviceInController>>(
+    fun listenData(email: String): Flow<List<ControllerDomain>?> {
+        return source.listenDocument<ControllerDeviceInController>(
             documentId = email,
             collectionPath = collectionId
         ).map { list ->
-            list?.flatMap { it.mapToDomainController() } ?: emptyList()
+            list?.devices?.map {
+                it.mapToControllerDomain()
+            }
         }
     }
 

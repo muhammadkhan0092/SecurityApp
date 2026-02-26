@@ -12,6 +12,9 @@ interface ControlledDao{
     suspend fun insert(data : List<ControlledEntity>)
     @Delete
     suspend fun delete(data : List<ControlledEntity>)
-    @Query("SELECT * FROM controller_entity")
+    @Query("SELECT * FROM controlled_entity")
     fun getFlow() : Flow<List<ControlledEntity>>
+
+    @Query("SELECT * FROM controlled_entity")
+    suspend fun getList() : List<ControlledEntity>
 }

@@ -1,11 +1,11 @@
-package com.example.securityapp.modules.controller.presentation
+package com.example.securityapp.modules.controlled.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
-import com.example.securityapp.modules.controller.data.ControllerRepository
-import com.example.securityapp.modules.controller.domain.ControllerDomain
-import com.example.securityapp.modules.controller.domain.SyncController
+import com.example.securityapp.modules.controlled.data.ControlledRepository
+import com.example.securityapp.modules.controlled.domain.ControlledDomain
+import com.example.securityapp.modules.controlled.domain.SyncControlled
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,13 +15,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ControllerVm @Inject constructor(
-    private val controllerRepository: ControllerRepository,
+class ControlledVm @Inject constructor(
+    private val controlledRepository: ControlledRepository,
     private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
-    private val syncController : SyncController
+    private val syncControlled: SyncControlled
 ) : ViewModel() {
 
-    val state: StateFlow<List<ControllerDomain>?> = controllerRepository.getFlow()
+    val state: StateFlow<List<ControlledDomain>?> = controlledRepository.getFlow()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -30,11 +30,12 @@ class ControllerVm @Inject constructor(
 
     init {
         viewModelScope.launch {
-            controllerRepository.listenData(dataStoreRepositoryImplementation.getEmail()).collectLatest {
-                it?.let {
-                    syncController(it)
+            controlledRepository.listenData(dataStoreRepositoryImplementation.getEmail())
+                .collectLatest {
+                    it?.let {
+                        syncControlled(it)
+                    }
                 }
-            }
         }
     }
 }
