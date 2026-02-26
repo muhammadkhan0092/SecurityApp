@@ -11,16 +11,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.securityapp.modules.controller.domain.ControllerDomain
 import com.example.securityapp.modules.controller.presentation.components.ControlledDevicesComponent
+import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun ControllerBarcodeScreen(
     onBarcodeScanned: (String) -> Unit,
-    state : List<ControllerDomain>
+    state: ControllerHomeState
 ) {
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract()
@@ -30,23 +29,33 @@ fun ControllerBarcodeScreen(
         }
     }
     Box(modifier = Modifier.fillMaxSize().safeContentPadding()){
-        Column {
-            Box(modifier = Modifier.fillMaxWidth().weight(1f)){
-                ControlledDevicesComponent(state)
-            }
-            Button(
-                onClick = {
-                    val options = ScanOptions().apply {
-                        setDesiredBarcodeFormats(ScanOptions.CODE_128)
-                        setPrompt("Scan barcode")
-                        setBeepEnabled(true)
-                        setOrientationLocked(true)
+        when(state.isLoading){
+            true -> CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+            false -> {
+                Column {
+                    Box(modifier = Modifier.fillMaxWidth().weight(1f)){
+                        when(state.isEmpty){
+                            true -> Text("No Devices Yet", modifier = Modifier.align(Alignment.Center))
+                            false ->  ControlledDevicesComponent(state.controlledEmails)
+                        }
                     }
-                    scanLauncher.launch(options)
-                    onBarcodeScanned("")
+                    Button(
+                        onClick = {
+                            val options = ScanOptions().apply {
+                                setDesiredBarcodeFormats(ScanOptions.CODE_128)
+                                setPrompt("Scan barcode")
+                                setBeepEnabled(true)
+                                setOrientationLocked(true)
+                            }
+                            scanLauncher.launch(options)
+                            onBarcodeScanned("")
+                        }
+                    ) {
+                        Text("Scan Barcode")
+                    }
                 }
-            ) {
-                Text("Scan Barcode")
             }
         }
     }

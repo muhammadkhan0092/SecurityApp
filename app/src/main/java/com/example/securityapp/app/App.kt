@@ -139,7 +139,7 @@ fun App() {
                             Log.d("KHAN","Barcode is $it")
                             controllerVm.connect("d87d81dc8cf0405da48927db201fbffb")
                         },
-                        state = state.value?:emptyList()
+                        state = state.value
                     )
                 }
             }

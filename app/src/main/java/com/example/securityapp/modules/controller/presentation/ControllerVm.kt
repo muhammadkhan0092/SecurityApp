@@ -4,19 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
-import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.domain.usecase.InsertConnection
-import com.example.securityapp.modules.controlled.presentation.PhoneRepository
 import com.example.securityapp.modules.controller.data.ControllerRepository
-import com.example.securityapp.modules.controller.data.mapToControlledDto
 import com.example.securityapp.modules.controller.data.mapToDevicesDto
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 import com.example.securityapp.modules.controller.domain.SyncController
+import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,16 +26,15 @@ class ControllerVm @Inject constructor(
     private val insertConnection: InsertConnection
 ) : ViewModel() {
 
-    val state: StateFlow<List<ControllerDomain>?> = controllerRepository.getFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = null
-        )
-
+    private var controllerDevices : List<ControllerDomain>? = null
+    private val _state = MutableStateFlow(ControllerHomeState())
+    val state = _state.asStateFlow()
     fun connect(barcode : String)  {
         viewModelScope.launch {
-            val deviceDto = state.value?.map {
+            _state.update {
+                it.copy(isLoading = true)
+            }
+            val deviceDto = controllerDevices?.map {
                 it.mapToDevicesDto()
             }?:emptyList()
             insertConnection(
@@ -53,6 +50,13 @@ class ControllerVm @Inject constructor(
                 Log.d("KHAN","NEW DATA RECEIVED IN CONTROLLER IS $it")
                 it?.let {
                     syncController(it)
+                }
+            }
+        }
+        viewModelScope.launch {
+            controllerRepository.getFlow().collectLatest {list->
+                _state.update {
+                    it.copy(isLoading = false, controlledEmails = list.mapToEmails(), isEmpty = list.isEmpty())
                 }
             }
         }
