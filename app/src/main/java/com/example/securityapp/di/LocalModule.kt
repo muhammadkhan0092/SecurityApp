@@ -9,7 +9,7 @@ import com.example.securityapp.core.data.AppSettingsSerializer
 import com.example.securityapp.core.data.db.SecurityDb
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.data.ControlledDao
-import com.example.securityapp.modules.controller.data.ControllerDao
+import com.example.securityapp.modules.controller.data.dao.ControllerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

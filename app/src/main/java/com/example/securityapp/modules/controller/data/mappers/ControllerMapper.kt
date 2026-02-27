@@ -1,9 +1,10 @@
-package com.example.securityapp.modules.controller.data
+package com.example.securityapp.modules.controller.data.mappers
 
 import com.example.securityapp.core.data.repository.ControlledDeviceDto
 import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.core.data.repository.DevicesDto
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
+import com.example.securityapp.modules.controller.data.models.ControllerEntity
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 
 fun ControllerEntity.mapToDomainController(): ControllerDomain {

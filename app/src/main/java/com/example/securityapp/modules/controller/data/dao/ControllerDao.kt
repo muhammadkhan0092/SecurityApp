@@ -1,9 +1,10 @@
-package com.example.securityapp.modules.controller.data
+package com.example.securityapp.modules.controller.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.securityapp.modules.controller.data.models.ControllerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

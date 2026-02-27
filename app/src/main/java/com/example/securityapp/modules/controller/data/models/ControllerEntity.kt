@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.controller.data
+package com.example.securityapp.modules.controller.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

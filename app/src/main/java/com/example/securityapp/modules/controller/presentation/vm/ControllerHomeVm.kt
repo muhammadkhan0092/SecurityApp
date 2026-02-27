@@ -1,20 +1,15 @@
 package com.example.securityapp.modules.controller.presentation.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.data.DataStoreRepositoryImplementation
 import com.example.securityapp.domain.usecase.InsertConnection
-import com.example.securityapp.modules.controller.data.ControllerRepository
-import com.example.securityapp.modules.controller.data.mapToDevicesDto
+import com.example.securityapp.modules.controller.data.mappers.mapToDevicesDto
 import com.example.securityapp.modules.controller.domain.ControllerDomain
-import com.example.securityapp.modules.controller.domain.SyncController
 import com.example.securityapp.modules.controller.presentation.mapToEmails
 import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject

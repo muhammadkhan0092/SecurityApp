@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.controller.domain
 
-import com.example.securityapp.modules.controller.data.ControllerRepository
+import com.example.securityapp.modules.controller.data.repository.ControllerRepository
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 
