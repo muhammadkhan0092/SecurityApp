@@ -1,11 +1,16 @@
 package com.example.securityapp.core.domain
 
+import android.util.Log
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
 import com.example.securityapp.core.data.repository.SmsCommandRepository
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.data.ControlledRepository
+import com.example.securityapp.modules.controlled.data.FusedLocationRepository
+import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.modules.controller.data.repository.ControllerRepository
 import com.example.securityapp.modules.controller.data.models.MessageFromController
+import com.example.securityapp.modules.controller.data.repository.ControllerMessagesRepository
+import com.example.securityapp.modules.controller.domain.ControllerMessagesDomain
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 
@@ -13,36 +18,39 @@ class HandleMessageIntent @Inject constructor(
     private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
     private val controlledRepository: ControlledRepository,
     private val controllerRepository: ControllerRepository,
-    private val smsCommandRepository: SmsCommandRepository
+    private val smsCommandRepository: SmsCommandRepository,
+    private val controllerMessagesRepository: ControllerMessagesRepository,
+    private val locationRepository : FusedLocationRepository
 ) {
-    suspend operator fun invoke(sender : String, message : String){
-        when(dataStoreRepositoryImplementation.getUserType()){
+    suspend operator fun invoke(sender: String, message: String) {
+        when (dataStoreRepositoryImplementation.getUserType()) {
             AppSettings.UserType.not_set -> Unit
-            AppSettings.UserType.controller -> handleControllerMessageIntent(sender,message)
-            AppSettings.UserType.controlled-> handleControlledMessageIntent(sender,message)
+            AppSettings.UserType.controller -> handleControllerMessageIntent(sender, message)
+            AppSettings.UserType.controlled -> handleControlledMessageIntent(sender, message)
             AppSettings.UserType.UNRECOGNIZED -> Unit
         }
     }
-    suspend fun handleControllerMessageIntent(sender: String, message: String){
-        val controllerLocalResult = controllerRepository.getLocalData()
-        when(controllerLocalResult){
+
+    suspend fun handleControlledMessageIntent(sender: String, message: String) {
+        val controlledLocalResult = controlledRepository.getLocalData()
+        when (controlledLocalResult) {
             is Result.Error -> Unit
-            is Result.Success ->{
-                val data = controllerLocalResult.data
-                val filteredData = data.firstOrNull() {
+            is Result.Success -> {
+                val data = controlledLocalResult.data
+                val filteredData = data.firstOrNull {
                     sender in it.numbers
                 }
-                when(filteredData){
-                    null-> return
+                when (filteredData) {
+                    null -> return
                     else -> {
-                        val result = smsCommandRepository.deserializeToMessageFromContainer(message)
-                        when(result){
+                        val result =
+                            smsCommandRepository.deserializeToMessageFromController(message)
+                        when (result) {
                             is Result.Error<*> -> {
-
                             }
-                            is Result.Success-> {
+                            is Result.Success -> {
                                 val messageFromController = result.data
-                                when(messageFromController){
+                                when (messageFromController) {
                                     MessageFromController.BLOCK_APPS -> blockApps()
                                     MessageFromController.WIPE_GALLERY -> wipeGallery()
                                     MessageFromController.GET_LOCATION -> getLocation()
@@ -55,32 +63,47 @@ class HandleMessageIntent @Inject constructor(
             }
         }
     }
-    fun blockApps(){
+
+    fun blockApps() {
 
     }
-    fun wipeGallery(){
+
+    fun wipeGallery() {
 
     }
-    fun getLocation(){
+
+    suspend fun getLocation() {
+        val location = locationRepository.getAccurateLocation()
+    }
+
+    fun factoryReset() {
 
     }
-    fun factoryReset(){
 
-    }
-    suspend fun handleControlledMessageIntent(sender : String,message : String){
-        val controlledLocalResult = controlledRepository.getLocalData()
-        when(controlledLocalResult) {
+    suspend fun handleControllerMessageIntent(sender: String, message: String) {
+        val controllerLocalResult = controllerRepository.getLocalData()
+        when (controllerLocalResult) {
             is Result.Error -> Unit
             is Result.Success -> {
-                val data = controlledLocalResult.data
+                val data = controllerLocalResult.data
                 val filteredData = data.firstOrNull() {
                     sender in it.numbers
                 }
-                when(filteredData){
-                    null-> Unit
-                    else -> {
-
+                val deserializedMessageResult = smsCommandRepository.deserializeToMessageFromControlled(message)
+                when {
+                    filteredData != null && deserializedMessageResult is Result.Success -> {
+                        val deserializedMessage = deserializedMessageResult.data
+                        val upsertResult = controllerMessagesRepository.upsertData(
+                            ControllerMessagesDomain(
+                                message = message,
+                                type = deserializedMessage
+                            ),
+                            email = filteredData.email
+                        )
+                        Log.d("KHAN","UPSERT RESULT IS $upsertResult")
                     }
+
+                    else -> Unit
                 }
             }
         }

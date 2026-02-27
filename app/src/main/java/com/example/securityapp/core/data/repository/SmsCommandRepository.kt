@@ -6,7 +6,6 @@ import com.example.securityapp.modules.controller.data.models.MessageFromControl
 import com.example.securityapp.modules.controller.data.models.MessageFromController
 import com.example.securityapp.utils.Result
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import javax.inject.Inject
 
 class SmsCommandRepository @Inject constructor(
@@ -41,9 +40,9 @@ class SmsCommandRepository @Inject constructor(
             Result.Error("Deserialization Error")
         }
     }
-    fun deserializeToMessageFromControlled(data : String) : Result<MessageFromController>{
+    fun deserializeToMessageFromControlled(data : String) : Result<MessageFromControlled>{
         return try {
-            Result.Success(gson.fromJson(data, MessageFromController::class.java))
+            Result.Success(gson.fromJson(data, MessageFromControlled::class.java))
         } catch (e: Exception) {
             e.printStackTrace()
             Result.Error("Deserialization Error")
