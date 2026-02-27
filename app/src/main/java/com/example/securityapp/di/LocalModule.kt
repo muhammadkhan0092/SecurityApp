@@ -10,6 +10,7 @@ import com.example.securityapp.core.data.db.SecurityDb
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.data.ControlledDao
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
+import com.example.securityapp.modules.controller.data.dao.ControllerMessagesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,5 +52,11 @@ object LocalModule {
     @Singleton
     fun returnControlledDao(db : SecurityDb) : ControlledDao{
         return db.controlledDao()
+    }
+
+    @Provides
+    @Singleton
+    fun returnControllerMessagesDao(db : SecurityDb) : ControllerMessagesDao {
+        return db.controllerMessagesDao()
     }
 }

@@ -15,6 +15,6 @@ interface ControllerMessagesDao{
     suspend fun delete(data : List<ControllerMessagesEntity>)
     @Query("SELECT * FROM controller_messages")
     fun getFlow() : Flow<List<ControllerMessagesEntity>>
-    @Query("SELECT * FROM controller_entity where email=:email")
+    @Query("SELECT * FROM controller_messages where email=:email")
     suspend fun getData(email : String) : List<ControllerMessagesEntity>
 }

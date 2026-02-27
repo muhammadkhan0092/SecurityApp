@@ -6,10 +6,8 @@ import com.example.securityapp.core.data.repository.SmsCommandRepository
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.data.ControlledRepository
 import com.example.securityapp.modules.controlled.data.FusedLocationRepository
-import com.example.securityapp.modules.controlled.domain.ControlledDomain
-import com.example.securityapp.modules.controller.data.repository.ControllerRepository
-import com.example.securityapp.modules.controller.data.models.MessageFromController
 import com.example.securityapp.modules.controller.data.repository.ControllerMessagesRepository
+import com.example.securityapp.modules.controller.data.repository.ControllerRepository
 import com.example.securityapp.modules.controller.domain.ControllerMessagesDomain
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
@@ -20,7 +18,7 @@ class HandleMessageIntent @Inject constructor(
     private val controllerRepository: ControllerRepository,
     private val smsCommandRepository: SmsCommandRepository,
     private val controllerMessagesRepository: ControllerMessagesRepository,
-    private val locationRepository : FusedLocationRepository
+    private val locationRepository: FusedLocationRepository
 ) {
     suspend operator fun invoke(sender: String, message: String) {
         when (dataStoreRepositoryImplementation.getUserType()) {
@@ -48,13 +46,14 @@ class HandleMessageIntent @Inject constructor(
                         when (result) {
                             is Result.Error<*> -> {
                             }
+
                             is Result.Success -> {
                                 val messageFromController = result.data
                                 when (messageFromController) {
-                                    MessageFromController.BLOCK_APPS -> blockApps()
-                                    MessageFromController.WIPE_GALLERY -> wipeGallery()
-                                    MessageFromController.GET_LOCATION -> getLocation()
-                                    MessageFromController.FACTORY_RESET -> factoryReset()
+                                    MessageFromController.BLOCK_APPS -> blockApps(filteredData.numbers)
+                                    MessageFromController.WIPE_GALLERY -> wipeGallery(filteredData.numbers)
+                                    MessageFromController.GET_LOCATION -> getLocation(filteredData.numbers)
+                                    MessageFromController.FACTORY_RESET -> factoryReset(filteredData.numbers)
                                 }
                             }
                         }
@@ -64,20 +63,94 @@ class HandleMessageIntent @Inject constructor(
         }
     }
 
-    fun blockApps() {
-
+    fun blockApps(numbers : List<String>) {
+        val firstNumber = numbers.firstOrNull()
+        val messageFromControlled = MessageFromControlled(
+            string = "Block Apps Complete",
+            type = MessageTypeFromControlled.NORMAL
+        )
+        val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+        when (serializedMessage) {
+            is Result.Error<*> -> {
+                firstNumber?.let {
+                    smsCommandRepository.sendSms(it, serializedMessage.error)
+                }
+            }
+            is Result.Success -> {
+                firstNumber?.let {
+                    smsCommandRepository.sendSms(it, serializedMessage.data)
+                }
+            }
+        }
     }
 
-    fun wipeGallery() {
-
+    fun wipeGallery(numbers : List<String>) {
+        val firstNumber = numbers.firstOrNull()
+        val messageFromControlled = MessageFromControlled(
+            string = "Factory Reset Complete",
+            type = MessageTypeFromControlled.NORMAL
+        )
+        val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+        when (serializedMessage) {
+            is Result.Error<*> -> {
+                firstNumber?.let {
+                    smsCommandRepository.sendSms(it, serializedMessage.error)
+                }
+            }
+            is Result.Success -> {
+                firstNumber?.let {
+                    smsCommandRepository.sendSms(it, serializedMessage.data)
+                }
+            }
+        }
     }
 
-    suspend fun getLocation() {
+    suspend fun getLocation(numbers: List<String>) {
         val location = locationRepository.getAccurateLocation()
+        location?.let {
+            val locationString =
+                "https://www.google.com/maps/search/?api=1&query=${it.latitude},${it.longitude}"
+            val firstNumber = numbers.firstOrNull()
+            val messageFromControlled = MessageFromControlled(
+                string = locationString,
+                type = MessageTypeFromControlled.NORMAL
+            )
+            val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+            when (serializedMessage) {
+                is Result.Error<*> -> {
+                    firstNumber?.let {
+                        smsCommandRepository.sendSms(it, serializedMessage.error)
+                    }
+                }
+
+                is Result.Success -> {
+                    firstNumber?.let {
+                        smsCommandRepository.sendSms(it, serializedMessage.data)
+                    }
+                }
+            }
+        }
     }
 
-    fun factoryReset() {
-
+    fun factoryReset(numbers: List<String>) {
+        val firstNumber = numbers.firstOrNull()
+        val messageFromControlled = MessageFromControlled(
+            string = "Factory Reset Complete",
+            type = MessageTypeFromControlled.NORMAL
+        )
+        val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+        when (serializedMessage) {
+            is Result.Error<*> -> {
+                firstNumber?.let {
+                    smsCommandRepository.sendSms(it, serializedMessage.error)
+                }
+            }
+            is Result.Success -> {
+                firstNumber?.let {
+                    smsCommandRepository.sendSms(it, serializedMessage.data)
+                }
+            }
+        }
     }
 
     suspend fun handleControllerMessageIntent(sender: String, message: String) {
@@ -89,18 +162,19 @@ class HandleMessageIntent @Inject constructor(
                 val filteredData = data.firstOrNull() {
                     sender in it.numbers
                 }
-                val deserializedMessageResult = smsCommandRepository.deserializeToMessageFromControlled(message)
+                val deserializedMessageResult =
+                    smsCommandRepository.deserializeToMessageFromControlled(message)
                 when {
                     filteredData != null && deserializedMessageResult is Result.Success -> {
                         val deserializedMessage = deserializedMessageResult.data
                         val upsertResult = controllerMessagesRepository.upsertData(
                             ControllerMessagesDomain(
-                                message = message,
-                                type = deserializedMessage
+                                message = deserializedMessage.string,
+                                type = deserializedMessage.type
                             ),
                             email = filteredData.email
                         )
-                        Log.d("KHAN","UPSERT RESULT IS $upsertResult")
+                        Log.d("KHAN", "UPSERT RESULT IS $upsertResult")
                     }
 
                     else -> Unit

@@ -25,7 +25,7 @@ import com.example.securityapp.modules.controlled.presentation.ControlledBarcode
 import com.example.securityapp.modules.controlled.presentation.ControlleDBarcodeScreen
 import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
 import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
-import com.example.securityapp.modules.controller.presentation.screens.ControllerActionsScreen
+import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreen
 import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
 import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
@@ -164,8 +164,11 @@ fun App() {
                         null-> Unit
                         else -> vm.onNumberReceived(commonControllerCommonVm.selectedController)
                     }
-                    ControllerActionsScreen(
-                        state = state.value
+                    ControllerTabScreen(
+                        state = state.value,
+                        {
+                            vm.onAction(it)
+                        }
                     )
                 }
             }

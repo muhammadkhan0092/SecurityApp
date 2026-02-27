@@ -2,14 +2,15 @@ package com.example.securityapp.core.data.repository
 
 import android.content.Context
 import android.telephony.SmsManager
-import com.example.securityapp.modules.controller.data.models.MessageFromControlled
-import com.example.securityapp.modules.controller.data.models.MessageFromController
+import com.example.securityapp.core.domain.MessageFromControlled
+import com.example.securityapp.core.domain.MessageFromController
 import com.example.securityapp.utils.Result
 import com.google.gson.Gson
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class SmsCommandRepository @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) {
     val gson = Gson()
     fun sendSms(phone: String, message: String) {
