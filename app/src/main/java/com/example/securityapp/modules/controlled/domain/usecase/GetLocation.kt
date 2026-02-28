@@ -10,7 +10,7 @@ class GetLocation @Inject constructor(
     private val locationRepository: FusedLocationRepository,
     private val smsCommandRepository: SmsCommandRepository,
 ){
-    suspend fun invoke(numbers: List<String>) {
+    suspend operator fun invoke(numbers: List<String>) {
         val location = locationRepository.getAccurateLocation()
         location?.let {
             val locationString =
