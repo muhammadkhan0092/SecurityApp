@@ -1,7 +1,5 @@
 package com.example.securityapp.modules.controlled.presentation
 
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.barcode.generateBarcode
@@ -10,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,14 +16,27 @@ import javax.inject.Inject
 class ControlledBarcodeVm @Inject constructor(
     private val datastore : DataStoreRepositoryImplementation
 ) : ViewModel(){
-    private val _bitmap = MutableStateFlow<Bitmap?>(null)
-    val bitmap = _bitmap.asStateFlow()
+    fun onAction(action: ControlledAction) {
+        when(action){
+            is ControlledAction.OnTabSelected -> {
+                if(action.index!=state.value.selectedIndex){
+                    _state.update {
+                        it.copy(selectedIndex = action.index)
+                    }
+                }
+            }
+        }
+    }
+
+    private val _state = MutableStateFlow(ControlledState())
+    val state = _state.asStateFlow()
     init {
         viewModelScope.launch {
             datastore.barcode.collectLatest {
-                Log.d("KHAN","BARCODE IS ")
                 val bitmap = generateBarcode(it)
-                _bitmap.value = bitmap
+                _state.update {
+                    it.copy(bitmap = bitmap)
+                }
             }
         }
     }

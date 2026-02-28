@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.intro.domain
 
+import android.util.Log
 import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.modules.controller.domain.usecase.StoreControllerInfoUseCase
@@ -30,16 +31,23 @@ class ControllerLoginUseCase @Inject constructor(
                 val data = isAlreadyLoggedInResult.data
                 when(data){
                     null-> newControllerLogin(email,password,sims)
-                    else -> alreadyControllerLogin(data)
+                    else -> alreadyControllerLogin(data,password)
                 }
             }
         }
     }
-    private suspend fun alreadyControllerLogin(data: DtoControllerUser) : Result<Unit>{
-        infoUseCase(email = data.email)
-        return Result.Success(Unit)
+    private suspend fun alreadyControllerLogin(data: DtoControllerUser,password: String) : Result<Unit>{
+        Log.d("KHAN","CONTROLLER ALREADY LOGIN")
+        return when(password==data.password){
+            true -> {
+                infoUseCase(email = data.email)
+                return Result.Success(Unit)
+            }
+            false -> Error("Invalid Password")
+        }
     }
     suspend fun newControllerLogin(email : String,password: String,sims : List<String>): Result<Unit> {
+        Log.d("KHAN","CONTROLLER NEW LOGIN")
         val result = loginRepository.insertControllerUser(
             controllerData = ControllerDeviceDto(
                 email = email,

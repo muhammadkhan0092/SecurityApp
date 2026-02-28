@@ -22,7 +22,7 @@ import com.example.securityapp.modules.intro.presentation.composables.LoginScree
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
 import com.example.securityapp.modules.controlled.presentation.ControlledBarcodeVm
-import com.example.securityapp.modules.controlled.presentation.ControlleDBarcodeScreen
+import com.example.securityapp.modules.controlled.presentation.ControlledHomeScreen
 import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
 import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
 import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreen
@@ -128,8 +128,13 @@ fun App() {
                 composable<Route.ControlledBarcode>(
                 ) { entry ->
                     val vm = hiltViewModel<ControlledBarcodeVm>()
-                    val state by vm.bitmap.collectAsStateWithLifecycle()
-                    ControlleDBarcodeScreen(state)
+                    val state by vm.state.collectAsStateWithLifecycle()
+                    ControlledHomeScreen(
+                        state = state,
+                        onAction = {
+                            vm.onAction(it)
+                        }
+                    )
                 }
             }
             navigation<Route.ControllerHomeGraph>(startDestination = Route.ControllerBarcode) {

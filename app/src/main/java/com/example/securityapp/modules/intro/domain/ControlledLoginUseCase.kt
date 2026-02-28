@@ -1,7 +1,7 @@
 package com.example.securityapp.modules.intro.domain
 
+import android.util.Log
 import com.example.securityapp.core.data.repository.ControlledDeviceDto
-import com.example.securityapp.core.data.repository.DeviceRepository
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.domain.DomainDevice
 import com.example.securityapp.modules.controlled.domain.PhoneRepository
@@ -12,7 +12,6 @@ import javax.inject.Inject
 
 class ControlledLoginUseCase @Inject constructor(
     private val phoneRepository: PhoneRepository,
-    private val deviceRepository: DeviceRepository,
     private val storeControlledInfoUseCase: StoreControlledInfoUseCase,
     private val loginRepository: LoginRepository
 ) {
@@ -43,6 +42,7 @@ class ControlledLoginUseCase @Inject constructor(
         }
     }
     private suspend fun alreadyLogin(alreadyDevice: Result.Success<DomainDevice?>,password: String): Result<Unit> {
+        Log.d("KHAN","CONTROLLED ALREADY LOGIN")
         return when (alreadyDevice.data!!.password == password) {
             true -> {
                 storeControlledInfoUseCase(
@@ -55,6 +55,7 @@ class ControlledLoginUseCase @Inject constructor(
         }
     }
     private suspend fun newLogin(email: String, sims: List<String>, id: String, password: String): Result<Unit> {
+        Log.d("KHAN","CONTROLLED NEW LOGIN")
         val result = loginRepository.insertControlledUser(
             controlledData =  ControlledDeviceDto(
                 email = email,
