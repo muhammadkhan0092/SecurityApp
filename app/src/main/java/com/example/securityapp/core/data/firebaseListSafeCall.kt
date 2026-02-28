@@ -19,7 +19,7 @@ suspend fun <T> firebaseGetSafeCall(
         val result = action()
         Result.Success(result)
     } catch (e: Exception) {
-        Result.Error("")
+        Result.Error(e.message?:"Unknown Error")
     }
 }
 

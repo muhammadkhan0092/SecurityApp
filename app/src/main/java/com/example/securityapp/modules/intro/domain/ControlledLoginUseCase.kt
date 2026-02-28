@@ -1,7 +1,7 @@
 package com.example.securityapp.modules.intro.domain
 
+import android.R.attr.password
 import com.example.securityapp.core.data.repository.ControlledDeviceDto
-import com.example.securityapp.modules.controlled.data.ControlledRepository
 import com.example.securityapp.core.data.repository.DeviceRepository
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.domain.DomainDevice
@@ -15,7 +15,6 @@ class ControlledLoginUseCase @Inject constructor(
     private val phoneRepository: PhoneRepository,
     private val deviceRepository: DeviceRepository,
     private val storeControlledInfoUseCase: StoreControlledInfoUseCase,
-    private val controlledRepository: ControlledRepository,
     private val loginRepository: LoginRepository
 ) {
     suspend operator fun invoke(email: String, password: String, id: String): Result<Unit> {
@@ -29,20 +28,34 @@ class ControlledLoginUseCase @Inject constructor(
 //        }
         val sims = listOf("0092","0082")
         val alreadyDevice = deviceRepository.getDevice(email)
-        when (alreadyDevice) {
+        return when (alreadyDevice) {
             is Error<*> -> return Error("Server Error")
             is Result.Success -> {
                 when (alreadyDevice.data) {
-                    null -> Unit
+                    null -> newLogin(email,sims,id,password)
                     else -> {
-                        return when (alreadyDevice.data.password == password) {
-                            true -> Result.Success(Unit)
-                            false -> Error("Invalid Password")
-                        }
+                        alreadyLogin(
+                            alreadyDevice,
+                            password = password
+                        )
                     }
                 }
             }
         }
+    }
+    private suspend fun alreadyLogin(alreadyDevice: Result.Success<DomainDevice?>,password: String): Result<Unit> {
+        return when (alreadyDevice.data!!.password == password) {
+            true -> {
+                storeControlledInfoUseCase(
+                    email = alreadyDevice.data.email,
+                    barcodeId = alreadyDevice.data.barcodeId
+                )
+                Result.Success(Unit)
+            }
+            false -> Error("Invalid Password")
+        }
+    }
+    private suspend fun newLogin(email: String, sims: List<String>, id: String, password: String): Result<Unit> {
         val result = loginRepository.insertControlledUser(
             controlledData =  ControlledDeviceDto(
                 email = email,

@@ -45,8 +45,8 @@ class OverlayService : Service() {
 
         // Layout params for overlay
         val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             else
@@ -60,33 +60,33 @@ class OverlayService : Service() {
         params.x = 100
         params.y = 100
 
-        // Make overlay draggable
-        overlayView.setOnTouchListener(object : View.OnTouchListener {
-            private var initialX = 0
-            private var initialY = 0
-            private var touchX = 0f
-            private var touchY = 0f
-
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (event == null) return false
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        initialX = params.x
-                        initialY = params.y
-                        touchX = event.rawX
-                        touchY = event.rawY
-                        return true
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        params.x = initialX + (event.rawX - touchX).toInt()
-                        params.y = initialY + (event.rawY - touchY).toInt()
-                        windowManager.updateViewLayout(overlayView, params)
-                        return true
-                    }
-                }
-                return false
-            }
-        })
+//        // Make overlay draggable
+//        overlayView.setOnTouchListener(object : View.OnTouchListener {
+//            private var initialX = 0
+//            private var initialY = 0
+//            private var touchX = 0f
+//            private var touchY = 0f
+//
+//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+//                if (event == null) return false
+//                when (event.action) {
+//                    MotionEvent.ACTION_DOWN -> {
+//                        initialX = params.x
+//                        initialY = params.y
+//                        touchX = event.rawX
+//                        touchY = event.rawY
+//                        return true
+//                    }
+//                    MotionEvent.ACTION_MOVE -> {
+//                        params.x = initialX + (event.rawX - touchX).toInt()
+//                        params.y = initialY + (event.rawY - touchY).toInt()
+//                        windowManager.updateViewLayout(overlayView, params)
+//                        return true
+//                    }
+//                }
+//                return false
+//            }
+//        })
 
         windowManager.addView(overlayView, params)
 

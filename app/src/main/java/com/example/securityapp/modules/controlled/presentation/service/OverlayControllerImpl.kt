@@ -6,9 +6,11 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import com.example.securityapp.modules.controlled.presentation.service.OverlayService
 import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class OverlayControllerImpl(
-    private val context: Context
+class OverlayControllerImpl @Inject constructor(
+    @ApplicationContext private val context: Context
 ) : OverlayRepository {
 
     override fun startOverlayService() {

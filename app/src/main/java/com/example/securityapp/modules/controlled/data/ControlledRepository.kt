@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controlled.data
 
+import android.util.Log
 import com.example.securityapp.core.data.firebaseGetSafeCall
 import com.example.securityapp.core.data.firebaseUpsertSafeCall
 import com.example.securityapp.core.data.repository.ControlledDeviceDto
@@ -70,6 +71,8 @@ class ControlledRepository @Inject constructor(
     }
 
     fun listenData(email: String): Flow<List<ControlledDomain>?> {
+        Log.d("KHAN","COLLECTION ID IS $collectionId")
+        Log.d("KHAN","CONTROLLED EMAIL IS $email")
         return source.listenDocument<ControlledDeviceDto>(
             documentId = email,
             collectionPath = collectionId

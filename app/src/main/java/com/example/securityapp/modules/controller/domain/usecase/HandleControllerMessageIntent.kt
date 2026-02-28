@@ -17,7 +17,7 @@ class HandleControllerMessageIntent @Inject constructor(
         val controllerLocalResult = controllerRepository.getLocalData()
         when (controllerLocalResult) {
             is Result.Error -> Unit
-            is com.example.securityapp.utils.Result.Success -> {
+            is Result.Success -> {
                 val data = controllerLocalResult.data
                 val filteredData = data.firstOrNull() {
                     sender in it.numbers

@@ -12,13 +12,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class MyAccessibilityService : AccessibilityService() {
-    @Inject
-    lateinit var dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
+//    @Inject
+//    lateinit var dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
 
-    @Inject
-    lateinit var overlayRepository: OverlayRepository
+//    @Inject
+//    lateinit var overlayRepository: OverlayRepository
     var shouldBlock = false
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
@@ -26,9 +25,9 @@ class MyAccessibilityService : AccessibilityService() {
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                 val packageName = event.packageName?.toString()
                 Log.d("ACCESS_SERVICE", "Opened app: $packageName")
-                if(shouldBlock){
-                    overlayRepository.startOverlayService()
-                }
+//                if(shouldBlock){
+//                    overlayRepository.startOverlayService()
+//                }
             }
 
             AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> {
@@ -51,10 +50,10 @@ class MyAccessibilityService : AccessibilityService() {
     }
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataStoreRepositoryImplementation.shouldBlock.collectLatest {
-                shouldBlock = it
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            dataStoreRepositoryImplementation.shouldBlock.collectLatest {
+//                shouldBlock = it
+//            }
+//        }
     }
 }

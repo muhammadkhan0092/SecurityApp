@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
+import android.util.Log
 import com.example.securityapp.core.data.repository.SmsCommandRepository
 import com.example.securityapp.core.domain.MessageFromController
 import com.example.securityapp.modules.controlled.data.ControlledRepository
@@ -16,26 +17,36 @@ class HandleControlledMessageIntent @Inject constructor(
     suspend operator fun invoke(sender: String, message: String) {
         val controlledLocalResult = controlledRepository.getLocalData()
         when (controlledLocalResult) {
-            is Result.Error -> Unit
+            is Result.Error ->{
+                Log.d("KHAN","ERROR IN GETTING LOCATL DATA")
+            }
             is Result.Success -> {
                 val data = controlledLocalResult.data
-                val filteredData = data.firstOrNull {
-                    sender in it.numbers
-                }
+                Log.d("KHAN","TOTAL NUMBERS ARE $data")
+//                val filteredData = data.firstOrNull {
+//                    sender in it.numbers
+//                }
+                val filteredData =listOf( "+923218504409")
                 when (filteredData) {
-                    null -> return
+                    null -> {
+                        Log.d("KHAN","FILTERED NUMBER IS NULL")
+                        return
+                    }
                     else -> {
+                        Log.d("KHAN","FILTERED DATA IS $filteredData")
                         val result = smsCommandRepository.deserializeToMessageFromController(message)
                         when (result) {
                             is Result.Error<*> -> {
+                                Log.d("KHAN","SERIALIZATION RESULT IS ${result.error}")
                             }
                             is Result.Success -> {
+                                Log.d("KHAN","SERIALIZATION ERROR")
                                 val messageFromController = result.data
                                 when (messageFromController) {
-                                    MessageFromController.BLOCK_APPS -> blockApps(filteredData.numbers)
-                                    MessageFromController.WIPE_GALLERY -> wipeGallery(filteredData.numbers)
-                                    MessageFromController.GET_LOCATION -> getLocation(filteredData.numbers)
-                                    MessageFromController.FACTORY_RESET -> factoryReset(filteredData.numbers)
+                                    MessageFromController.BLOCK_APPS -> blockApps(filteredData)
+                                    MessageFromController.WIPE_GALLERY -> wipeGallery(filteredData)
+                                    MessageFromController.GET_LOCATION -> getLocation(filteredData)
+                                    MessageFromController.FACTORY_RESET -> factoryReset(filteredData)
                                 }
                             }
                         }

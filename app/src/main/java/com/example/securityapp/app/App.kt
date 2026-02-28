@@ -145,7 +145,7 @@ fun App() {
                     }
                     ControllerBarcodeScreen(
                         onBarcodeScanned = {
-                            vm.connect("d87d81dc8cf0405da48927db201fbffb",state.value)
+                            vm.connect(it,state.value)
                         },
                         onItemClicked ={it: String->
                             commonVm.onItemClicked(it)

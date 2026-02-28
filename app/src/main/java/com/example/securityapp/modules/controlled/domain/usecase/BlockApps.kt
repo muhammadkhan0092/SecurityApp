@@ -4,12 +4,14 @@ import com.example.securityapp.core.data.DataStoreRepositoryImplementation
 import com.example.securityapp.core.data.repository.SmsCommandRepository
 import com.example.securityapp.core.domain.MessageFromControlled
 import com.example.securityapp.core.domain.MessageTypeFromControlled
+import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 
 class BlockApps @Inject constructor(
     private val smsCommandRepository: SmsCommandRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
+    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
+    private val overlayRepository: OverlayRepository
 ) {
     suspend operator fun invoke(numbers : List<String>){
         val firstNumber = numbers.firstOrNull()
@@ -17,6 +19,7 @@ class BlockApps @Inject constructor(
             string = "Block Apps Complete",
             type = MessageTypeFromControlled.NORMAL
         )
+        overlayRepository.startOverlayService()
         val result = dataStoreRepositoryImplementation.setShouldBlock(true)
         when(result){
             true ->{

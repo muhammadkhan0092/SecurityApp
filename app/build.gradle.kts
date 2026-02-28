@@ -89,9 +89,9 @@ dependencies {
     implementation("com.google.zxing:core:3.5.2")
     implementation("androidx.datastore:datastore:1.1.0")
     implementation("com.google.protobuf:protobuf-javalite:3.24.0")
-    implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("com.google.dagger:hilt-android:2.51")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    kapt("com.google.dagger:hilt-compiler:2.48.1")
+    kapt("com.google.dagger:hilt-compiler:2.51")
     implementation("androidx.activity:activity-compose:1.9.0")
     // Room runtime
     implementation("androidx.room:room-runtime:2.6.1")

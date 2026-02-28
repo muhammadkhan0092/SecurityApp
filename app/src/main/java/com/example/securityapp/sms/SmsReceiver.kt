@@ -6,11 +6,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.telephony.SmsMessage
 import android.util.Log
+import com.example.securityapp.core.domain.HandleMessageIntent
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class SmsReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
-
         if (intent.action == "android.provider.Telephony.SMS_RECEIVED") {
 
             val bundle: Bundle? = intent.extras
@@ -28,6 +32,9 @@ class SmsReceiver : BroadcastReceiver() {
 
                         Log.d("SMS_RECEIVED", "From: $sender")
                         Log.d("SMS_RECEIVED", "Message: $messageBody")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            SmsReceiverEntryPoint.get(context).invoke(sender,messageBody)
+                        }
                         if (messageBody.contains("LOCATION")) {
                         }
                     }
