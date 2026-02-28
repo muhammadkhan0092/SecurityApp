@@ -16,7 +16,7 @@ class HandleControlledMessageIntent @Inject constructor(
     private val getLocation: GetLocation,
     private val factoryReset: FactoryReset
 ){
-    suspend operator fun invoke(sender: String, message: String, email: String) {
+    suspend operator fun invoke(sender: String, message: String, email: String = "") {
         val controlledLocalResult = controlledRepository.getLocalData()
         when (controlledLocalResult) {
             is Result.Error ->{

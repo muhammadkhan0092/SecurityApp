@@ -22,7 +22,7 @@ import com.example.securityapp.modules.intro.presentation.composables.LoginScree
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
 import com.example.securityapp.modules.controlled.presentation.vm.ControlledBarcodeVm
-import com.example.securityapp.modules.controlled.presentation.screen.ControlledHomeScreen
+import com.example.securityapp.modules.controlled.presentation.screen.ControlledTabs
 import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
 import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
 import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreen
@@ -129,7 +129,7 @@ fun App() {
                 ) { entry ->
                     val vm = hiltViewModel<ControlledBarcodeVm>()
                     val state by vm.state.collectAsStateWithLifecycle()
-                    ControlledHomeScreen(
+                    ControlledTabs(
                         state = state,
                         onAction = {
                             vm.onAction(it)

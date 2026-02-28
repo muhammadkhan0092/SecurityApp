@@ -21,21 +21,4 @@ class ControlledVm @Inject constructor(
     private val syncControlled: SyncControlled
 ) : ViewModel() {
 
-    val state: StateFlow<List<ControlledDomain>?> = controlledRepository.getFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Companion.Eagerly,
-            initialValue = null
-        )
-
-    init {
-        viewModelScope.launch {
-            controlledRepository.listenData(dataStoreRepositoryImplementation.getEmail())
-                .collectLatest {
-                    it?.let {
-                        syncControlled(it)
-                    }
-                }
-        }
-    }
 }
