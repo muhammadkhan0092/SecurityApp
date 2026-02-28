@@ -105,32 +105,6 @@ class HandleMessageIntent @Inject constructor(
         }
     }
 
-    suspend fun getLocation(numbers: List<String>) {
-        val location = locationRepository.getAccurateLocation()
-        location?.let {
-            val locationString =
-                "https://www.google.com/maps/search/?api=1&query=${it.latitude},${it.longitude}"
-            val firstNumber = numbers.firstOrNull()
-            val messageFromControlled = MessageFromControlled(
-                string = locationString,
-                type = MessageTypeFromControlled.NORMAL
-            )
-            val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
-            when (serializedMessage) {
-                is Result.Error<*> -> {
-                    firstNumber?.let {
-                        smsCommandRepository.sendSms(it, serializedMessage.error)
-                    }
-                }
-
-                is Result.Success -> {
-                    firstNumber?.let {
-                        smsCommandRepository.sendSms(it, serializedMessage.data)
-                    }
-                }
-            }
-        }
-    }
 
     fun factoryReset(numbers: List<String>) {
         val firstNumber = numbers.firstOrNull()
