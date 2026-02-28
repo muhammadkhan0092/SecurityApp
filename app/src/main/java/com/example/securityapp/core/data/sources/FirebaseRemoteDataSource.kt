@@ -30,13 +30,13 @@ class FirebaseRemoteDataSource @Inject constructor(
     suspend inline fun <reified T : Any> get(
         collectionPath: String,
         documentId: String
-    ): T{
+    ): T?{
         val result = firestore
             .collection(collectionPath)
             .document(documentId)
             .get()
             .await()
-        return result.toObject(T::class.java)?:throw Exception("User Null")
+        return result.toObject(T::class.java)
     }
 
     suspend inline fun <reified T : Any> getDocumentByEqualFilter(

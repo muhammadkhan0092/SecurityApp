@@ -1,6 +1,9 @@
 package com.example.securityapp.core.data.repository
 
+import com.example.securityapp.core.data.firebaseGetSafeCall
+import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.domain.DomainDevice
+import com.example.securityapp.firebase.DtoControllerDevice
 import com.example.securityapp.firebase.DtoControllerUser
 import com.example.securityapp.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
@@ -9,24 +12,26 @@ import javax.inject.Inject
 
 class LoginRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
+    private val dataSource: FirebaseRemoteDataSource
 
 ) {
     val controlledDataCollection = "controlled"
     val controlledUserCollection = "controlled_user"
     suspend fun insertControlledUser(
-        controlledData : ControlledDeviceDto,
-        user : DomainDevice
+        controlledData: ControlledDeviceDto,
+        user: DomainDevice
     ): Result<Unit> {
         return try {
             val batch = firestore.batch()
-            val controlledDataRef = firestore.collection(controlledDataCollection).document(user.email)
-            val controllerUserRef = firestore.collection(controlledUserCollection).document(user.email)
+            val controlledDataRef =
+                firestore.collection(controlledDataCollection).document(user.email)
+            val controllerUserRef =
+                firestore.collection(controlledUserCollection).document(user.email)
             batch.set(controlledDataRef, controlledData)
-            batch.set(controllerUserRef,user)
+            batch.set(controllerUserRef, user)
             batch.commit().await()
             Result.Success(Unit)
-        }
-        catch (e : Exception){
+        } catch (e: Exception) {
             Result.Error("")
         }
     }
@@ -34,20 +39,35 @@ class LoginRepository @Inject constructor(
     val controllerUserCollection = "controller_user"
     val controllerDataCollection = "controllers"
     suspend fun insertControllerUser(
-        controllerData : ControllerDeviceDto,
-        user : DtoControllerUser
+        controllerData: ControllerDeviceDto,
+        user: DtoControllerUser
     ): Result<Unit> {
         return try {
             val batch = firestore.batch()
-            val controllerDataReference = firestore.collection(controllerDataCollection).document(controllerData.email)
-            val controllerUserRef = firestore.collection(controllerUserCollection).document(user.email)
+            val controllerDataReference =
+                firestore.collection(controllerDataCollection).document(controllerData.email)
+            val controllerUserRef =
+                firestore.collection(controllerUserCollection).document(user.email)
             batch.set(controllerUserRef, user)
-            batch.set(controllerDataReference,controllerData)
+            batch.set(controllerDataReference, controllerData)
             batch.commit().await()
             Result.Success(Unit)
-        }
-        catch (e : Exception){
+        } catch (e: Exception) {
             Result.Error("")
         }
+    }
+    suspend fun getControllerUser(email: String): Result<DtoControllerUser?> {
+        return firebaseGetSafeCall<DtoControllerUser>(
+            action = {
+                dataSource.get(collectionPath = controllerUserCollection, documentId = email)
+            }
+        )
+    }
+    suspend fun getControlledUser(email: String): Result<DomainDevice?> {
+        return firebaseGetSafeCall<DomainDevice>(
+            action = {
+                dataSource.get(collectionPath = controlledUserCollection, documentId = email)
+            }
+        )
     }
 }

@@ -23,6 +23,23 @@ class ControllerLoginUseCase @Inject constructor(
         if (sims.isEmpty()) {
             return Error("Insert A Sim to Continue")
         }
+        val isAlreadyLoggedInResult = loginRepository.getControllerUser(email)
+        return when(isAlreadyLoggedInResult){
+            is Error<*> -> Error(isAlreadyLoggedInResult.error)
+            is Result.Success -> {
+                val data = isAlreadyLoggedInResult.data
+                when(data){
+                    null-> newControllerLogin(email,password,sims)
+                    else -> alreadyControllerLogin(data)
+                }
+            }
+        }
+    }
+    private suspend fun alreadyControllerLogin(data: DtoControllerUser) : Result<Unit>{
+        infoUseCase(email = data.email)
+        return Result.Success(Unit)
+    }
+    suspend fun newControllerLogin(email : String,password: String,sims : List<String>): Result<Unit> {
         val result = loginRepository.insertControllerUser(
             controllerData = ControllerDeviceDto(
                 email = email,

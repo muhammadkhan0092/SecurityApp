@@ -1,12 +1,11 @@
 package com.example.securityapp.modules.intro.domain
 
-import android.R.attr.password
 import com.example.securityapp.core.data.repository.ControlledDeviceDto
 import com.example.securityapp.core.data.repository.DeviceRepository
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.domain.DomainDevice
-import com.example.securityapp.modules.controlled.domain.usecase.StoreControlledInfoUseCase
 import com.example.securityapp.modules.controlled.domain.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.usecase.StoreControlledInfoUseCase
 import com.example.securityapp.utils.Result
 import com.example.securityapp.utils.Result.Error
 import javax.inject.Inject
@@ -27,7 +26,7 @@ class ControlledLoginUseCase @Inject constructor(
 //            return Error("Insert A Sim to Continue")
 //        }
         val sims = listOf("0092","0082")
-        val alreadyDevice = deviceRepository.getDevice(email)
+        val alreadyDevice = loginRepository.getControlledUser(email)
         return when (alreadyDevice) {
             is Error<*> -> return Error("Server Error")
             is Result.Success -> {
