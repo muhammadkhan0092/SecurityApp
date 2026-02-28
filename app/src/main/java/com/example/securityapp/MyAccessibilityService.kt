@@ -3,14 +3,6 @@ package com.example.securityapp
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import android.util.Log
-import com.example.securityapp.core.data.DataStoreRepositoryImplementation
-import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class MyAccessibilityService : AccessibilityService() {
 //    @Inject

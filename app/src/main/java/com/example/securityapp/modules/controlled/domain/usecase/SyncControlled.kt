@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
-import com.example.securityapp.modules.controlled.data.ControlledRepository
+import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.utils.Result
 import javax.inject.Inject

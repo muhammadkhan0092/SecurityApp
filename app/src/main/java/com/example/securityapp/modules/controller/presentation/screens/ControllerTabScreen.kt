@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,8 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.securityapp.core.presentation.ButtonComposable
-import com.example.securityapp.modules.controller.domain.ControllerMessagesDomain
-import com.example.securityapp.modules.controller.presentation.components.ControllerMessagesItem
+import com.example.securityapp.core.presentation.MessagesScreen
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
 
@@ -82,19 +79,10 @@ fun ControllerTabScreen(
                     }
 
                     1 -> {
-                        ControllerMessages(state.messages)
+                        MessagesScreen(state.messages)
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun ControllerMessages(messages: List<ControllerMessagesDomain>) {
-    LazyColumn {
-        items(messages) {
-            ControllerMessagesItem(it)
         }
     }
 }

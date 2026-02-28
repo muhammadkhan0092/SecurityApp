@@ -1,8 +1,8 @@
 package com.example.securityapp.di
 
-import com.example.securityapp.modules.controlled.domain.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
 import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
-import com.example.securityapp.modules.controlled.presentation.TelephoneRepository
+import com.example.securityapp.modules.controlled.data.repository.TelephoneRepository
 import com.example.securityapp.modules.controlled.presentation.service.OverlayControllerImpl
 import dagger.Module
 import dagger.Provides

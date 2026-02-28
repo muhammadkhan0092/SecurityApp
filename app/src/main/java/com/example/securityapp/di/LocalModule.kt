@@ -5,12 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.room.Room
-import com.example.securityapp.core.data.AppSettingsSerializer
+import com.example.securityapp.core.data.db.AppSettingsSerializer
 import com.example.securityapp.core.data.db.SecurityDb
 import com.example.securityapp.datastore.AppSettings
-import com.example.securityapp.modules.controlled.data.ControlledDao
+import com.example.securityapp.modules.controlled.data.source.ControlledDao
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
-import com.example.securityapp.modules.controller.data.dao.ControllerMessagesDao
+import com.example.securityapp.core.data.dao.ControllerMessagesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

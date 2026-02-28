@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.controller.domain.usecase
 
-import com.example.securityapp.core.data.DataStoreRepositoryImplementation
+import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.utils.Result
 import javax.inject.Inject

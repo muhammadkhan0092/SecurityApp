@@ -1,13 +1,13 @@
 package com.example.securityapp.domain.usecase
 
 import android.util.Log
-import com.example.securityapp.core.data.DataStoreRepositoryImplementation
+import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
 import com.example.securityapp.core.data.repository.ConnectionRepository
-import com.example.securityapp.core.data.repository.ControlledDeviceDto
-import com.example.securityapp.modules.controlled.data.ControlledRepository
-import com.example.securityapp.core.data.repository.ControllerDeviceDto
-import com.example.securityapp.core.data.repository.DevicesDto
-import com.example.securityapp.modules.controlled.domain.PhoneRepository
+import com.example.securityapp.core.data.models.ControlledDeviceDto
+import com.example.securityapp.core.data.models.ControllerDeviceDto
+import com.example.securityapp.core.data.models.DevicesDto
+import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
+import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 

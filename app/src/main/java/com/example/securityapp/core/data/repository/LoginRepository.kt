@@ -1,9 +1,10 @@
 package com.example.securityapp.core.data.repository
 
-import com.example.securityapp.core.data.firebaseGetSafeCall
+import com.example.securityapp.core.data.ext.firebaseGetSafeCall
+import com.example.securityapp.core.data.models.ControlledDeviceDto
+import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.domain.DomainDevice
-import com.example.securityapp.firebase.DtoControllerDevice
 import com.example.securityapp.firebase.DtoControllerUser
 import com.example.securityapp.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore

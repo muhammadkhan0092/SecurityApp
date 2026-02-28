@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.example.securityapp.core.data.AppSettingsSerializer
+import com.example.securityapp.core.data.db.AppSettingsSerializer
 import com.example.securityapp.datastore.AppSettings
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore

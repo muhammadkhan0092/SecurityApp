@@ -2,7 +2,7 @@ package com.example.securityapp.modules.controller.presentation.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.data.DataStoreRepositoryImplementation
+import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
 import com.example.securityapp.modules.controller.data.repository.ControllerRepository
 import com.example.securityapp.modules.controller.domain.ControllerDomain
 import com.example.securityapp.modules.controller.domain.SyncController

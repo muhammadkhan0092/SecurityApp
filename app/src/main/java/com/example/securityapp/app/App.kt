@@ -21,8 +21,8 @@ import com.example.securityapp.modules.intro.presentation.vm.LoginCommonVm
 import com.example.securityapp.modules.intro.presentation.composables.LoginScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.securityapp.datastore.AppSettings.UserType.*
-import com.example.securityapp.modules.controlled.presentation.ControlledBarcodeVm
-import com.example.securityapp.modules.controlled.presentation.ControlledHomeScreen
+import com.example.securityapp.modules.controlled.presentation.vm.ControlledBarcodeVm
+import com.example.securityapp.modules.controlled.presentation.screen.ControlledHomeScreen
 import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
 import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
 import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreen

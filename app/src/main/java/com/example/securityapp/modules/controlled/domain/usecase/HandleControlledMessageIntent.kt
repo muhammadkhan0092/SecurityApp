@@ -3,9 +3,11 @@ package com.example.securityapp.modules.controlled.domain.usecase
 import android.util.Log
 import com.example.securityapp.core.data.repository.SmsCommandRepository
 import com.example.securityapp.core.domain.MessageFromController
-import com.example.securityapp.modules.controlled.data.ControlledRepository
+import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
 import javax.inject.Inject
 import com.example.securityapp.utils.Result
+import kotlin.text.contains
+
 class HandleControlledMessageIntent @Inject constructor(
     private val controlledRepository : ControlledRepository,
     private val smsCommandRepository: SmsCommandRepository,
@@ -14,7 +16,7 @@ class HandleControlledMessageIntent @Inject constructor(
     private val getLocation: GetLocation,
     private val factoryReset: FactoryReset
 ){
-    suspend operator fun invoke(sender: String, message: String) {
+    suspend operator fun invoke(sender: String, message: String, email: String) {
         val controlledLocalResult = controlledRepository.getLocalData()
         when (controlledLocalResult) {
             is Result.Error ->{
@@ -26,7 +28,7 @@ class HandleControlledMessageIntent @Inject constructor(
 //                val filteredData = data.firstOrNull {
 //                    sender in it.numbers
 //                }
-                val filteredData =listOf( "+923218504409")
+                val filteredData =listOf("+923218504409")
                 when (filteredData) {
                     null -> {
                         Log.d("KHAN","FILTERED NUMBER IS NULL")
@@ -43,10 +45,10 @@ class HandleControlledMessageIntent @Inject constructor(
                                 Log.d("KHAN","SERIALIZATION ERROR")
                                 val messageFromController = result.data
                                 when (messageFromController) {
-                                    MessageFromController.BLOCK_APPS -> blockApps(filteredData)
-                                    MessageFromController.WIPE_GALLERY -> wipeGallery(filteredData)
-                                    MessageFromController.GET_LOCATION -> getLocation(filteredData)
-                                    MessageFromController.FACTORY_RESET -> factoryReset(filteredData)
+                                    MessageFromController.BLOCK_APPS -> blockApps(filteredData,email)
+                                    MessageFromController.WIPE_GALLERY -> wipeGallery(filteredData,email)
+                                    MessageFromController.GET_LOCATION -> getLocation(filteredData,email)
+                                    MessageFromController.FACTORY_RESET -> factoryReset(filteredData,email)
                                 }
                             }
                         }

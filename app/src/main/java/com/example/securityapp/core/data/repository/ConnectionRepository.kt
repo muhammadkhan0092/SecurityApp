@@ -1,5 +1,7 @@
 package com.example.securityapp.core.data.repository
 
+import com.example.securityapp.core.data.models.ControlledDeviceDto
+import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
