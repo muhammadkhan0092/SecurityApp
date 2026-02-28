@@ -2,9 +2,9 @@ package com.example.securityapp.modules.intro.domain
 
 import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.core.data.repository.LoginRepository
-import com.example.securityapp.domain.StoreControllerInfoUseCase
+import com.example.securityapp.modules.controller.domain.usecase.StoreControllerInfoUseCase
 import com.example.securityapp.firebase.DtoControllerUser
-import com.example.securityapp.modules.controlled.presentation.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.PhoneRepository
 import com.example.securityapp.utils.Result
 import com.example.securityapp.utils.Result.Error
 import javax.inject.Inject

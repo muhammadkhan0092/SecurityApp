@@ -1,6 +1,6 @@
 package com.example.securityapp.di
 
-import com.example.securityapp.modules.controlled.presentation.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.PhoneRepository
 import com.example.securityapp.modules.controlled.presentation.TelephoneRepository
 import dagger.Module
 import dagger.Provides

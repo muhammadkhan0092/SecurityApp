@@ -6,7 +6,7 @@ import com.example.securityapp.core.data.repository.ConnectionRepository
 import com.example.securityapp.modules.controlled.data.ControlledRepository
 import com.example.securityapp.core.data.repository.ControllerDeviceDto
 import com.example.securityapp.core.data.repository.DevicesDto
-import com.example.securityapp.modules.controlled.presentation.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.PhoneRepository
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 

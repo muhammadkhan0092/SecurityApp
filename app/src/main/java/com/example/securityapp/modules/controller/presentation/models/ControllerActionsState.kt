@@ -6,5 +6,6 @@ data class ControllerActionsState(
     val isLoading : Boolean = true,
     val numbers : List<String> = emptyList(),
     val messages : List<ControllerMessagesDomain> = emptyList(),
-    val selectedTab : Int = 0
+    val selectedTab : Int = 0,
+    val email : String=""
 )

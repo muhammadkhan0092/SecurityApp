@@ -2,8 +2,8 @@ package com.example.securityapp.modules.controller.presentation.models
 
 sealed interface ControllerTabAction {
     data class OnTabSelected(val index : Int) : ControllerTabAction
-    data object OnWipeGallery : ControllerTabAction
-    data object OnFactoryReset : ControllerTabAction
-    data object OnLocationFetch : ControllerTabAction
-    data object OnBlockApps : ControllerTabAction
+    data class OnWipeGallery(val number : String) : ControllerTabAction
+    data class OnFactoryReset(val number : String) : ControllerTabAction
+    data class OnLocationFetch(val number : String) : ControllerTabAction
+    data class OnBlockApps(val number : String) : ControllerTabAction
 }

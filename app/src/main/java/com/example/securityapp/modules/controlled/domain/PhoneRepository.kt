@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.controlled.presentation
+package com.example.securityapp.modules.controlled.domain
 
 interface PhoneRepository {
 

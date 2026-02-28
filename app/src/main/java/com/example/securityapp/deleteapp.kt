@@ -25,7 +25,6 @@ internal fun uninstallPackage(context: Context, packageName: String) {
         CODE_UNINSTALL_RESULT,
         Intent(ACTION_UNINSTALL_RESULT),
         PendingIntent.FLAG_IMMUTABLE).intentSender
-
     val pi = context.packageManager.packageInstaller
     pi.uninstall(packageName, intentSender)
 }

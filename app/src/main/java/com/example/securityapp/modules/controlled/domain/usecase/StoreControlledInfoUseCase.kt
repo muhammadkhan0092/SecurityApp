@@ -1,8 +1,7 @@
-package com.example.securityapp.domain
+package com.example.securityapp.modules.controlled.domain.usecase
 
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
 import com.example.securityapp.datastore.AppSettings
-import com.example.securityapp.firebase.DtoDevice
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 

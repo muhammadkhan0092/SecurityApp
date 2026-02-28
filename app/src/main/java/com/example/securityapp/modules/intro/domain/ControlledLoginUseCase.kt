@@ -5,8 +5,8 @@ import com.example.securityapp.modules.controlled.data.ControlledRepository
 import com.example.securityapp.core.data.repository.DeviceRepository
 import com.example.securityapp.core.data.repository.LoginRepository
 import com.example.securityapp.domain.DomainDevice
-import com.example.securityapp.domain.StoreControlledInfoUseCase
-import com.example.securityapp.modules.controlled.presentation.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.usecase.StoreControlledInfoUseCase
+import com.example.securityapp.modules.controlled.domain.PhoneRepository
 import com.example.securityapp.utils.Result
 import com.example.securityapp.utils.Result.Error
 import javax.inject.Inject

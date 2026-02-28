@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.Settings
 import android.telephony.SubscriptionManager
 import androidx.annotation.RequiresPermission
+import com.example.securityapp.modules.controlled.domain.PhoneRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
-import com.example.securityapp.modules.controlled.presentation.PhoneRepository
+import com.example.securityapp.modules.controlled.domain.PhoneRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map

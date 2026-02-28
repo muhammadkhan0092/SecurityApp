@@ -1,4 +1,4 @@
-package com.example.securityapp.domain
+package com.example.securityapp.modules.controller.domain.usecase
 
 import com.example.securityapp.core.data.DataStoreRepositoryImplementation
 import com.example.securityapp.datastore.AppSettings

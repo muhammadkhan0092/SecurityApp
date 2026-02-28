@@ -78,7 +78,7 @@ fun ControllerTabScreen(
             HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth().weight(1f)){pagerState->
                 when (pagerState) {
                     0 -> {
-                        ControllerActions(state.numbers)
+                        ControllerActions(state.numbers,onAction)
                     }
 
                     1 -> {
@@ -100,23 +100,23 @@ fun ControllerMessages(messages: List<ControllerMessagesDomain>) {
 }
 
 @Composable
-fun ControllerActions(numbers: List<String>) {
+fun ControllerActions(numbers: List<String>,onAction: (ControllerTabAction) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         NumbersComposable(numbers = numbers)
         ButtonComposable("Wipe Data") {
-
+            onAction(ControllerTabAction.OnFactoryReset(numbers.first()))
         }
         ButtonComposable(text = "Clear Gallery") {
-
+            onAction(ControllerTabAction.OnWipeGallery(numbers.first()))
         }
         ButtonComposable(text = "Fetch Location") {
-
+            onAction(ControllerTabAction.OnLocationFetch(numbers.first()))
         }
         ButtonComposable(text = "Block Apps") {
-
+            onAction(ControllerTabAction.OnBlockApps(numbers.first()))
         }
     }
 }

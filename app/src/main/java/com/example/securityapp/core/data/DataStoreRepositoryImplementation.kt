@@ -30,7 +30,11 @@ class DataStoreRepositoryImplementation @Inject constructor(
     val isSetupComplete : Flow<Boolean> = dataStore.data.safeFlowWithDefault("").map { it.isSetupComplete }
     val barcode : Flow<String> = dataStore.data.safeFlowWithDefault("barcode").map { it.barcode }
     val userType : Flow<AppSettings.UserType> = dataStore.data.safeFlowWithDefault("barcode").map { it.userType }
+    val shouldBlock : Flow<Boolean> = dataStore.data.safeFlowWithDefault("should_block").map { it.shouldBlock }
 
+    suspend fun getShouldBlock(): Boolean {
+        return shouldBlock.first()
+    }
     suspend fun getEmail(): String {
         return email.first()
     }
@@ -39,6 +43,18 @@ class DataStoreRepositoryImplementation @Inject constructor(
     }
     suspend fun getIsSetupCompleted(): Boolean {
         return isSetupComplete.first()
+    }
+
+    suspend fun setShouldBlock(state: Boolean): Boolean {
+        return try {
+            dataStore.updateData { currentData ->
+                currentData.toBuilder().setShouldBlock(state).build()
+            }
+            true
+        } catch (e: IOException) {
+            Log.e(TAG, "Failed to update is Usage Displayed", e)
+            false
+        }
     }
     suspend fun setIsSetupCompleted(state: Boolean): Boolean {
         return try {
