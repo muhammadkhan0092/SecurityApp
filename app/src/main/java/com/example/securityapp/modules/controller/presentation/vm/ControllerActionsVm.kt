@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.domain.MessageFromController
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.modules.controller.domain.ControllerDomain
+import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.modules.controller.domain.usecase.SendMessageRequestFromController
 import com.example.securityapp.modules.controller.presentation.mapToNumbers
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState

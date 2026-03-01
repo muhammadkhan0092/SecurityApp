@@ -4,7 +4,7 @@ import com.example.securityapp.core.data.repository.SmsCommandRepository
 import com.example.securityapp.core.domain.MessageFromController
 import com.example.securityapp.core.domain.MessageTypeFromControlled
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.modules.controller.domain.MessagesDomain
+import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 

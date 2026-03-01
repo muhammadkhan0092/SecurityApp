@@ -5,7 +5,7 @@ import com.example.securityapp.core.data.ext.roomSafeFlow
 import com.example.securityapp.core.data.mappers.mapToMessagesDomain
 import com.example.securityapp.core.data.mappers.mapToMessagesEntity
 import com.example.securityapp.core.data.models.MessagesEntity
-import com.example.securityapp.modules.controller.domain.MessagesDomain
+import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import com.example.securityapp.utils.Result
 import com.example.securityapp.utils.map
 import kotlinx.coroutines.flow.Flow

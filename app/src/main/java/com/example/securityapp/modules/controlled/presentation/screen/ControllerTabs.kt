@@ -36,33 +36,55 @@ fun ControlledTabs(
             pagerState.scrollToPage(state.selectedIndex)
         }
     }
-    Column (modifier = Modifier
+    Column (
+        modifier = Modifier
         .fillMaxSize()
-        .safeContentPadding()) {
-        TabRow(selectedTabIndex = state.selectedIndex,
+        .safeContentPadding()
+    ) {
+        TabRow(
+            selectedTabIndex = state.selectedIndex,
             containerColor = Color.White,
             contentColor = Color.Blue
             ) {
-            Tab(selected = state.selectedIndex==0, onClick = {
-                onAction(ControlledAction.OnTabSelected(0))
-            }) {
-                Text("Controllers", modifier = Modifier.padding(vertical = 30.dp))
+            Tab(
+                selected = state.selectedIndex==0,
+                onClick = {
+                    onAction(ControlledAction.OnTabSelected(0))
+                }
+            ) {
+                Text(
+                    "Controllers",
+                    modifier = Modifier.padding(vertical = 30.dp)
+                )
             }
-            Tab(selected = state.selectedIndex==0, onClick = {
+            Tab(
+                selected = state.selectedIndex==0,
+                onClick = {
                 onAction(ControlledAction.OnTabSelected(1))
-            }) {
-                Text("Messages", modifier = Modifier.padding(vertical = 30.dp))
+                }
+            ) {
+                Text(
+                    "Messages", modifier = Modifier.padding(vertical = 30.dp)
+                )
             }
             Tab(selected = state.selectedIndex==0, onClick = {
                 onAction(ControlledAction.OnTabSelected(2))
             }) {
-                Text("Barcode", modifier = Modifier.padding(vertical = 30.dp))
+                Text(
+                    "Barcode", modifier = Modifier.padding(vertical = 30.dp)
+                )
             }
         }
-        HorizontalPager(state = pagerState, modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)) { pagerState->
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) { pagerState->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
                 when (pagerState) {
                     0 -> ControllerListComposable(state.controllers)
                     1-> MessagesScreen(state.messages)

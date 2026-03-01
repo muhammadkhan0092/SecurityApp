@@ -8,12 +8,11 @@ import android.os.Environment
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 
 @Composable
 fun RequestManageStoragePermission() {
-
     val context = LocalContext.current
-
     var hasPermission by remember {
         mutableStateOf(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -28,7 +27,7 @@ fun RequestManageStoragePermission() {
         Button(onClick = {
             val intent = Intent(
                 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                Uri.parse("package:${context.packageName}")
+                "package:${context.packageName}".toUri()
             )
             context.startActivity(intent)
         }) {

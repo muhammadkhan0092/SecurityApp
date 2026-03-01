@@ -24,6 +24,6 @@ fun GateScreen(navController: NavHostController, state:AppSettings.UserType?) {
             }
         }
 
-        AppSettings.UserType.not_set -> navController.navigate(Route.IntroGraph)
+        AppSettings.UserType.not_set -> navController.navigate(Route.Permissions)
     }
 }

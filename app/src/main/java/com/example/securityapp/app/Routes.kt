@@ -25,4 +25,7 @@ sealed interface Route {
     data object ControllerBarcode: Route
     @Serializable
     data object ControllerActions: Route
+
+    @Serializable
+    data object Permissions : Route
 }

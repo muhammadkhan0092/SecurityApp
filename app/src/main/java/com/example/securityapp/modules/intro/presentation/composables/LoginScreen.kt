@@ -1,8 +1,10 @@
 package com.example.securityapp.modules.intro.presentation.composables
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -18,33 +20,35 @@ fun LoginScreen(
     state: LoginState,
     onAction : (LoginAction)-> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        TextField(
-            placeholder = {
-            Text("Email")
-        },
-            value = state.email,
-            onValueChange = {
-                onAction(LoginAction.OnEmailChanged(it))
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            TextField(
+                placeholder = {
+                    Text("Email")
+                },
+                value = state.email,
+                onValueChange = {
+                    onAction(LoginAction.OnEmailChanged(it))
+                }
+            )
+            TextField(
+                placeholder = {
+                    Text("Password")
+                },
+                value = state.password,
+                onValueChange = {
+                    onAction(LoginAction.OnPasswordChanged(it))
+                }
+            )
+            Button(onClick = {
+                onAction(LoginAction.OnLoginClicked(state.email,state.password))
+            }){
+                Text("Login")
             }
-        )
-        TextField(
-            placeholder = {
-                Text("Password")
-            },
-            value = state.password,
-            onValueChange = {
-                onAction(LoginAction.OnPasswordChanged(it))
-            }
-        )
-        Button(onClick = {
-            onAction(LoginAction.OnLoginClicked(state.email,state.password))
-        }){
-            Text("Login")
         }
     }
 }

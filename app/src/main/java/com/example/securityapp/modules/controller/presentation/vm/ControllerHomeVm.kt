@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.domain.usecase.InsertConnection
 import com.example.securityapp.modules.controller.data.mappers.mapToDevicesDto
-import com.example.securityapp.modules.controller.domain.ControllerDomain
+import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.modules.controller.presentation.mapToEmails
 import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
 import dagger.hilt.android.lifecycle.HiltViewModel

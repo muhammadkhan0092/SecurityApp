@@ -1,7 +1,7 @@
 package com.example.securityapp.core.domain
 
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.modules.controller.domain.MessagesDomain
+import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import javax.inject.Inject
 
 class InsertMessage @Inject constructor(

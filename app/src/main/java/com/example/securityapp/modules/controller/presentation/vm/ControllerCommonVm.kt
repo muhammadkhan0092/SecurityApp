@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
 import com.example.securityapp.modules.controller.data.repository.ControllerRepository
-import com.example.securityapp.modules.controller.domain.ControllerDomain
-import com.example.securityapp.modules.controller.domain.SyncController
+import com.example.securityapp.modules.controller.domain.models.ControllerDomain
+import com.example.securityapp.modules.controller.domain.usecase.SyncController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest

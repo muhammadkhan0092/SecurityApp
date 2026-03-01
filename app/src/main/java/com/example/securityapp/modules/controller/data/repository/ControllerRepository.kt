@@ -9,7 +9,7 @@ import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
 import com.example.securityapp.modules.controller.data.mappers.mapToControllerEntity
 import com.example.securityapp.modules.controller.data.mappers.mapToDomainController
-import com.example.securityapp.modules.controller.domain.ControllerDomain
+import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.utils.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

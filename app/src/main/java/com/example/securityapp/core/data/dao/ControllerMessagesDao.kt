@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.securityapp.core.data.models.MessagesEntity
-import com.example.securityapp.modules.controller.domain.MessagesDomain
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -5,7 +5,7 @@ import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.core.data.models.DevicesDto
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.modules.controller.data.models.ControllerEntity
-import com.example.securityapp.modules.controller.domain.ControllerDomain
+import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 
 fun ControllerEntity.mapToDomainController(): ControllerDomain {
     return ControllerDomain(

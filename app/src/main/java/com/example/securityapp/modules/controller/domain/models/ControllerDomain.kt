@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.controller.domain
+package com.example.securityapp.modules.controller.domain.models
 
 data class ControllerDomain(
     val email : String,

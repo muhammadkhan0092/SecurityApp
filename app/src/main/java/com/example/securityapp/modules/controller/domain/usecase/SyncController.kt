@@ -1,6 +1,7 @@
-package com.example.securityapp.modules.controller.domain
+package com.example.securityapp.modules.controller.domain.usecase
 
 import com.example.securityapp.modules.controller.data.repository.ControllerRepository
+import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.utils.Result
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package com.example.securityapp.core.data.mappers
 
 import com.example.securityapp.core.data.models.MessagesEntity
-import com.example.securityapp.modules.controller.domain.MessagesDomain
+import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 
 fun MessagesEntity.mapToMessagesDomain(): MessagesDomain {
     return MessagesDomain(
