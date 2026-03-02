@@ -1,5 +1,7 @@
 package com.example.securityapp.core.data.repository
 
+import com.example.securityapp.core.data.ext.firebaseGetSafeCall
+import com.example.securityapp.core.data.models.BothDeviceDto
 import com.example.securityapp.core.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.utils.Result
@@ -28,6 +30,37 @@ class ConnectionRepository @Inject constructor(
         }
         catch (e : Exception){
             Result.Error("")
+        }
+    }
+    suspend fun getControllerAndControlledData(
+        controllerEmail: String,
+        controlledEmail: String
+    ): Result<BothDeviceDto> {
+
+        return try {
+
+            val controllerSnapshot = firestore
+                .collection(controllerCollection)
+                .document(controllerEmail)
+                .get()
+                .await()
+
+            val controlledSnapshot = firestore
+                .collection(controlledCollection)
+                .document(controlledEmail)
+                .get()
+                .await()
+
+            val controller = controllerSnapshot.toObject(ControllerDeviceDto::class.java)
+            val controlled = controlledSnapshot.toObject(ControlledDeviceDto::class.java)
+
+            if (controller != null && controlled != null) {
+                Result.Success(BothDeviceDto(controllerDto = controller, controlledDto =controlled))
+            } else {
+                Result.Error("One or both documents not found")
+            }
+        } catch (e: Exception) {
+            Result.Error(e.message ?: "Unknown error")
         }
     }
 }

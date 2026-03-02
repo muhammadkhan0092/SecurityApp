@@ -5,17 +5,12 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,15 +34,8 @@ import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
 import com.example.securityapp.modules.intro.presentation.models.LoginEvents
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreen
-import com.example.securityapp.permissions.PermissionAction
-import com.example.securityapp.permissions.PermissionEvent
 import com.example.securityapp.permissions.PermissionScreen
 import com.example.securityapp.permissions.PermissionVm
-import com.example.securityapp.permissions.RuntimePermissions
-import com.example.securityapp.permissions.SpecialPermissions.hasManageAllFilesPermission
-import com.example.securityapp.permissions.SpecialPermissions.hasOverlayPermission
-import com.example.securityapp.permissions.SpecialPermissions.requestManageAllFilesPermission
-import com.example.securityapp.permissions.SpecialPermissions.requestOverlayPermission
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -158,6 +146,7 @@ fun App() {
                     val state by vm.state.collectAsStateWithLifecycle()
                     ControlledTabs(
                         state = state,
+                        vm.events,
                         onAction = {
                             vm.onAction(it)
                         }

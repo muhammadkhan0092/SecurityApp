@@ -72,10 +72,11 @@ class PermissionVm @Inject constructor(
                 return
             }
             PermissionAction.OnContinueClicked ->{
-                when{
-                    state.value.isOtherGranted && state.value.isStorageGranted && state.value.isOverlayGranted->  PermissionEvent.NavigateToIntro
-                    else ->PermissionEvent.Toast("Grant All Permissions")
-                }
+                PermissionEvent.NavigateToIntro
+//                when{
+//                    state.value.isOtherGranted && state.value.isStorageGranted && state.value.isOverlayGranted->  PermissionEvent.NavigateToIntro
+//                    else ->PermissionEvent.Toast("Grant All Permissions")
+//                }
             }
         }
         viewModelScope.launch {

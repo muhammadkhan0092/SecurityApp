@@ -26,7 +26,7 @@ fun PermissionItem(
             modifier = Modifier.weight(1f)
         ){
             Text(heading, fontWeight = FontWeight.Bold)
-            Text(content)
+            Text("")
 
         }
         Switch(

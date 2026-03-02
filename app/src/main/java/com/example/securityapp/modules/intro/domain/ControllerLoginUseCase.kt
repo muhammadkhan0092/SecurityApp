@@ -20,7 +20,8 @@ class ControllerLoginUseCase @Inject constructor(
         if (isAirplaneOn) {
             return Error("Disable Airplane Mode")
         }
-        val sims = phoneRepository.getSimNumbers()
+        val sims = listOf("12312","123124")
+        //val sims = phoneRepository.getSimNumbers()
         Log.d("KHAN","SIMS ARE $sims")
         if (sims.isEmpty()) {
             return Error("Insert A Sim to Continue")

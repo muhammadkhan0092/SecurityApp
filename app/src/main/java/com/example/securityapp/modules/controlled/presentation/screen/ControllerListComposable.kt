@@ -8,9 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
 import com.example.securityapp.modules.controlled.presentation.components.ControllerListItem
+import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 
 @Composable
-fun ControllerListComposable(controllers : List<ControlledDomain>) {
+fun ControllerListComposable(
+    controllers : List<ControlledDomain>,
+    onAction : (ControlledAction)-> Unit
+) {
     when(controllers.isEmpty()){
         true -> {
             Text("No Devices")
@@ -18,7 +22,10 @@ fun ControllerListComposable(controllers : List<ControlledDomain>) {
         false -> {
             LazyColumn(modifier = Modifier.fillMaxWidth(0.8f)){
                 items(controllers){data->
-                    ControllerListItem(data)
+                    ControllerListItem(
+                        data,
+                        onAction = onAction
+                    )
                 }
             }
         }

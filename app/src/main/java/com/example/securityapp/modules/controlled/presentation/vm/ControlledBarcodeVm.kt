@@ -5,12 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.securityapp.barcode.generateBarcode
 import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
+import com.example.securityapp.domain.usecase.RemoveConnection
 import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
 import com.example.securityapp.modules.controlled.domain.usecase.SyncControlled
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
+import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
+import com.example.securityapp.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -23,16 +29,29 @@ class ControlledBarcodeVm @Inject constructor(
     private val messagesRepository: RoomMessagesRepository,
     private val controlledRepository: ControlledRepository,
     private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
-    private val syncControlled: SyncControlled
+    private val syncControlled: SyncControlled,
+    private val removeConnection: RemoveConnection
 ) : ViewModel() {
     private val _state = MutableStateFlow(ControlledState())
     val state = _state.asStateFlow()
+
+    private val _events = MutableSharedFlow<ControlledEvents>(replay = 0, extraBufferCapacity = 1)
+    val events = _events.asSharedFlow()
     fun onAction(action: ControlledAction) {
         when (action) {
             is ControlledAction.OnTabSelected -> {
                 if (action.index != state.value.selectedIndex) {
                     _state.update {
                         it.copy(selectedIndex = action.index)
+                    }
+                }
+            }
+            is ControlledAction.OnDeleteClicked ->{
+                viewModelScope.launch(Dispatchers.IO){
+                    val result = removeConnection(action.email)
+                    when(result){
+                        is Result.Error<*> -> ControlledEvents.Toast(result.error)
+                        is Result.Success -> ControlledEvents.Toast("Controller Removed Successfully")
                     }
                 }
             }
