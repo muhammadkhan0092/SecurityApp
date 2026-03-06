@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.permissions.SpecialPermissions.hasManageAllFilesPermission
-import com.example.securityapp.permissions.SpecialPermissions.hasOverlayPermission
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,8 +21,8 @@ class PermissionVm @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(
         PermissionState(
-            isOverlayGranted = hasOverlayPermission(context),
-            isStorageGranted = hasManageAllFilesPermission(),
+            isOverlayGranted = permissionManager.hasOverlayPermission(),
+            isStorageGranted = permissionManager.hasManageAllFilesPermission(),
             isOtherGranted = permissionManager.areAllRuntimePermissionsGranted()
         )
     )
@@ -83,4 +81,9 @@ class PermissionVm @Inject constructor(
             _events.emit(event)
         }
     }
+
+    fun hasOverlayPermission() = permissionManager.hasOverlayPermission()
+    fun hasStoragePermission() = permissionManager.hasManageAllFilesPermission()
+    fun requestStoragePermission() = permissionManager.requestManageAllFilesPermission()
+    fun requestOverlayPermission() = permissionManager.requestOverlayPermission()
 }

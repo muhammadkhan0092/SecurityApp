@@ -20,10 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.example.securityapp.permissions.SpecialPermissions.hasManageAllFilesPermission
-import com.example.securityapp.permissions.SpecialPermissions.hasOverlayPermission
-import com.example.securityapp.permissions.SpecialPermissions.requestManageAllFilesPermission
-import com.example.securityapp.permissions.SpecialPermissions.requestOverlayPermission
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -32,7 +28,11 @@ fun PermissionScreen(
     state: PermissionState,
     events : SharedFlow<PermissionEvent>,
     onAction : (PermissionAction)-> Unit,
-    onContinueEvent :()-> Unit
+    onContinueEvent :()-> Unit,
+    requestOverlayPermission : () -> Unit,
+    requestManageAllFilesPermission:()-> Unit,
+    hasManageAllFilesPermission:()-> Boolean,
+    hasOverlayPermission:()-> Boolean
 ) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -51,8 +51,8 @@ fun PermissionScreen(
         events.collectLatest {
             when(it){
                 PermissionEvent.RequestOtherPermission -> launcher.launch(RuntimePermissions.permissions)
-                PermissionEvent.RequestOverlayPermission -> requestOverlayPermission(context)
-                PermissionEvent.RequestStoragePermission -> requestManageAllFilesPermission(context)
+                PermissionEvent.RequestOverlayPermission -> requestOverlayPermission()
+                PermissionEvent.RequestStoragePermission -> requestManageAllFilesPermission()
                 PermissionEvent.NavigateToIntro -> onContinueEvent()
                 is PermissionEvent.Toast -> Toast.makeText(context, it.str, Toast.LENGTH_SHORT).show()
             }
@@ -61,7 +61,7 @@ fun PermissionScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                if (hasOverlayPermission(context)) {
+                if (hasOverlayPermission()) {
                     onAction(PermissionAction.OnOverlayPermissionGranted)
                 }
                 if (hasManageAllFilesPermission()) {
@@ -80,7 +80,7 @@ fun PermissionScreen(
         if(hasManageAllFilesPermission()){
             onAction(PermissionAction.OnStoragePermissionGranted)
         }
-        if(hasOverlayPermission(context)){
+        if(hasOverlayPermission()){
             onAction(PermissionAction.OnOverlayPermissionGranted)
         }
     }

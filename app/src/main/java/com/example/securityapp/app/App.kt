@@ -62,6 +62,18 @@ fun App() {
                     },
                     onContinueEvent = {
                         navController.navigate(Route.IntroGraph)
+                    },
+                    requestOverlayPermission = {
+                        vm.requestOverlayPermission()
+                    },
+                    requestManageAllFilesPermission = {
+                        vm.requestStoragePermission()
+                    },
+                    hasManageAllFilesPermission = {
+                        vm.hasStoragePermission()
+                    },
+                    hasOverlayPermission = {
+                        vm.hasOverlayPermission()
                     }
                 )
             }
