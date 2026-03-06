@@ -1,19 +1,19 @@
 package com.example.securityapp.modules.controller.domain.usecase
 
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
+import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.datastore.AppSettings
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class StoreControllerInfoUseCase @Inject constructor(
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
+    private val dataStoreRepository: DataStoreRepository
 ) {
     suspend operator fun invoke(
         email : String
     ): Result<Unit> {
-        val emailResult = dataStoreRepositoryImplementation.setEmail(email)
-        val isSetupResult = dataStoreRepositoryImplementation.setIsSetupCompleted(true)
-        val userTypeResult = dataStoreRepositoryImplementation.setUserType(AppSettings.UserType.controller)
+        val emailResult = dataStoreRepository.setEmail(email)
+        val isSetupResult = dataStoreRepository.setIsSetupCompleted(true)
+        val userTypeResult = dataStoreRepository.setUserType(AppSettings.UserType.controller)
         return when (emailResult && isSetupResult && userTypeResult) {
             true -> {
                 Result.Success(Unit)

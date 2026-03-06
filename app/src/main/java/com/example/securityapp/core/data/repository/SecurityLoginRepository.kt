@@ -4,23 +4,24 @@ import com.example.securityapp.core.data.ext.firebaseGetSafeCall
 import com.example.securityapp.core.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
-import com.example.securityapp.domain.DomainDevice
+import com.example.securityapp.core.domain.repository.LoginRepository
+import com.example.securityapp.modules.controlled.domain.ControlledDomainDevice
 import com.example.securityapp.firebase.DtoControllerUser
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class LoginRepository @Inject constructor(
+class SecurityLoginRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val dataSource: FirebaseRemoteDataSource
 
-) {
+) : LoginRepository{
     val controlledDataCollection = "controlled"
     val controlledUserCollection = "controlled_user"
-    suspend fun insertControlledUser(
+    override suspend fun insertControlledUser(
         controlledData: ControlledDeviceDto,
-        user: DomainDevice
+        user: ControlledDomainDevice
     ): Result<Unit> {
         return try {
             val batch = firestore.batch()
@@ -39,7 +40,7 @@ class LoginRepository @Inject constructor(
 
     val controllerUserCollection = "controller_user"
     val controllerDataCollection = "controllers"
-    suspend fun insertControllerUser(
+    override suspend fun insertControllerUser(
         controllerData: ControllerDeviceDto,
         user: DtoControllerUser
     ): Result<Unit> {
@@ -57,15 +58,15 @@ class LoginRepository @Inject constructor(
             Result.Error("")
         }
     }
-    suspend fun getControllerUser(email: String): Result<DtoControllerUser?> {
+    override suspend fun getControllerUser(email: String): Result<DtoControllerUser?> {
         return firebaseGetSafeCall<DtoControllerUser>(
             action = {
                 dataSource.get(collectionPath = controllerUserCollection, documentId = email)
             }
         )
     }
-    suspend fun getControlledUser(email: String): Result<DomainDevice?> {
-        return firebaseGetSafeCall<DomainDevice>(
+    override suspend fun getControlledUser(email: String): Result<ControlledDomainDevice?> {
+        return firebaseGetSafeCall<ControlledDomainDevice>(
             action = {
                 dataSource.get(collectionPath = controlledUserCollection, documentId = email)
             }

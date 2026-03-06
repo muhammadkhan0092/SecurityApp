@@ -2,8 +2,8 @@ package com.example.securityapp.modules.controller.presentation.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
-import com.example.securityapp.modules.controller.data.repository.ControllerRepository
+import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.controller.data.repository.FirebaseControllerRepository
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.modules.controller.domain.usecase.SyncController
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ControllerCommonVm @Inject constructor(
-    private val controllerRepository: ControllerRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
+    private val firebaseControllerRepository: FirebaseControllerRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val syncController : SyncController
 ) : ViewModel() {
-    val state = controllerRepository.getFlow().stateIn(
+    val state = firebaseControllerRepository.getFlow().stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = null
@@ -34,7 +34,7 @@ class ControllerCommonVm @Inject constructor(
     }
     init {
         viewModelScope.launch {
-            controllerRepository.listenData(dataStoreRepositoryImplementation.getEmail()).collectLatest {
+            firebaseControllerRepository.listenData(dataStoreRepository.getEmail()).collectLatest {
                 it?.let {
                     syncController(it)
                 }

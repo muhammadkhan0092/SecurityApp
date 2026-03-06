@@ -3,15 +3,15 @@ package com.example.securityapp.modules.controlled.presentation.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.barcode.generateBarcode
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
+import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.domain.usecase.RemoveConnection
-import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
+import com.example.securityapp.modules.controlled.domain.usecase.RemoveConnection
+import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import com.example.securityapp.modules.controlled.domain.usecase.SyncControlled
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,10 +25,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ControlledBarcodeVm @Inject constructor(
-    private val datastore: DataStoreRepositoryImplementation,
+    private val datastore: DataStoreRepository,
     private val messagesRepository: RoomMessagesRepository,
-    private val controlledRepository: ControlledRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
+    private val firebaseControlledRepository: FirebaseControlledRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val syncControlled: SyncControlled,
     private val removeConnection: RemoveConnection
 ) : ViewModel() {
@@ -76,7 +76,7 @@ class ControlledBarcodeVm @Inject constructor(
             }
         }
         viewModelScope.launch {
-            controlledRepository.listenData(dataStoreRepositoryImplementation.getEmail())
+            firebaseControlledRepository.listenData(dataStoreRepository.getEmail())
                 .collectLatest {
                     it?.let {
                         syncControlled(it)
@@ -84,7 +84,7 @@ class ControlledBarcodeVm @Inject constructor(
                 }
         }
         viewModelScope.launch {
-            controlledRepository.getFlow().collectLatest {list->
+            firebaseControlledRepository.getFlow().collectLatest { list->
                 _state.update {
                     it.copy(controllers = list)
                 }

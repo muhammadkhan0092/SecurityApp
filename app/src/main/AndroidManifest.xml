@@ -42,7 +42,7 @@
         android:theme="@style/Theme.SecurityApp"
         tools:targetApi="31">
         <service
-            android:name=".MyAccessibilityService"
+            android:name=".framework.MyAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
 
@@ -77,7 +77,7 @@
         </receiver>
 
         <receiver
-            android:name=".MyDeviceAdminReceiver"
+            android:name=".framework.MyDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
             android:exported="true">
 

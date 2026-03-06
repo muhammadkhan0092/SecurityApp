@@ -1,4 +1,4 @@
-package com.example.securityapp
+package com.example.securityapp.framework
 
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent

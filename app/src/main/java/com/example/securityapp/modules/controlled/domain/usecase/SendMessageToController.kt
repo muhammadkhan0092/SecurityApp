@@ -1,24 +1,24 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
-import com.example.securityapp.core.data.repository.SmsCommandRepository
-import com.example.securityapp.core.domain.MessageFromControlled
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.core.domain.models.MessageFromControlled
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class SendMessageToController @Inject constructor(
-    private val smsCommandRepository: SmsCommandRepository
+    private val androidSmsManagerRepository: AndroidSmsManagerRepository
 ) {
     operator fun invoke(firstNumber: String?,messageFromControlled: MessageFromControlled){
-        val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+        val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
         when (serializedMessage) {
             is Result.Error<*> -> {
                 firstNumber?.let {
-                    smsCommandRepository.sendSms(it, serializedMessage.error)
+                    androidSmsManagerRepository.sendSms(it, serializedMessage.error)
                 }
             }
             is Result.Success -> {
                 firstNumber?.let {
-                    smsCommandRepository.sendSms(it, serializedMessage.data)
+                    androidSmsManagerRepository.sendSms(it, serializedMessage.data)
                 }
             }
         }

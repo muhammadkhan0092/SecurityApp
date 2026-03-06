@@ -1,6 +1,4 @@
-package com.example.securityapp.utils
-
-import com.example.securityapp.firebase.DtoDevice
+package com.example.securityapp.core.domain.utils
 
 sealed interface Result<out D> {
     data class Success<out D>(val data: D): Result<D>

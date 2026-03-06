@@ -1,15 +1,15 @@
 package com.example.securityapp.modules.controller.domain.usecase
 
-import com.example.securityapp.core.data.repository.SmsCommandRepository
-import com.example.securityapp.core.domain.MessageFromController
-import com.example.securityapp.core.domain.MessageTypeFromControlled
+import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.core.domain.models.MessageFromController
+import com.example.securityapp.core.domain.models.MessageTypeFromControlled
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class SendMessageRequestFromController @Inject constructor(
-    private val smsRepository: SmsCommandRepository,
+    private val smsRepository: AndroidSmsManagerRepository,
     private val messagesRepository: RoomMessagesRepository
 ) {
     suspend operator fun invoke(phoneNo : String,data : MessageFromController,email : String) : Result<Unit>{

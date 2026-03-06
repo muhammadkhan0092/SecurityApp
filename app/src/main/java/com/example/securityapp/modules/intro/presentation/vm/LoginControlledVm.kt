@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.securityapp.modules.intro.domain.ControlledLoginUseCase
 import com.example.securityapp.modules.intro.presentation.models.LoginAction
 import com.example.securityapp.modules.intro.presentation.models.LoginEvents
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

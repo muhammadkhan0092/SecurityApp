@@ -1,4 +1,4 @@
-package com.example.securityapp.core.domain
+package com.example.securityapp.core.domain.models
 
 enum class MessageFromController{
     BLOCK_APPS,

@@ -5,17 +5,18 @@ import com.example.securityapp.core.data.ext.roomSafeFlow
 import com.example.securityapp.core.data.mappers.mapToMessagesDomain
 import com.example.securityapp.core.data.mappers.mapToMessagesEntity
 import com.example.securityapp.core.data.models.MessagesEntity
+import com.example.securityapp.core.domain.repository.MessagesRepository
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
-import com.example.securityapp.utils.Result
-import com.example.securityapp.utils.map
+import com.example.securityapp.core.domain.utils.Result
+import com.example.securityapp.core.domain.utils.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RoomMessagesRepository @Inject constructor(
     private val controllerMessagesDao: ControllerMessagesDao
-) {
-    suspend fun upsertData(data: MessagesDomain, email: String): Result<Unit> {
+) : MessagesRepository{
+    override suspend fun upsertData(data: MessagesDomain, email: String): Result<Unit> {
         return roomSafeFlow(
             action = {
                 controllerMessagesDao.insert(data.mapToMessagesEntity(email))
@@ -23,7 +24,7 @@ class RoomMessagesRepository @Inject constructor(
         )
     }
 
-    suspend fun getData(email: String): Result<List<MessagesDomain>> {
+    override suspend fun getData(email: String): Result<List<MessagesDomain>> {
         return roomSafeFlow<List<MessagesEntity>>(
             action = {
                 controllerMessagesDao.getData(email)
@@ -35,14 +36,14 @@ class RoomMessagesRepository @Inject constructor(
         }
     }
 
-    fun getAllFlow(): Flow<List<MessagesDomain>> {
+    override fun getAllFlow(): Flow<List<MessagesDomain>> {
         return controllerMessagesDao.getAllFlow().map { list ->
             list.map {
                 it.mapToMessagesDomain()
             }
         }
     }
-    fun getFlow(email: String): Flow<List<MessagesDomain>> {
+    override fun getFlow(email: String): Flow<List<MessagesDomain>> {
         return controllerMessagesDao.getFlow(email).map { list ->
             list.map {
                 it.mapToMessagesDomain()

@@ -1,21 +1,21 @@
 package com.example.securityapp.core.data.repository
 
-import com.example.securityapp.core.data.ext.firebaseGetSafeCall
 import com.example.securityapp.core.data.models.BothDeviceDto
 import com.example.securityapp.core.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.models.ControllerDeviceDto
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.repository.ConnectionRepository
+import com.example.securityapp.core.domain.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class ConnectionRepository @Inject constructor(
+class FirebaseConnectionRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
 
-) {
+) : ConnectionRepository{
     val controlledCollection = "controlled"
     val controllerCollection = "controllers"
-    suspend fun insertControllerAndControllerData(
+    override suspend fun insertControllerAndControllerData(
         controllerData : ControllerDeviceDto,
         controlledData : ControlledDeviceDto
     ): Result<Unit> {
@@ -32,7 +32,7 @@ class ConnectionRepository @Inject constructor(
             Result.Error("")
         }
     }
-    suspend fun getControllerAndControlledData(
+    override suspend fun getControllerAndControlledData(
         controllerEmail: String,
         controlledEmail: String
     ): Result<BothDeviceDto> {

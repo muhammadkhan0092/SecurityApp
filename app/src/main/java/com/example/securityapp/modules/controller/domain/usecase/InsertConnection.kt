@@ -1,39 +1,34 @@
-package com.example.securityapp.domain.usecase
+package com.example.securityapp.modules.controller.domain.usecase
 
-import android.util.Log
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
-import com.example.securityapp.core.data.repository.ConnectionRepository
 import com.example.securityapp.core.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.core.data.models.DevicesDto
-import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
+import com.example.securityapp.core.data.repository.FirebaseConnectionRepository
+import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class InsertConnection @Inject constructor(
-    private val controlledRepository: ControlledRepository,
-    private val connectionRepository: ConnectionRepository,
+    private val firebaseControlledRepository: FirebaseControlledRepository,
+    private val firebaseConnectionRepository: FirebaseConnectionRepository,
     private val phoneRepository: PhoneRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
+    private val dataStoreRepository: DataStoreRepository
 ) {
     suspend operator fun invoke(barcode: String, controllerDevicesDto: List<DevicesDto>) {
-        Log.d("KHAN","BARCODE IS $barcode")
-        val result = controlledRepository.getDataByBarcode(barcode)
+        val result = firebaseControlledRepository.getDataByBarcode(barcode)
         val controllerData = ControllerDeviceDto(
-            email = dataStoreRepositoryImplementation.getEmail(),
+            email = dataStoreRepository.getEmail(),
             numbers = phoneRepository.getSimNumbers(),
             controlled = controllerDevicesDto
         )
-        Log.d("KHAN","OLD CONTROLLER DATA IS $controllerData")
         when (result) {
             is Result.Error<*> -> {
-                Log.d("KHAN","ERROR IS ${result.error}")
                 Result.Error(result.error)
             }
             is Result.Success -> {
                 val oldControlledData = result.data
-                Log.d("KHAN","OLD CONTROLLED DATA IS $oldControlledData")
                 when (oldControlledData != null) {
                     true -> {
                         val newControlledData = returnControlledData(
@@ -42,16 +37,13 @@ class InsertConnection @Inject constructor(
                             oldControlledData
                         )
                         val newControllerData = returnControllerData(controllerData,oldControlledData.email,oldControlledData.numbers)
-                        Log.d("KHAN","NEW CONTROLLED DATA $newControlledData")
-                        Log.d("KHAN","NEW CONTROLLER DATA $newControllerData")
-                        connectionRepository.insertControllerAndControllerData(
+                        firebaseConnectionRepository.insertControllerAndControllerData(
                             controlledData = newControlledData,
                             controllerData = newControllerData
                         )
                     }
 
                     false -> {
-                        Log.d("KHAN","DATA IS NULL")
                         Result.Error("Data is null")
                     }
                 }

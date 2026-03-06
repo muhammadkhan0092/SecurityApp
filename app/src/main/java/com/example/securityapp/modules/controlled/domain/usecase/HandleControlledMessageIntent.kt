@@ -1,23 +1,22 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
 import android.util.Log
-import com.example.securityapp.core.data.repository.SmsCommandRepository
-import com.example.securityapp.core.domain.MessageFromController
-import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
+import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.core.domain.models.MessageFromController
+import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import javax.inject.Inject
-import com.example.securityapp.utils.Result
-import kotlin.text.contains
+import com.example.securityapp.core.domain.utils.Result
 
 class HandleControlledMessageIntent @Inject constructor(
-    private val controlledRepository : ControlledRepository,
-    private val smsCommandRepository: SmsCommandRepository,
+    private val firebaseControlledRepository : FirebaseControlledRepository,
+    private val androidSmsManagerRepository: AndroidSmsManagerRepository,
     private val blockApps: BlockApps,
     private val wipeGallery: WipeGallery,
     private val getLocation: GetLocation,
     private val factoryReset: FactoryReset
 ){
     suspend operator fun invoke(sender: String, message: String, email: String = "") {
-        val controlledLocalResult = controlledRepository.getLocalData()
+        val controlledLocalResult = firebaseControlledRepository.getLocalData()
         when (controlledLocalResult) {
             is Result.Error ->{
                 Log.d("KHAN","ERROR IN GETTING LOCATL DATA")
@@ -36,7 +35,7 @@ class HandleControlledMessageIntent @Inject constructor(
                     }
                     else -> {
                         Log.d("KHAN","FILTERED DATA IS $filteredData")
-                        val result = smsCommandRepository.deserializeToMessageFromController(message)
+                        val result = androidSmsManagerRepository.deserializeToMessageFromController(message)
                         when (result) {
                             is Result.Error<*> -> {
                                 Log.d("KHAN","SERIALIZATION RESULT IS ${result.error}")

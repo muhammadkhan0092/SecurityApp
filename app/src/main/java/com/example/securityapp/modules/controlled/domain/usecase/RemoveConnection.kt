@@ -1,21 +1,21 @@
-package com.example.securityapp.domain.usecase
+package com.example.securityapp.modules.controlled.domain.usecase
 
 import com.example.securityapp.core.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.models.ControllerDeviceDto
-import com.example.securityapp.core.data.repository.ConnectionRepository
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
-import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.data.repository.FirebaseConnectionRepository
+import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class RemoveConnection @Inject constructor(
-    private val controlledRepository: ControlledRepository,
-    private val connectionRepository: ConnectionRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation
+    private val firebaseControlledRepository: FirebaseControlledRepository,
+    private val firebaseConnectionRepository: FirebaseConnectionRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) {
     suspend operator fun invoke(controllerEmail: String): Result<Unit> {
-        val controlledEmail = dataStoreRepositoryImplementation.getEmail()
-        val bothDeviceResult = connectionRepository.getControllerAndControlledData(controlledEmail =controlledEmail, controllerEmail = controllerEmail)
+        val controlledEmail = dataStoreRepository.getEmail()
+        val bothDeviceResult = firebaseConnectionRepository.getControllerAndControlledData(controlledEmail =controlledEmail, controllerEmail = controllerEmail)
         return when(bothDeviceResult){
             is Result.Error<*> -> Result.Error(bothDeviceResult.error)
             is Result.Success->{
@@ -28,7 +28,7 @@ class RemoveConnection @Inject constructor(
                     oldControlledData = bothData.controlledDto,
                     controllerEmail = controllerEmail
                 )
-                connectionRepository.insertControllerAndControllerData(
+                firebaseConnectionRepository.insertControllerAndControllerData(
                     controllerData = newControllerData,
                     controlledData = newControlledData
                 )

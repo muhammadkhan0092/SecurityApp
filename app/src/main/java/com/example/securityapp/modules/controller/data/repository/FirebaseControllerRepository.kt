@@ -10,17 +10,18 @@ import com.example.securityapp.modules.controller.data.dao.ControllerDao
 import com.example.securityapp.modules.controller.data.mappers.mapToControllerEntity
 import com.example.securityapp.modules.controller.data.mappers.mapToDomainController
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
+import com.example.securityapp.modules.controller.domain.repository.ControllerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ControllerRepository @Inject constructor(
+class FirebaseControllerRepository @Inject constructor(
     private val source: FirebaseRemoteDataSource,
     private val controllerDao: ControllerDao
-) {
+)  : ControllerRepository{
     val collectionId = "controllers"
-    suspend fun upsertData(data: ControllerDeviceDto): Result<Unit> {
+    override suspend fun upsertData(data: ControllerDeviceDto): Result<Unit> {
         return firebaseUpsertSafeCall(
             action = {
                 source.addData(documentId = data.email, collectionId = collectionId, data)
@@ -28,7 +29,7 @@ class ControllerRepository @Inject constructor(
         )
     }
 
-    suspend fun getData(email: String): Result<ControllerDeviceDto?> {
+    override suspend fun getData(email: String): Result<ControllerDeviceDto?> {
         return firebaseGetSafeCall<ControllerDeviceDto>(
             action = {
                 source.get(collectionPath = collectionId, documentId = email)
@@ -36,7 +37,7 @@ class ControllerRepository @Inject constructor(
         )
     }
 
-    fun getFlow(): Flow<List<ControllerDomain>> {
+    override fun getFlow(): Flow<List<ControllerDomain>> {
         return controllerDao.getFlow().map { list ->
             list.map {
                 it.mapToDomainController()
@@ -44,7 +45,7 @@ class ControllerRepository @Inject constructor(
         }
     }
 
-    suspend fun insertData(data: List<ControllerDomain>): Result<Unit> {
+    override suspend fun insertData(data: List<ControllerDomain>): Result<Unit> {
         return roomSafeFlow {
             controllerDao.insert(data.map {
                 it.mapToControllerEntity()
@@ -52,7 +53,7 @@ class ControllerRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteData(data: List<ControllerDomain>): Result<Unit> {
+    override suspend fun deleteData(data: List<ControllerDomain>): Result<Unit> {
         return roomSafeFlow {
             controllerDao.delete(data.map {
                 it.mapToControllerEntity()
@@ -60,7 +61,7 @@ class ControllerRepository @Inject constructor(
         }
     }
 
-    fun listenData(email: String): Flow<List<ControllerDomain>?> {
+    override fun listenData(email: String): Flow<List<ControllerDomain>?> {
         return source.listenDocument<ControllerDeviceDto>(
             documentId = email,
             collectionPath = collectionId
@@ -71,7 +72,7 @@ class ControllerRepository @Inject constructor(
         }
     }
 
-    suspend fun getLocalData(): Result<List<ControllerDomain>> {
+    override suspend fun getLocalData(): Result<List<ControllerDomain>> {
         return roomSafeFlow {
             controllerDao.getData().map {
                 it.mapToDomainController()

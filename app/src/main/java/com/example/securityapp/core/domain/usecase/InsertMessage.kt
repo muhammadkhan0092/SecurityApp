@@ -1,6 +1,7 @@
-package com.example.securityapp.core.domain
+package com.example.securityapp.core.domain.usecase
 
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
+import com.example.securityapp.core.domain.models.MessageTypeFromControlled
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import javax.inject.Inject
 

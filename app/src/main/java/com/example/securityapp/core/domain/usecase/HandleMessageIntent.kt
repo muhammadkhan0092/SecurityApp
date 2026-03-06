@@ -1,7 +1,7 @@
-package com.example.securityapp.core.domain
+package com.example.securityapp.core.domain.usecase
 
 import android.util.Log
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
+import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.domain.usecase.HandleControlledMessageIntent
 import com.example.securityapp.modules.controller.domain.usecase.HandleControllerMessageIntent
@@ -9,12 +9,12 @@ import javax.inject.Inject
 
 
 class HandleMessageIntent @Inject constructor(
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
+    private val dataStoreRepository: DataStoreRepository,
     private val handleControlledMessageIntent: HandleControlledMessageIntent,
     private val handleControllerMessageIntent: HandleControllerMessageIntent,
 ) {
     suspend operator fun invoke(sender: String, message: String) {
-        when (dataStoreRepositoryImplementation.getUserType()) {
+        when (dataStoreRepository.getUserType()) {
             AppSettings.UserType.not_set -> {
                 Log.d("KHAN", "USER TYPE NOT SET")
             }

@@ -2,18 +2,18 @@ package com.example.securityapp.modules.intro.domain
 
 import android.util.Log
 import com.example.securityapp.core.data.models.ControllerDeviceDto
-import com.example.securityapp.core.data.repository.LoginRepository
+import com.example.securityapp.core.data.repository.SecurityLoginRepository
 import com.example.securityapp.modules.controller.domain.usecase.StoreControllerInfoUseCase
 import com.example.securityapp.firebase.DtoControllerUser
 import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
-import com.example.securityapp.utils.Result
-import com.example.securityapp.utils.Result.Error
+import com.example.securityapp.core.domain.utils.Result
+import com.example.securityapp.core.domain.utils.Result.Error
 import javax.inject.Inject
 
 class ControllerLoginUseCase @Inject constructor(
     private val phoneRepository: PhoneRepository,
     private val infoUseCase: StoreControllerInfoUseCase,
-    private val loginRepository: LoginRepository
+    private val securityLoginRepository: SecurityLoginRepository
 ) {
     suspend operator fun invoke(email: String, password: String): Result<Unit> {
         val isAirplaneOn = phoneRepository.isAirplaneModeOn()
@@ -26,7 +26,7 @@ class ControllerLoginUseCase @Inject constructor(
         if (sims.isEmpty()) {
             return Error("Insert A Sim to Continue")
         }
-        val isAlreadyLoggedInResult = loginRepository.getControllerUser(email)
+        val isAlreadyLoggedInResult = securityLoginRepository.getControllerUser(email)
         return when(isAlreadyLoggedInResult){
             is Error<*> -> Error(isAlreadyLoggedInResult.error)
             is Result.Success -> {
@@ -50,7 +50,7 @@ class ControllerLoginUseCase @Inject constructor(
     }
     suspend fun newControllerLogin(email : String,password: String,sims : List<String>): Result<Unit> {
         Log.d("KHAN","CONTROLLER NEW LOGIN")
-        val result = loginRepository.insertControllerUser(
+        val result = securityLoginRepository.insertControllerUser(
             controllerData = ControllerDeviceDto(
                 email = email,
                 numbers = sims

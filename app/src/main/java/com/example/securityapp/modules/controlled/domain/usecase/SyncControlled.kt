@@ -1,15 +1,15 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
-import com.example.securityapp.modules.controlled.data.repository.ControlledRepository
+import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class SyncControlled @Inject constructor(
-    private val controlledRepository: ControlledRepository
+    private val firebaseControlledRepository: FirebaseControlledRepository
 ) {
     suspend operator fun invoke(domains: List<ControlledDomain>) {
-        val roomDataResult = controlledRepository.getLocalData()
+        val roomDataResult = firebaseControlledRepository.getLocalData()
         when (roomDataResult) {
             is Result.Error<*> -> Unit
             is Result.Success -> {
@@ -20,8 +20,8 @@ class SyncControlled @Inject constructor(
                 val toInsert = domains.filter { domainItem ->
                     data.none { it.email == domainItem.email }
                 }
-                controlledRepository.deleteData(toDelete)
-                controlledRepository.insertData(toInsert)
+                firebaseControlledRepository.deleteData(toDelete)
+                firebaseControlledRepository.insertData(toInsert)
             }
         }
     }

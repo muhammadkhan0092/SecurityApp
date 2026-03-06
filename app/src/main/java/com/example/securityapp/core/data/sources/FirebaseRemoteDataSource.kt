@@ -1,6 +1,6 @@
 package com.example.securityapp.core.data.sources
 
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

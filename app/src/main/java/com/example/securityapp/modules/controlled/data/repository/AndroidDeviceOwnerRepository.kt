@@ -7,15 +7,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import com.example.securityapp.MyDeviceAdminReceiver
-import com.example.securityapp.utils.Result
+import com.example.securityapp.framework.MyDeviceAdminReceiver
+import com.example.securityapp.core.domain.utils.Result
+import com.example.securityapp.modules.controlled.domain.repository.DeviceOwnerRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class DeviceOwnerRepository @Inject constructor(
+class AndroidDeviceOwnerRepository @Inject constructor(
     @ApplicationContext private val context: Context
-) {
-    fun resetPhone(): Result<Unit> {
+) : DeviceOwnerRepository{
+    override fun resetPhone(): Result<Unit> {
         return try {
             val dpm = context.getSystemService(DevicePolicyManager::class.java)
             val isOwner = dpm.isDeviceOwnerApp("com.example.securityapp")
@@ -36,7 +37,7 @@ class DeviceOwnerRepository @Inject constructor(
         }
     }
 
-    fun deleteApp(){
+    override fun deleteApp(){
         val dpm = context.getSystemService(DevicePolicyManager::class.java)
         val comp = ComponentName(context, MyDeviceAdminReceiver::class.java)
         dpm.clearPackagePersistentPreferredActivities(comp, "com.target.app")
@@ -45,7 +46,7 @@ class DeviceOwnerRepository @Inject constructor(
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
     }
-    fun uninstallPackage(packageName: String): Result<Unit> {
+    override fun uninstallPackage(packageName: String): Result<Unit> {
         return try {
             val CODE_UNINSTALL_RESULT = 1235
             val ACTION_UNINSTALL_RESULT = "eu.sisik.removehideaps.ACTION_UNINSTALL_RESULT"

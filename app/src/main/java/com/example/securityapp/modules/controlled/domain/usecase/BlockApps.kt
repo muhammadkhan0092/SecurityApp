@@ -1,17 +1,17 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
-import com.example.securityapp.core.data.repository.DataStoreRepositoryImplementation
-import com.example.securityapp.core.data.repository.SmsCommandRepository
-import com.example.securityapp.core.domain.InsertMessage
-import com.example.securityapp.core.domain.MessageFromControlled
-import com.example.securityapp.core.domain.MessageTypeFromControlled
+import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.core.domain.usecase.InsertMessage
+import com.example.securityapp.core.domain.models.MessageFromControlled
+import com.example.securityapp.core.domain.models.MessageTypeFromControlled
 import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class BlockApps @Inject constructor(
-    private val smsCommandRepository: SmsCommandRepository,
-    private val dataStoreRepositoryImplementation: DataStoreRepositoryImplementation,
+    private val androidSmsManagerRepository: AndroidSmsManagerRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val overlayRepository: OverlayRepository,
     private val insertMessage : InsertMessage
 ) {
@@ -22,20 +22,20 @@ class BlockApps @Inject constructor(
             type = MessageTypeFromControlled.NORMAL
         )
         overlayRepository.startOverlayService()
-        val result = dataStoreRepositoryImplementation.setShouldBlock(true)
+        val result = dataStoreRepository.setShouldBlock(true)
         when(result){
             true ->{
                 insertMessage(email,"Blocking Apps From $email", MessageTypeFromControlled.NORMAL)
-                val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+                val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
                     is Result.Error<*> -> {
                         firstNumber?.let {
-                            smsCommandRepository.sendSms(it, serializedMessage.error)
+                            androidSmsManagerRepository.sendSms(it, serializedMessage.error)
                         }
                     }
                     is Result.Success -> {
                         firstNumber?.let {
-                            smsCommandRepository.sendSms(it, serializedMessage.data)
+                            androidSmsManagerRepository.sendSms(it, serializedMessage.data)
                         }
                     }
                 }
@@ -43,7 +43,7 @@ class BlockApps @Inject constructor(
             false -> {
                 insertMessage(email,"Error Blocking Apps From $email", MessageTypeFromControlled.ERROR)
                 firstNumber?.let {
-                    smsCommandRepository.sendSms(it, "Error Blocking Apps")
+                    androidSmsManagerRepository.sendSms(it, "Error Blocking Apps")
                 }
             }
         }

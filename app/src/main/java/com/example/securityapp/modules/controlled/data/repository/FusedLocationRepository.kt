@@ -3,6 +3,7 @@ package com.example.securityapp.modules.controlled.data.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import com.example.securityapp.modules.controlled.domain.repository.LocationRepository
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -12,9 +13,9 @@ import javax.inject.Inject
 
 class FusedLocationRepository @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+) : LocationRepository{
     @SuppressLint("MissingPermission")
-    suspend fun getAccurateLocation(): Location? =
+    override suspend fun getAccurateLocation(): Location? =
         try {
             suspendCancellableCoroutine { cont ->
                 val client = LocationServices.getFusedLocationProviderClient(context)

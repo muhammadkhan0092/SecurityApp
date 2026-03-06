@@ -1,4 +1,4 @@
-package com.example.securityapp
+package com.example.securityapp.framework
 
 import android.app.admin.DeviceAdminReceiver
 import android.content.Context

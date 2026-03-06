@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.securityapp.core.domain.MessageTypeFromControlled
+import com.example.securityapp.core.domain.models.MessageTypeFromControlled
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 
 @Composable

@@ -1,6 +1,6 @@
-package com.example.securityapp.firebase
+package com.example.securityapp.modules.controlled.domain
 
-data class DtoDevice(
+data class ControlledDomainDevice(
     val email : String,
     val password : String,
     val barcodeId : String,

@@ -1,20 +1,20 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
-import com.example.securityapp.core.data.repository.SmsCommandRepository
-import com.example.securityapp.core.domain.InsertMessage
-import com.example.securityapp.core.domain.MessageFromControlled
-import com.example.securityapp.core.domain.MessageTypeFromControlled
-import com.example.securityapp.modules.controlled.data.repository.DeviceOwnerRepository
-import com.example.securityapp.utils.Result
+import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.core.domain.usecase.InsertMessage
+import com.example.securityapp.core.domain.models.MessageFromControlled
+import com.example.securityapp.core.domain.models.MessageTypeFromControlled
+import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
+import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
 class FactoryReset @Inject constructor(
-    private val smsCommandRepository: SmsCommandRepository,
-    private val deviceOwnerRepository: DeviceOwnerRepository,
+    private val androidSmsManagerRepository: AndroidSmsManagerRepository,
+    private val androidDeviceOwnerRepository: AndroidDeviceOwnerRepository,
     private val insertMessage: InsertMessage
 ) {
     suspend operator fun invoke(numbers: List<String>, email: String) {
-        val resetResult = deviceOwnerRepository.resetPhone()
+        val resetResult = androidDeviceOwnerRepository.resetPhone()
         val firstNumber = numbers.firstOrNull()
         when(resetResult){
             is Result.Error<*> -> {
@@ -24,16 +24,16 @@ class FactoryReset @Inject constructor(
                     type = MessageTypeFromControlled.ERROR
                 )
                 insertMessage(email,"Factory Reset From $email", MessageTypeFromControlled.NORMAL)
-                val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+                val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
                     is Result.Error<*> -> {
                         firstNumber?.let {
-                            smsCommandRepository.sendSms(it, serializedMessage.error)
+                            androidSmsManagerRepository.sendSms(it, serializedMessage.error)
                         }
                     }
                     is Result.Success -> {
                         firstNumber?.let {
-                            smsCommandRepository.sendSms(it, serializedMessage.data)
+                            androidSmsManagerRepository.sendSms(it, serializedMessage.data)
                         }
                     }
                 }
@@ -44,16 +44,16 @@ class FactoryReset @Inject constructor(
                     type = MessageTypeFromControlled.NORMAL
                 )
                 insertMessage(email,"Factory Reset From $email", MessageTypeFromControlled.NORMAL)
-                val serializedMessage = smsCommandRepository.serializeToString(messageFromControlled)
+                val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
                     is Result.Error<*> -> {
                         firstNumber?.let {
-                            smsCommandRepository.sendSms(it, serializedMessage.error)
+                            androidSmsManagerRepository.sendSms(it, serializedMessage.error)
                         }
                     }
                     is Result.Success -> {
                         firstNumber?.let {
-                            smsCommandRepository.sendSms(it, serializedMessage.data)
+                            androidSmsManagerRepository.sendSms(it, serializedMessage.data)
                         }
                     }
                 }
