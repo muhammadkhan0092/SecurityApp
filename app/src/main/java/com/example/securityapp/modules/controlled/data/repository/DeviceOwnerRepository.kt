@@ -9,10 +9,13 @@ import android.net.Uri
 import android.util.Log
 import com.example.securityapp.MyDeviceAdminReceiver
 import com.example.securityapp.utils.Result
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class DeviceOwnerRepository @Inject constructor() {
-    fun resetPhone(context : Context): Result<Unit> {
+class DeviceOwnerRepository @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+    fun resetPhone(): Result<Unit> {
         return try {
             val dpm = context.getSystemService(DevicePolicyManager::class.java)
             val isOwner = dpm.isDeviceOwnerApp("com.example.securityapp")
@@ -33,7 +36,7 @@ class DeviceOwnerRepository @Inject constructor() {
         }
     }
 
-    fun deleteApp(context: Context){
+    fun deleteApp(){
         val dpm = context.getSystemService(DevicePolicyManager::class.java)
         val comp = ComponentName(context, MyDeviceAdminReceiver::class.java)
         dpm.clearPackagePersistentPreferredActivities(comp, "com.target.app")
@@ -42,7 +45,7 @@ class DeviceOwnerRepository @Inject constructor() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
     }
-    fun uninstallPackage(context: Context, packageName: String): Result<Unit> {
+    fun uninstallPackage(packageName: String): Result<Unit> {
         return try {
             val CODE_UNINSTALL_RESULT = 1235
             val ACTION_UNINSTALL_RESULT = "eu.sisik.removehideaps.ACTION_UNINSTALL_RESULT"

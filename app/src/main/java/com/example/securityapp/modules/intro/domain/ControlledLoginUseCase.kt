@@ -20,7 +20,7 @@ class ControlledLoginUseCase @Inject constructor(
         if (isAirplaneOn) {
             return Error("Disable Airplane Mode")
         }
-//        val sims = phoneRepository.getSimNumbers()
+        phoneRepository.getSimNumbers()
 //        if (sims.isEmpty()) {
 //            return Error("Insert A Sim to Continue")
 //        }
