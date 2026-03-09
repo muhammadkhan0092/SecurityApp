@@ -15,7 +15,7 @@ class HandleControlledMessageIntent @Inject constructor(
     private val getLocation: GetLocation,
     private val factoryReset: FactoryReset
 ){
-    suspend operator fun invoke(sender: String, message: String, email: String = "") {
+    suspend operator fun invoke(sender: String, message: String) {
         val controlledLocalResult = firebaseControlledRepository.getLocalData()
         when (controlledLocalResult) {
             is Result.Error ->{
@@ -25,7 +25,7 @@ class HandleControlledMessageIntent @Inject constructor(
                 val data = controlledLocalResult.data
                 val filteredData = data.firstOrNull {
                     sender == it.number
-                }?.number
+                }
                 when (filteredData) {
                     null -> {
                         Log.d("KHAN","FILTERED NUMBER IS NULL")
@@ -42,20 +42,20 @@ class HandleControlledMessageIntent @Inject constructor(
                                 val messageFromController = result.data
                                 when (messageFromController) {
                                     MessageFromController.BLOCK_APPS -> blockApps(
-                                        filteredData,
-                                        email
+                                        filteredData.number,
+                                        filteredData.email
                                     )
                                     MessageFromController.WIPE_GALLERY -> wipeGallery(
-                                        filteredData,
-                                        email
+                                        filteredData.number,
+                                        filteredData.email
                                     )
                                     MessageFromController.GET_LOCATION -> getLocation(
-                                        filteredData,
-                                        email
+                                        filteredData.number,
+                                        filteredData.email
                                     )
                                     MessageFromController.FACTORY_RESET -> factoryReset(
-                                        filteredData,
-                                        email
+                                        filteredData.number,
+                                        filteredData.email
                                     )
                                 }
                             }

@@ -28,7 +28,7 @@ class WipeGallery @Inject constructor(
         else{
             androidGalleryRepository.deleteAllGalleryFiles()
             val messageFromControlled = MessageFromControlled(
-                string = "Factory Reset Complete",
+                string = "Gallery Wipe Complete",
                 type = MessageTypeFromControlled.NORMAL
             )
             insertMessage(email,"Gallery Wipe From $email", MessageTypeFromControlled.NORMAL)
