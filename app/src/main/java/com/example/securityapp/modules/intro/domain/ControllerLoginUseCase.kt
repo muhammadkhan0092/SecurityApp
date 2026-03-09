@@ -15,54 +15,55 @@ class ControllerLoginUseCase @Inject constructor(
     private val infoUseCase: StoreControllerInfoUseCase,
     private val securityLoginRepository: SecurityLoginRepository
 ) {
-    suspend operator fun invoke(email: String, password: String): Result<Unit> {
+    suspend operator fun invoke(email: String, password: String,number : String): Result<Unit> {
         val isAirplaneOn = phoneRepository.isAirplaneModeOn()
         if (isAirplaneOn) {
             return Error("Disable Airplane Mode")
         }
-        val sims = listOf("12312","123124")
         phoneRepository.getSimNumbers()
-        Log.d("KHAN","SIMS ARE $sims")
-        if (sims.isEmpty()) {
-            return Error("Insert A Sim to Continue")
-        }
         val isAlreadyLoggedInResult = securityLoginRepository.getControllerUser(email)
         return when(isAlreadyLoggedInResult){
             is Error<*> -> Error(isAlreadyLoggedInResult.error)
             is Result.Success -> {
                 val data = isAlreadyLoggedInResult.data
                 when(data){
-                    null-> newControllerLogin(email,password,sims)
-                    else -> alreadyControllerLogin(data,password)
+                    null-> newControllerLogin(email,password,number)
+                    else -> alreadyControllerLogin(data,password,data.number)
                 }
             }
         }
     }
-    private suspend fun alreadyControllerLogin(data: DtoControllerUser,password: String) : Result<Unit>{
+    private suspend fun alreadyControllerLogin(
+        data: DtoControllerUser,
+        password: String,
+        number: String
+    ) : Result<Unit>{
         Log.d("KHAN","CONTROLLER ALREADY LOGIN")
         return when(password==data.password){
             true -> {
-                infoUseCase(email = data.email)
+                infoUseCase(email = data.email,number = number)
                 return Result.Success(Unit)
             }
             false -> Error("Invalid Password")
         }
     }
-    suspend fun newControllerLogin(email : String,password: String,sims : List<String>): Result<Unit> {
+    suspend fun newControllerLogin(email: String, password: String, number: String): Result<Unit> {
         Log.d("KHAN","CONTROLLER NEW LOGIN")
         val result = securityLoginRepository.insertControllerUser(
             controllerData = ControllerDeviceDto(
                 email = email,
-                numbers = sims
+                number = number
             ),
             user = DtoControllerUser(
                 email = email,
-                password = password
+                password = password,
+                number = number
             )
         )
         return when (result is Result.Success) {
             true -> infoUseCase(
-                email = email
+                email = email,
+                number = number
             )
             false -> Error("Error")
         }

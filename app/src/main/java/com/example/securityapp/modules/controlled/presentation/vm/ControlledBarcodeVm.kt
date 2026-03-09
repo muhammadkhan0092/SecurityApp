@@ -62,7 +62,7 @@ class ControlledBarcodeVm @Inject constructor(
     init {
         viewModelScope.launch {
             datastore.barcode.collectLatest {
-                val bitmap = generateBarcode(it)
+                val bitmap = generateBarcode()
                 _state.update {
                     it.copy(bitmap = bitmap)
                 }

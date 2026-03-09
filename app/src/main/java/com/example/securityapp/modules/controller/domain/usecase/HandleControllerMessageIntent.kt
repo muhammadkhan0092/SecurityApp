@@ -20,7 +20,7 @@ class HandleControllerMessageIntent @Inject constructor(
             is Result.Success -> {
                 val data = controllerLocalResult.data
                 val filteredData = data.firstOrNull() {
-                    sender in it.numbers
+                    sender == it.number
                 }
                 val deserializedMessageResult =
                     androidSmsManagerRepository.deserializeToMessageFromControlled(message)

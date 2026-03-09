@@ -3,9 +3,11 @@ package com.example.securityapp.modules.intro.presentation.composables
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -44,8 +46,34 @@ fun LoginScreen(
                     onAction(LoginAction.OnPasswordChanged(it))
                 }
             )
+            state.numbers?.let {
+                if(it.isEmpty()){
+                    TextField(
+                        placeholder = {
+                            Text("Number")
+                        },
+                        value = state.selectedNumber,
+                        onValueChange = {
+                            onAction(LoginAction.OnNumberChanged(it))
+                        }
+                    )
+                }
+                else{
+                    it.forEach {current->
+                        Row {
+                            Text(current)
+                            RadioButton(
+                                selected = current==state.selectedNumber,
+                                onClick = {
+                                    onAction(LoginAction.OnNumberClick(current))
+                                }
+                            )
+                        }
+                    }
+                }
+            }
             Button(onClick = {
-                onAction(LoginAction.OnLoginClicked(state.email,state.password))
+                onAction(LoginAction.OnLoginClicked(state.email,state.password,state.selectedNumber))
             }){
                 Text("Login")
             }

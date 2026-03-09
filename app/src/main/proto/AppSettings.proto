@@ -16,4 +16,5 @@ message AppSettings {
     string barcode = 3;
     UserType userType = 4;
     bool shouldBlock = 5;
+    string number = 6;
 }

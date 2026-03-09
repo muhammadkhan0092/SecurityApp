@@ -7,7 +7,7 @@ import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 fun DevicesDto.mapToControlledDomain(): ControlledDomain {
     return ControlledDomain(
         email = email,
-        numbers = numbers
+        number = number
     )
 }
 
@@ -15,6 +15,6 @@ fun DevicesDto.mapToControlledDomain(): ControlledDomain {
 fun DevicesDto.mapToControllerDomain() : ControllerDomain{
     return ControllerDomain(
         email = email,
-        numbers = numbers
+        number= number
     )
 }

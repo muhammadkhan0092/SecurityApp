@@ -23,11 +23,9 @@ class HandleControlledMessageIntent @Inject constructor(
             }
             is Result.Success -> {
                 val data = controlledLocalResult.data
-                Log.d("KHAN","TOTAL NUMBERS ARE $data")
-//                val filteredData = data.firstOrNull {
-//                    sender in it.numbers
-//                }
-                val filteredData =listOf("+923218504409")
+                val filteredData = data.firstOrNull {
+                    sender == it.number
+                }?.number
                 when (filteredData) {
                     null -> {
                         Log.d("KHAN","FILTERED NUMBER IS NULL")
@@ -41,13 +39,24 @@ class HandleControlledMessageIntent @Inject constructor(
                                 Log.d("KHAN","SERIALIZATION RESULT IS ${result.error}")
                             }
                             is Result.Success -> {
-                                Log.d("KHAN","SERIALIZATION ERROR")
                                 val messageFromController = result.data
                                 when (messageFromController) {
-                                    MessageFromController.BLOCK_APPS -> blockApps(filteredData,email)
-                                    MessageFromController.WIPE_GALLERY -> wipeGallery(filteredData,email)
-                                    MessageFromController.GET_LOCATION -> getLocation(filteredData,email)
-                                    MessageFromController.FACTORY_RESET -> factoryReset(filteredData,email)
+                                    MessageFromController.BLOCK_APPS -> blockApps(
+                                        filteredData,
+                                        email
+                                    )
+                                    MessageFromController.WIPE_GALLERY -> wipeGallery(
+                                        filteredData,
+                                        email
+                                    )
+                                    MessageFromController.GET_LOCATION -> getLocation(
+                                        filteredData,
+                                        email
+                                    )
+                                    MessageFromController.FACTORY_RESET -> factoryReset(
+                                        filteredData,
+                                        email
+                                    )
                                 }
                             }
                         }

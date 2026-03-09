@@ -11,55 +11,49 @@ import com.example.securityapp.core.domain.utils.Result.Error
 import javax.inject.Inject
 
 class ControlledLoginUseCase @Inject constructor(
-    private val phoneRepository: PhoneRepository,
     private val storeControlledInfoUseCase: StoreControlledInfoUseCase,
     private val securityLoginRepository: SecurityLoginRepository
 ) {
-    suspend operator fun invoke(email: String, password: String, id: String): Result<Unit> {
-        val isAirplaneOn = phoneRepository.isAirplaneModeOn()
-        if (isAirplaneOn) {
-            return Error("Disable Airplane Mode")
-        }
-        phoneRepository.getSimNumbers()
-//        if (sims.isEmpty()) {
-//            return Error("Insert A Sim to Continue")
-//        }
-        val sims = listOf("0092","0082")
+    suspend operator fun invoke(email: String, password: String, id: String,number : String): Result<Unit> {
         val alreadyDevice = securityLoginRepository.getControlledUser(email)
+        Log.d("KHAN","ALREADY DEVICE RESULT IS $alreadyDevice")
         return when (alreadyDevice) {
-            is Error<*> -> return Error("Server Error")
+            is Error<*> -> {
+                Log.d("KHAN","ERROR IS ${alreadyDevice.error}")
+                return Error("Server Error")
+            }
             is Result.Success -> {
                 when (alreadyDevice.data) {
-                    null -> newLogin(email,sims,id,password)
+                    null -> newLogin(email,number,id,password)
                     else -> {
                         alreadyLogin(
                             alreadyDevice,
-                            password = password
+                            password = password,
+                            alreadyDevice.data.phoneNumber
                         )
                     }
                 }
             }
         }
     }
-    private suspend fun alreadyLogin(alreadyDevice: Result.Success<ControlledDomainDevice?>, password: String): Result<Unit> {
-        Log.d("KHAN","CONTROLLED ALREADY LOGIN")
+    private suspend fun alreadyLogin(alreadyDevice: Result.Success<ControlledDomainDevice?>, password: String,number: String): Result<Unit> {
         return when (alreadyDevice.data!!.password == password) {
             true -> {
                 storeControlledInfoUseCase(
                     email = alreadyDevice.data.email,
-                    barcodeId = alreadyDevice.data.barcodeId
+                    barcodeId = alreadyDevice.data.barcodeId,
+                    number
                 )
                 Result.Success(Unit)
             }
             false -> Error("Invalid Password")
         }
     }
-    private suspend fun newLogin(email: String, sims: List<String>, id: String, password: String): Result<Unit> {
-        Log.d("KHAN","CONTROLLED NEW LOGIN")
+    private suspend fun newLogin(email: String, sims: String, id: String, password: String): Result<Unit> {
         val result = securityLoginRepository.insertControlledUser(
             controlledData =  ControlledDeviceDto(
                 email = email,
-                numbers = sims,
+                number = sims,
                 barcode = id,
                 controllers = emptyList()
             ),
@@ -67,11 +61,11 @@ class ControlledLoginUseCase @Inject constructor(
                 email = email,
                 password = password,
                 barcodeId = id,
-                phoneNumbers = sims
+                phoneNumber = sims
             )
         )
         return when (result is Result.Success) {
-            true -> storeControlledInfoUseCase(email, id)
+            true -> storeControlledInfoUseCase(email, id, sims)
             false -> Error("Error")
         }
     }

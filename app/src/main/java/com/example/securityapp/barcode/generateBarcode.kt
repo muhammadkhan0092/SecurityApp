@@ -2,26 +2,33 @@ package com.example.securityapp.barcode
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import androidx.core.graphics.set
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.MultiFormatWriter
 
-fun generateBarcode(data: String, width: Int = 1200, height: Int = 500): Bitmap{
-    val clean = data.replace("-", "")
+fun generateBarcode(
+    width: Int = 1200,
+    height: Int = 400
+): Bitmap {
+    val data = "rockzzz0092@gmail.com"
+    val hints = mapOf(
+        EncodeHintType.MARGIN to 16,
+        EncodeHintType.CHARACTER_SET to "UTF-8"
+    )
     val bitMatrix = MultiFormatWriter().encode(
-        clean,
+        data,
         BarcodeFormat.CODE_128,
         width,
-        height
+        height,
+        hints
     )
-
-    val bmp = createBitmap(width, height, Bitmap.Config.RGB_565)
+    val bitmap = createBitmap(width, height, Bitmap.Config.ARGB_8888)
     for (x in 0 until width) {
         for (y in 0 until height) {
-            bmp[x, y] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
+            bitmap[x, y] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
         }
     }
-
-    return bmp
+    return bitmap
 }

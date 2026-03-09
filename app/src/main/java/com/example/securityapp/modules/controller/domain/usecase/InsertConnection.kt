@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controller.domain.usecase
 
+import android.util.Log
 import com.example.securityapp.core.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.models.ControllerDeviceDto
 import com.example.securityapp.core.data.models.DevicesDto
@@ -13,18 +14,19 @@ import javax.inject.Inject
 class InsertConnection @Inject constructor(
     private val firebaseControlledRepository: FirebaseControlledRepository,
     private val firebaseConnectionRepository: FirebaseConnectionRepository,
-    private val phoneRepository: PhoneRepository,
     private val dataStoreRepository: DataStoreRepository
 ) {
     suspend operator fun invoke(barcode: String, controllerDevicesDto: List<DevicesDto>) {
+        Log.d("KHAN","BARCODE IS $barcode")
         val result = firebaseControlledRepository.getDataByBarcode(barcode)
         val controllerData = ControllerDeviceDto(
             email = dataStoreRepository.getEmail(),
-            numbers = phoneRepository.getSimNumbers(),
+            number = dataStoreRepository.getNumber(),
             controlled = controllerDevicesDto
         )
         when (result) {
             is Result.Error<*> -> {
+                Log.d("KHAN","IN FIRST ERROR")
                 Result.Error(result.error)
             }
             is Result.Success -> {
@@ -32,18 +34,18 @@ class InsertConnection @Inject constructor(
                 when (oldControlledData != null) {
                     true -> {
                         val newControlledData = returnControlledData(
-                            controllerData.numbers,
+                            controllerData.number,
                             controllerData.email,
                             oldControlledData
                         )
-                        val newControllerData = returnControllerData(controllerData,oldControlledData.email,oldControlledData.numbers)
+                        val newControllerData = returnControllerData(controllerData,oldControlledData.email,oldControlledData.number)
                         firebaseConnectionRepository.insertControllerAndControllerData(
                             controlledData = newControlledData,
                             controllerData = newControllerData
                         )
                     }
-
                     false -> {
+                        Log.d("KHAN","IN FALSE")
                         Result.Error("Data is null")
                     }
                 }
@@ -53,19 +55,19 @@ class InsertConnection @Inject constructor(
     fun returnControllerData(
         controllerData: ControllerDeviceDto,
         email: String,
-        numbers: List<String>
+        number: String
     ): ControllerDeviceDto {
         val controlledDevicesInControllerData = controllerData.controlled.toMutableList()
         controlledDevicesInControllerData.add(
             DevicesDto(
                 email = email,
-                numbers = numbers
+                number = number
             )
         )
         return controllerData.copy(controlled = controlledDevicesInControllerData)
     }
     fun returnControlledData(
-        numbers: List<String>,
+        number: String,
         newEmail: String,
         oldControlledData: ControlledDeviceDto
     ): ControlledDeviceDto {
@@ -73,7 +75,7 @@ class InsertConnection @Inject constructor(
         list.add(
             DevicesDto(
                 email = newEmail,
-                numbers = numbers
+                number = number
             )
         )
        return oldControlledData.copy(controllers = list)

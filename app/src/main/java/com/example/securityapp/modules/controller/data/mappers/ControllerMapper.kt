@@ -10,39 +10,39 @@ import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 fun ControllerEntity.mapToDomainController(): ControllerDomain {
     return ControllerDomain(
         email = email,
-        numbers = numbers
+        number = number
     )
 }
 fun ControllerDomain.mapToDevicesDto(): DevicesDto {
     return DevicesDto(
         email = email,
-        numbers = numbers
+        number = number
     )
 }
 fun ControlledDomain.mapToDevicesDto(): DevicesDto {
     return DevicesDto(
         email = email,
-        numbers = numbers
+        number = number
     )
 }
 fun ControllerDomain.mapToControllerEntity(): ControllerEntity {
     return ControllerEntity(
         email = email,
-        numbers = numbers
+        number = number
     )
 }
 fun ControllerDomain.mapToControlledDto(barcode : String): ControlledDeviceDto {
     return ControlledDeviceDto(
         email = email,
         barcode = barcode,
-        numbers = numbers
+        number = number
     )
 }
 fun ControllerDeviceDto.mapToDomainController(): List<ControllerDomain> {
     return controlled.map {device->
         ControllerDomain(
             email = device.email,
-            numbers = device.numbers
+            number = device.number
         )
     }
 }

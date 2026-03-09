@@ -13,38 +13,38 @@ class BlockApps @Inject constructor(
     private val androidSmsManagerRepository: AndroidSmsManagerRepository,
     private val dataStoreRepository: DataStoreRepository,
     private val overlayRepository: OverlayRepository,
-    private val insertMessage : InsertMessage
+    private val insertMessage: InsertMessage
 ) {
-    suspend operator fun invoke(numbers : List<String>,email : String = ""){
-        val firstNumber = numbers.firstOrNull()
+    suspend operator fun invoke(firstNumber: String, email: String = "") {
         val messageFromControlled = MessageFromControlled(
             string = "Block Apps Complete",
             type = MessageTypeFromControlled.NORMAL
         )
         overlayRepository.startOverlayService()
         val result = dataStoreRepository.setShouldBlock(true)
-        when(result){
-            true ->{
-                insertMessage(email,"Blocking Apps From $email", MessageTypeFromControlled.NORMAL)
-                val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
+        when (result) {
+            true -> {
+                insertMessage(email, "Blocking Apps From $email", MessageTypeFromControlled.NORMAL)
+                val serializedMessage =
+                    androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
                     is Result.Error<*> -> {
-                        firstNumber?.let {
-                            androidSmsManagerRepository.sendSms(it, serializedMessage.error)
-                        }
+                        androidSmsManagerRepository.sendSms(firstNumber, serializedMessage.error)
                     }
+
                     is Result.Success -> {
-                        firstNumber?.let {
-                            androidSmsManagerRepository.sendSms(it, serializedMessage.data)
-                        }
+                        androidSmsManagerRepository.sendSms(firstNumber, serializedMessage.data)
                     }
                 }
             }
+
             false -> {
-                insertMessage(email,"Error Blocking Apps From $email", MessageTypeFromControlled.ERROR)
-                firstNumber?.let {
-                    androidSmsManagerRepository.sendSms(it, "Error Blocking Apps")
-                }
+                insertMessage(
+                    email,
+                    "Error Blocking Apps From $email",
+                    MessageTypeFromControlled.ERROR
+                )
+                androidSmsManagerRepository.sendSms(firstNumber, "Error Blocking Apps")
             }
         }
     }

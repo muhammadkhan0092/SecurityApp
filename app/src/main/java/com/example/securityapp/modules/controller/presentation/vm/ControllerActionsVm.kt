@@ -3,15 +3,14 @@ package com.example.securityapp.modules.controller.presentation.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.domain.models.MessageFromController
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
+import com.example.securityapp.core.domain.models.MessageFromController
+import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.modules.controller.domain.usecase.SendMessageRequestFromController
-import com.example.securityapp.modules.controller.presentation.mapToNumbers
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabEvent
-import com.example.securityapp.core.domain.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -36,9 +35,10 @@ class ControllerActionsVm @Inject constructor(
     val events = _events.asSharedFlow()
 
     fun onNumberReceived(data: ControllerDomain?){
-        val numbers = data?.mapToNumbers()
-        _state.update {
-            it.copy(isLoading = false, numbers = numbers?:emptyList())
+        data?.let {d->
+            _state.update {
+                it.copy(isLoading = false, number =d.number)
+            }
         }
     }
 

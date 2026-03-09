@@ -17,6 +17,7 @@ interface SettingsRepository {
     val barcode : Flow<String>
     val userType : Flow<AppSettings.UserType>
     val shouldBlock : Flow<Boolean>
+    val number : Flow<String>
 
     suspend fun getShouldBlock(): Boolean {
         return shouldBlock.first()
@@ -36,4 +37,6 @@ interface SettingsRepository {
     suspend fun setUserType(state: AppSettings.UserType): Boolean
     suspend fun setBarcode(state: String): Boolean
     suspend fun setEmail(state: String): Boolean
+    suspend fun setNumber(state: String): Boolean
+    suspend fun getNumber(): String
 }

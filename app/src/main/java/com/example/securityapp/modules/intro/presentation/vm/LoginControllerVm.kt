@@ -7,6 +7,7 @@ import com.example.securityapp.modules.intro.domain.ControllerLoginUseCase
 import com.example.securityapp.modules.intro.presentation.models.LoginAction
 import com.example.securityapp.modules.intro.presentation.models.LoginEvents
 import com.example.securityapp.core.domain.utils.Result
+import com.example.securityapp.modules.intro.presentation.models.LoginEvents.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -24,15 +25,17 @@ class LoginControllerVm @Inject constructor(
             is LoginAction.OnEmailChanged -> Unit
             is LoginAction.OnLoginClicked ->{
                 viewModelScope.launch {
-                    val result = controllerLogin(action.email,action.password)
+                    val result = controllerLogin(action.email,action.password,action.selectedNumber)
                     Log.d("KHAN","RESULT OS $result")
                     when(result){
-                        is Result.Error<*> -> _events.emit(LoginEvents.Toast(result.error))
-                        is Result.Success<*> -> _events.emit(LoginEvents.NavigateToControlledHome)
+                        is Result.Error<*> -> _events.emit(Toast(result.error))
+                        is Result.Success<*> -> _events.emit(NavigateToControlledHome)
                     }
                 }
             }
             is LoginAction.OnPasswordChanged -> Unit
+            is LoginAction.OnNumberClick -> Unit
+            is LoginAction.OnNumberChanged -> Unit
         }
     }
 }

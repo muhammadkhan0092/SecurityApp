@@ -9,14 +9,16 @@ class StoreControlledInfoUseCase @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) {
     suspend operator fun invoke(
-        email : String,
-        barcodeId : String
+        email: String,
+        barcodeId: String,
+        number: String
     ): Result<Unit> {
         val emailResult = dataStoreRepository.setEmail(email)
         val isSetupResult = dataStoreRepository.setIsSetupCompleted(true)
         val userTypeResult = dataStoreRepository.setUserType(AppSettings.UserType.controlled)
         val barcodeResult = dataStoreRepository.setBarcode(barcodeId)
-        return when (emailResult && isSetupResult && userTypeResult && barcodeResult) {
+        val numberResult = dataStoreRepository.setNumber(number)
+        return when (emailResult && isSetupResult && userTypeResult && barcodeResult && numberResult) {
             true -> {
                 Result.Success(Unit)
             }

@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.provider.Telephony.SMS_RECEIVED") {
-
             val bundle: Bundle? = intent.extras
             try {
                 if (bundle != null) {
@@ -31,8 +30,6 @@ class SmsReceiver : BroadcastReceiver() {
                         Log.d("SMS_RECEIVED", "Message: $messageBody")
                         CoroutineScope(Dispatchers.IO).launch {
                             SmsReceiverEntryPoint.get(context).invoke(sender,messageBody)
-                        }
-                        if (messageBody.contains("LOCATION")) {
                         }
                     }
                 }

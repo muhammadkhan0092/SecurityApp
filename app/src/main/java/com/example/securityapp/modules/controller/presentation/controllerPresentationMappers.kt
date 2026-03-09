@@ -7,6 +7,6 @@ fun List<ControllerDomain>.mapToEmails(): List<String> {
         it.email
     }
 }
-fun ControllerDomain.mapToNumbers(): List<String> {
-    return numbers
+fun ControllerDomain.mapToNumbers(): String{
+    return number
 }

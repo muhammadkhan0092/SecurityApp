@@ -9,12 +9,14 @@ class StoreControllerInfoUseCase @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) {
     suspend operator fun invoke(
-        email : String
+        email: String,
+        number: String
     ): Result<Unit> {
         val emailResult = dataStoreRepository.setEmail(email)
         val isSetupResult = dataStoreRepository.setIsSetupCompleted(true)
         val userTypeResult = dataStoreRepository.setUserType(AppSettings.UserType.controller)
-        return when (emailResult && isSetupResult && userTypeResult) {
+        val number = dataStoreRepository.setNumber(number)
+        return when (emailResult && isSetupResult && userTypeResult && number) {
             true -> {
                 Result.Success(Unit)
             }

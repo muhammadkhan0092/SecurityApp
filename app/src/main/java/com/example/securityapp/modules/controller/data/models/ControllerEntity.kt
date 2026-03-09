@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class ControllerEntity(
     @PrimaryKey(autoGenerate = false)
     val email : String,
-    val numbers : List<String>
+    val number : String
 )

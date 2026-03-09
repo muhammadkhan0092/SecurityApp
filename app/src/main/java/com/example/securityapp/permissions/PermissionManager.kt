@@ -2,6 +2,7 @@ package com.example.securityapp.permissions
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -41,6 +42,7 @@ class PermissionManager @Inject constructor(
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             "package:${context.packageName}".toUri()
         )
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
     fun hasManageAllFilesPermission(): Boolean {
@@ -56,6 +58,7 @@ class PermissionManager @Inject constructor(
                 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
                 "package:${context.packageName}".toUri()
             )
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
         else return

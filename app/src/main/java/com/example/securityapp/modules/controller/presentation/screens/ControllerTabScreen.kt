@@ -75,7 +75,7 @@ fun ControllerTabScreen(
             HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth().weight(1f)){pagerState->
                 when (pagerState) {
                     0 -> {
-                        ControllerActions(state.numbers,onAction)
+                        ControllerActions(state.number,onAction)
                     }
 
                     1 -> {
@@ -88,38 +88,22 @@ fun ControllerTabScreen(
 }
 
 @Composable
-fun ControllerActions(numbers: List<String>,onAction: (ControllerTabAction) -> Unit) {
+fun ControllerActions(number: String,onAction: (ControllerTabAction) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        NumbersComposable(numbers = numbers)
         ButtonComposable("Wipe Data") {
-            onAction(ControllerTabAction.OnFactoryReset(numbers.first()))
+            onAction(ControllerTabAction.OnFactoryReset(number))
         }
         ButtonComposable(text = "Clear Gallery") {
-            onAction(ControllerTabAction.OnWipeGallery(numbers.first()))
+            onAction(ControllerTabAction.OnWipeGallery(number))
         }
         ButtonComposable(text = "Fetch Location") {
-            onAction(ControllerTabAction.OnLocationFetch(numbers.first()))
+            onAction(ControllerTabAction.OnLocationFetch(number))
         }
         ButtonComposable(text = "Block Apps") {
-            onAction(ControllerTabAction.OnBlockApps(numbers.first()))
-        }
-    }
-}
-
-@Composable
-fun NumbersComposable(modifier: Modifier = Modifier, numbers: List<String>) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Text("Ph No : ")
-        Column {
-            numbers.forEach {
-                Text(it)
-            }
+            onAction(ControllerTabAction.OnBlockApps(number))
         }
     }
 }
