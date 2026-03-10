@@ -40,6 +40,9 @@ class DataStoreRepository @Inject constructor(
     override suspend fun getEmail(): String {
         return email.first()
     }
+    suspend fun getBarcode(): String{
+        return barcode.first()
+    }
     override suspend fun getUserType(): AppSettings.UserType {
         return userType.first()
     }

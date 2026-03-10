@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,9 +63,9 @@ class ControlledBarcodeVm @Inject constructor(
     init {
         viewModelScope.launch {
             datastore.barcode.collectLatest {
-                val bitmap = generateBarcode()
+                val barcodeBitmap = generateBarcode(useQrCode = true, data = dataStoreRepository.getBarcode())
                 _state.update {
-                    it.copy(bitmap = bitmap)
+                    it.copy(bitmap = barcodeBitmap)
                 }
             }
         }

@@ -45,13 +45,12 @@ fun ControllerBarcodeScreen(
                     Button(
                         onClick = {
                             val options = ScanOptions().apply {
-                                setDesiredBarcodeFormats(ScanOptions.CODE_128)
-                                setPrompt("Scan barcode")
+                                setDesiredBarcodeFormats(listOf(ScanOptions.QR_CODE)) // QR instead of CODE_128
+                                setPrompt("Scan QR code")
                                 setBeepEnabled(true)
                                 setOrientationLocked(true)
                             }
                             scanLauncher.launch(options)
-                            onBarcodeScanned("")
                         }
                     ) {
                         Text("Scan Barcode")
