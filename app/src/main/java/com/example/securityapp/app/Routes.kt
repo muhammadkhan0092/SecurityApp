@@ -13,6 +13,9 @@ sealed interface Route {
     @Serializable
     data object RouteGate: Route
 
+    @Serializable
+    data object Packages: Route
+
 
     @Serializable
     data object ControlledHomeGraph: Route

@@ -29,6 +29,7 @@ import com.example.securityapp.modules.controller.presentation.screens.Controlle
 import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
 import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
+import com.example.securityapp.modules.intro.presentation.composables.PackagesScreenRoot
 import com.example.securityapp.modules.intro.presentation.vm.IntroVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
@@ -47,9 +48,7 @@ fun App() {
             startDestination = Route.RouteGate
         ) {
             composable<Route.RouteGate> {
-                val vm = hiltViewModel<IntroVm>()
-                val state = vm.userType.collectAsStateWithLifecycle()
-                GateScreen(navController, state.value)
+                GateScreen(navController)
             }
             composable<Route.Permissions> {
                 val vm = hiltViewModel<PermissionVm>()
@@ -90,6 +89,9 @@ fun App() {
                         }
                     )
                 }
+                composable<Route.Packages> {
+                    PackagesScreenRoot(navController)
+                }
                 composable<Route.Login>(
                     enterTransition = {
                         slideInHorizontally { offset ->
@@ -111,10 +113,7 @@ fun App() {
                     LaunchedEffect(Unit) {
                         loginControlledByVm.events.collectLatest {
                             when (it) {
-                                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControlledHomeGraph) {
-                                    popUpTo(Route.IntroGraph) { inclusive = true }
-                                    launchSingleTop = true
-                                }
+                                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.Packages)
 
                                 is LoginEvents.Toast -> {
                                     Log.d("KHAN", "TOAST ${it.str}")

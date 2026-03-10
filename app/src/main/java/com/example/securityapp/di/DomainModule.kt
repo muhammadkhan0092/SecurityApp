@@ -2,6 +2,7 @@ package com.example.securityapp.di
 
 import android.os.Message
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.core.data.repository.AndroidUninstallRepository
 import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.core.data.repository.FirebaseConnectionRepository
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
@@ -11,6 +12,7 @@ import com.example.securityapp.core.domain.repository.LoginRepository
 import com.example.securityapp.core.domain.repository.MessagesRepository
 import com.example.securityapp.core.domain.repository.SettingsRepository
 import com.example.securityapp.core.domain.repository.SmsManagerRepository
+import com.example.securityapp.core.domain.repository.UninstallRepository
 import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
 import com.example.securityapp.modules.controlled.data.repository.AndroidGalleryRepository
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
@@ -25,6 +27,8 @@ import com.example.securityapp.modules.controlled.domain.repository.LocationRepo
 import com.example.securityapp.modules.controlled.presentation.service.OverlayControllerImpl
 import com.example.securityapp.modules.controller.data.repository.FirebaseControllerRepository
 import com.example.securityapp.modules.controller.domain.repository.ControllerRepository
+import com.example.securityapp.modules.intro.data.AndroidPackageRepository
+import com.example.securityapp.modules.intro.domain.PackageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -119,4 +123,15 @@ object DomainModule {
     }
 
 
+    @Singleton
+    @Provides
+    fun providesPackageRepository(repo : AndroidPackageRepository) : PackageRepository {
+        return repo
+    }
+
+    @Singleton
+    @Provides
+    fun providesUninstallRepository(repo : AndroidUninstallRepository) : UninstallRepository {
+        return repo
+    }
 }

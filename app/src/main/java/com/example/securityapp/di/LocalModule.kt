@@ -11,6 +11,7 @@ import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.data.source.ControlledDao
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
 import com.example.securityapp.core.data.dao.ControllerMessagesDao
+import com.example.securityapp.core.data.dao.UninstallDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,5 +59,10 @@ object LocalModule {
     @Singleton
     fun returnControllerMessagesDao(db : SecurityDb) : ControllerMessagesDao {
         return db.controllerMessagesDao()
+    }
+    @Provides
+    @Singleton
+    fun returnUninstallDao(db : SecurityDb): UninstallDao {
+        return db.uninstalledDao()
     }
 }

@@ -34,6 +34,8 @@ class DataStoreRepository @Inject constructor(
     override val userType : Flow<AppSettings.UserType> = dataStore.data.safeFlowWithDefault("barcode").map { it.userType }
     override val shouldBlock : Flow<Boolean> = dataStore.data.safeFlowWithDefault("should_block").map { it.shouldBlock }
     override val number : Flow<String> = dataStore.data.safeFlowWithDefault("number").map { it.number }
+    override val packages: Flow<Boolean> = dataStore.data.safeFlowWithDefault("packages").map { it.arePackagesSet }
+
     override suspend fun getShouldBlock(): Boolean {
         return shouldBlock.first()
     }
@@ -48,6 +50,10 @@ class DataStoreRepository @Inject constructor(
     }
     override suspend fun getIsSetupCompleted(): Boolean {
         return isSetupComplete.first()
+    }
+
+    override suspend fun getIsPackagesSet(): Boolean {
+        return packages.first()
     }
 
     override suspend fun setShouldBlock(state: Boolean): Boolean {
@@ -120,6 +126,18 @@ class DataStoreRepository @Inject constructor(
 
     override suspend fun getNumber(): String {
         return number.first()
+    }
+
+    override suspend fun setPackagesSet(state : Boolean): Boolean {
+        return try {
+            dataStore.updateData { currentData ->
+                currentData.toBuilder().setArePackagesSet(state).build()
+            }
+            true
+        } catch (e: IOException) {
+            Log.e(TAG, "Failed to update is Usage Displayed", e)
+            false
+        }
     }
 
 }

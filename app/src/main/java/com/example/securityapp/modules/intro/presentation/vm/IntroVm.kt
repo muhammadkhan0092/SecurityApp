@@ -1,14 +1,16 @@
 package com.example.securityapp.modules.intro.presentation.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
+import com.example.securityapp.modules.intro.presentation.models.GateEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,12 +18,39 @@ class IntroVm @Inject constructor(
     private val datastore : DataStoreRepository,
     private val phoneRepository: PhoneRepository
 ) : ViewModel(){
-    val userType = datastore.userType
-        .map { it }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
-
+    private val _state = MutableStateFlow(GateEvents.None)
+    val state = _state.asStateFlow()
     init {
-        val numbers = phoneRepository.getSimNumbers()
-        Log.d("KHAN","PHONE NUMBERS ARE $numbers")
+        viewModelScope.launch {
+            val userType = datastore.getUserType()
+            val isPackagesSet = datastore.getIsPackagesSet()
+            when(userType){
+                AppSettings.UserType.not_set -> {
+                    _state.update {
+                        GateEvents.NavigateToPermissions
+                    }
+                }
+                AppSettings.UserType.controller -> {
+                    _state.update {
+                        GateEvents.NavigateToController
+                    }
+                }
+                AppSettings.UserType.controlled -> {
+                    when(isPackagesSet){
+                        true ->{
+                            _state.update {
+                                GateEvents.NavigateToControlled
+                            }
+                        }
+                        false -> {
+                            _state.update {
+                                GateEvents.NavigateToPackages
+                            }
+                        }
+                    }
+                }
+                AppSettings.UserType.UNRECOGNIZED -> Unit
+            }
+        }
     }
 }

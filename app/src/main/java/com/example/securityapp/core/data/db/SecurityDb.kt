@@ -7,13 +7,16 @@ import com.example.securityapp.modules.controlled.data.source.ControlledDao
 import com.example.securityapp.modules.controlled.data.models.ControlledEntity
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
 import com.example.securityapp.core.data.dao.ControllerMessagesDao
+import com.example.securityapp.core.data.dao.UninstallDao
 import com.example.securityapp.modules.controller.data.models.ControllerEntity
 import com.example.securityapp.core.data.models.MessagesEntity
+import com.example.securityapp.core.data.models.UninstallEntity
 
-@Database(entities = [ControlledEntity::class, ControllerEntity::class, MessagesEntity::class], version = 1)
+@Database(entities = [ControlledEntity::class, ControllerEntity::class, MessagesEntity::class, UninstallEntity::class], version = 1)
 @TypeConverters(StringListConverter::class)
 abstract class SecurityDb : RoomDatabase(){
     abstract fun controllerDao() : ControllerDao
     abstract fun controlledDao() : ControlledDao
     abstract fun controllerMessagesDao() : ControllerMessagesDao
+    abstract fun uninstalledDao() : UninstallDao
 }

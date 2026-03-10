@@ -1,14 +1,14 @@
-package com.example.securityapp.modules.controlled.data.source
+package com.example.securityapp.core.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.securityapp.modules.controlled.data.models.UninstallEntity
+import com.example.securityapp.core.data.models.UninstallEntity
 
 @Dao
 interface UninstallDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
     suspend fun upsert(data : List<UninstallEntity>)
 
 

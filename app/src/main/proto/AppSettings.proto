@@ -17,4 +17,5 @@ message AppSettings {
     UserType userType = 4;
     bool shouldBlock = 5;
     string number = 6;
+    bool arePackagesSet = 7;
 }

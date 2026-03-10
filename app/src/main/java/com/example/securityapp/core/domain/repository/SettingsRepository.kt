@@ -18,7 +18,7 @@ interface SettingsRepository {
     val userType : Flow<AppSettings.UserType>
     val shouldBlock : Flow<Boolean>
     val number : Flow<String>
-
+    val packages : Flow<Boolean>
     suspend fun getShouldBlock(): Boolean {
         return shouldBlock.first()
     }
@@ -31,6 +31,7 @@ interface SettingsRepository {
     suspend fun getIsSetupCompleted(): Boolean {
         return isSetupComplete.first()
     }
+    suspend fun getIsPackagesSet(): Boolean
 
     suspend fun setShouldBlock(state: Boolean): Boolean
     suspend fun setIsSetupCompleted(state: Boolean): Boolean
@@ -39,4 +40,5 @@ interface SettingsRepository {
     suspend fun setEmail(state: String): Boolean
     suspend fun setNumber(state: String): Boolean
     suspend fun getNumber(): String
+    suspend fun setPackagesSet(state : Boolean = true): Boolean
 }
