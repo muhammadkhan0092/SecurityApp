@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
+import android.util.Log
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
 import com.example.securityapp.core.domain.models.MessageFromControlled
 import com.example.securityapp.core.domain.models.MessageTypeFromControlled
@@ -16,7 +17,9 @@ class UninstallApps @Inject constructor(
     private val deviceOwnerRepository: DeviceOwnerRepository
 ) {
     suspend operator fun invoke(number: String, email: String = "") {
+        Log.d("KHAN","IN UNINSTALL APPS")
         val isDeviceOwner = deviceOwnerRepository.isDeviceOwner()
+        Log.d("KHAN","AFTER DEVICE OWNER $isDeviceOwner")
         if(!isDeviceOwner){
             insertMessage(email,"Not Device Owner, Requested From $email", type = MessageTypeFromControlled.ERROR)
             sendMessageToOtherDevice("Not Device Owner", MessageTypeFromControlled.ERROR,number)

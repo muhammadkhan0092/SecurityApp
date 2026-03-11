@@ -34,6 +34,10 @@ class PackagesVm @Inject constructor(
         when(action){
             PackagesAction.OnNextClicked -> {
                 viewModelScope.launch(Dispatchers.IO){
+                    if(state.value.selectedPackages.isEmpty()){
+                        _events.emit(PackagesEvent.Toast("Select Atleast One App"))
+                        return@launch
+                    }
                     val result = packagesComplete(state.value.selectedPackages.map {
                         UninstallDomain(it)
                     })

@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.intro.presentation.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.repository.DataStoreRepository
@@ -24,6 +25,8 @@ class IntroVm @Inject constructor(
         viewModelScope.launch {
             val userType = datastore.getUserType()
             val isPackagesSet = datastore.getIsPackagesSet()
+            Log.d("KHAN","USER TYPE IS $userType")
+            Log.d("KHAN","PACKAGES SET IS $isPackagesSet")
             when(userType){
                 AppSettings.UserType.not_set -> {
                     _state.update {

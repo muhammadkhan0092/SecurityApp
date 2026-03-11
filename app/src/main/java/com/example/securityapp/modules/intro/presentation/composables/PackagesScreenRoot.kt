@@ -4,12 +4,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -70,15 +72,24 @@ private fun PackagesScreen(state: PackagesState,onClick:(PackagesAction)-> Unit)
                      modifier = Modifier.align(Alignment.Center)
                 )
             }
-            else -> PackagesList(list = state.allPackages, selectedList = state.selectedPackages, onClick = onClick)
+            else -> {
+                Column(modifier = Modifier.fillMaxSize()){
+                    PackagesList(list = state.allPackages, selectedList = state.selectedPackages, onClick = onClick, modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {onClick(PackagesAction.OnNextClicked)}
+                    ) {
+                        Text("Continue")
+                    }
+                }
+            }
         }
     }
 }
 @Composable
-private fun PackagesList(list : List<String>,selectedList: List<String>,onClick:(PackagesAction)-> Unit){
+private fun PackagesList(list : List<String>,selectedList: List<String>,onClick:(PackagesAction)-> Unit,modifier: Modifier){
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
+            .fillMaxWidth()
     ){
         items(list){
             PackagesComponent(
