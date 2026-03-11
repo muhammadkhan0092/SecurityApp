@@ -7,4 +7,5 @@ interface DeviceOwnerRepository{
 
     fun deleteApp()
     fun uninstallPackage(packageName: String): Result<Unit>
+    fun isDeviceOwner() : Boolean
 }

@@ -4,5 +4,6 @@ enum class MessageFromController{
     BLOCK_APPS,
     WIPE_GALLERY,
     GET_LOCATION,
-    FACTORY_RESET
+    FACTORY_RESET,
+    UNINSTALL_APPS
 }

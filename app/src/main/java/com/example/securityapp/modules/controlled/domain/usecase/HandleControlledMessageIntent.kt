@@ -13,7 +13,8 @@ class HandleControlledMessageIntent @Inject constructor(
     private val blockApps: BlockApps,
     private val wipeGallery: WipeGallery,
     private val getLocation: GetLocation,
-    private val factoryReset: FactoryReset
+    private val factoryReset: FactoryReset,
+    private val uninstallApps : UninstallApps
 ){
     suspend operator fun invoke(sender: String, message: String) {
         val controlledLocalResult = firebaseControlledRepository.getLocalData()
@@ -56,6 +57,11 @@ class HandleControlledMessageIntent @Inject constructor(
                                     MessageFromController.FACTORY_RESET -> factoryReset(
                                         filteredData.number,
                                         filteredData.email
+                                    )
+
+                                    MessageFromController.UNINSTALL_APPS -> uninstallApps(
+                                        number = filteredData.number,
+                                        email = filteredData.email
                                     )
                                 }
                             }

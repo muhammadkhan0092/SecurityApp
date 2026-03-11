@@ -18,6 +18,7 @@ class SendMessageRequestFromController @Inject constructor(
             MessageFromController.WIPE_GALLERY -> "Wipe Gallery Requested"
             MessageFromController.GET_LOCATION -> "Get Location Requested"
             MessageFromController.FACTORY_RESET -> "Factory Reset Requested"
+            MessageFromController.UNINSTALL_APPS -> "Uninstall Requested"
         }
         val messageStrResult = smsRepository.serializeToString(data)
         return when(messageStrResult){

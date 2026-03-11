@@ -63,4 +63,9 @@ class AndroidDeviceOwnerRepository @Inject constructor(
             Result.Error("Error Deleting App")
         }
     }
+
+    override fun isDeviceOwner(): Boolean {
+        val dpm = context.getSystemService(DevicePolicyManager::class.java)
+        return dpm.isDeviceOwnerApp("com.example.securityapp")
+    }
 }
