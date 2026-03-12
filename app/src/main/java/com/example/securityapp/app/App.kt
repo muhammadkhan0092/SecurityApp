@@ -34,7 +34,7 @@ import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
 import com.example.securityapp.modules.intro.presentation.models.LoginEvents
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreen
-import com.example.securityapp.permissions.PermissionScreen
+import com.example.securityapp.permissions.PermissionScreenRoot
 import com.example.securityapp.permissions.PermissionVm
 import kotlinx.coroutines.flow.collectLatest
 
@@ -52,7 +52,7 @@ fun App() {
             composable<Route.Permissions> {
                 val vm = hiltViewModel<PermissionVm>()
                 val state = vm.state.collectAsStateWithLifecycle()
-                PermissionScreen(
+                PermissionScreenRoot(
                     state.value,
                     vm.events,
                     onAction = {

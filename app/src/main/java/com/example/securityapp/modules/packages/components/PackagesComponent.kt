@@ -25,34 +25,38 @@ import com.example.securityapp.ui.theme.Purple40
 
 @Composable fun PackagesComponent(name : String, selected : Boolean, onClick:(PackagesAction)-> Unit){
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp).clickable{
+            onClick(PackagesAction.OnPackageClicked(name))
+        },
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ){
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.width(20.dp).height(20.dp).background(
-                color = Color.White,
-                shape = RoundedCornerShape(10.dp)
-            )
-                .border(1.dp, Color.LightGray)
-                .clickable{
-                onClick(PackagesAction.OnPackageClicked(name))
-            }
-        ){
-            if(selected){
-                Box(
-                    modifier = Modifier.fillMaxSize(0.9f)
-                        .background(
-                            color =  Purple40
-                        )
-                )
-            }
-        }
+        Radio(selected = selected)
         Text(
             name, maxLines = 1,
             fontSize = 16.sp,
             fontWeight = FontWeight.Light
         )
+    }
+}
+
+@Composable
+fun Radio(selected: Boolean){
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.width(20.dp).height(20.dp).background(
+            color = Color.White,
+            shape = RoundedCornerShape(10.dp)
+        )
+            .border(1.dp, Color.LightGray)
+    ){
+        if(selected){
+            Box(
+                modifier = Modifier.fillMaxSize(0.9f)
+                    .background(
+                        color =  Purple40
+                    )
+            )
+        }
     }
 }

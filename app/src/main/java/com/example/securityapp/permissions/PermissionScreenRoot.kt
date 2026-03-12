@@ -4,11 +4,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,14 +22,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun PermissionScreen(
+fun PermissionScreenRoot(
     state: PermissionState,
     events : SharedFlow<PermissionEvent>,
     onAction : (PermissionAction)-> Unit,
@@ -84,45 +94,75 @@ fun PermissionScreen(
             onAction(PermissionAction.OnOverlayPermissionGranted)
         }
     }
+    PermissionScreen(state,onAction)
+}
+@Composable
+fun PermissionScreen(state: PermissionState,onAction: (PermissionAction) -> Unit){
     Box(modifier = Modifier
         .fillMaxSize()
         .safeContentPadding(), contentAlignment = Alignment.Center){
         Column(
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize(0.8f)
-        ) {
-            PermissionItem(
-                heading = "Overlay",
-                content = "Overlay Permission Required to Block Screen Usage",
-                checked = state.isOverlayGranted,
-                onCheckClicked = {
-                    onAction(PermissionAction.OnOverlayAction)
-                }
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopStart)
+        ){
+            Text(
+                "Permissions",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
             )
-            PermissionItem(
-                heading = "Storage",
-                content = "Storage Permission Required To Wipe Gallery On Request",
-                checked = state.isStorageGranted,
-                onCheckClicked = {
-                    onAction(PermissionAction.OnStorageAction)
-                }
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                "These Permissions Are required for functioning of our App",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
             )
-            PermissionItem(
-                heading = "Other Permissions",
-                content = "Camera , Location , Phone , Sms",
-                checked = state.isOtherGranted,
-                onCheckClicked = {
-                    Log.d("KHAN","ON OTHER CLICKED")
-                    onAction(PermissionAction.OnOtherAction)
-                }
-            )
-            Button(
-                onClick = {
-                    onAction(PermissionAction.OnContinueClicked)
-                }
+            Spacer(modifier = Modifier.height(30.dp))
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text("Continue")
+                PermissionItem(
+                    heading = "Overlay",
+                    content = "Overlay Permission Required to Block Screen Usage",
+                    checked = state.isOverlayGranted,
+                    onCheckClicked = {
+                        onAction(PermissionAction.OnOverlayAction)
+                    }
+                )
+                PermissionItem(
+                    heading = "Storage",
+                    content = "Storage Permission Required To Wipe Gallery On Request",
+                    checked = state.isStorageGranted,
+                    onCheckClicked = {
+                        onAction(PermissionAction.OnStorageAction)
+                    }
+                )
+                PermissionItem(
+                    heading = "Other Permissions",
+                    content = "Camera , Location , Phone , Sms",
+                    checked = state.isOtherGranted,
+                    onCheckClicked = {
+                        onAction(PermissionAction.OnOtherAction)
+                    }
+                )
+                Spacer(modifier = Modifier.fillMaxWidth().weight(1f))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                        .background(color = Purple40, shape = RoundedCornerShape(10.dp))
+                    ,
+                    onClick = {
+                        onAction(PermissionAction.OnContinueClicked)
+                    }
+                ) {
+                    Text(
+                        "Continue",
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

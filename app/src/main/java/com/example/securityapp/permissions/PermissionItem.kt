@@ -1,4 +1,5 @@
 package com.example.securityapp.permissions
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.securityapp.modules.packages.components.Radio
 
 @Composable
 fun PermissionItem(
@@ -19,21 +21,19 @@ fun PermissionItem(
     onCheckClicked : ()-> Unit
 ){
     Row(
+        modifier = Modifier.clickable{
+            onCheckClicked()
+        },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ){
+        Radio(selected = checked)
         Column(
             modifier = Modifier.weight(1f)
         ){
             Text(heading, fontWeight = FontWeight.Bold)
-            Text("")
+            Text(content)
 
         }
-        Switch(
-            checked = checked,
-            onCheckedChange = {newValue ->
-                onCheckClicked()
-            }
-        )
     }
 }
