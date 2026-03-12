@@ -1,39 +1,108 @@
 package com.example.securityapp.modules.intro.presentation.composables
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.securityapp.modules.intro.presentation.models.IntroAction
+import com.example.securityapp.modules.intro.presentation.models.IntroState
+import com.example.securityapp.modules.intro.presentation.models.UserType
+import com.example.securityapp.modules.packages.components.Radio
+import com.example.securityapp.ui.theme.Purple40
 
 @Composable
 fun UserTypeScreen(
+    state: IntroState,
     onAction : (IntroAction)-> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+    Box(modifier = Modifier.fillMaxSize().safeContentPadding()){
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text("I want to")
-            Button(onClick ={onAction(IntroAction.OnBeControlled)}) {
-                Text("Be Controlled")
-            }
-            Button(
+            Text(
+                "User Type",
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 30.sp,
+                color = Purple40
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Text(
+                "I Am",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            UserTypeComponent(
+                isSelected = state.userType== UserType.CONTROLLED,
+                title = "Controlled",
+                content = "Other Devices Linked to you can control your device",
+                onClick = {
+                    onAction(IntroAction.OnBeControlled)
+                }
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            UserTypeComponent(
+                isSelected = state.userType== UserType.CONTROLLER,
+                title = "Controller",
+                content = "Device Linked to you can be controlled",
                 onClick = {
                     onAction(IntroAction.OnControl)
                 }
-            ) {
-                Text("Controll")
+            )
+            Spacer(modifier = Modifier.fillMaxWidth().weight(1f))
+            Button(
+                modifier = Modifier.fillMaxWidth().background(Purple40, RoundedCornerShape(10.dp)),
+                onClick ={onAction(IntroAction.OnContinueClicked)}) {
+                Text("Continue")
             }
+        }
+    }
+}
+
+@Composable
+fun UserTypeComponent(
+    isSelected: Boolean,
+    title: String,
+    content: String,
+    onClick: () -> Unit
+){
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Radio(isSelected)
+        Spacer(modifier = Modifier.width(10.dp))
+        Column(
+            modifier = Modifier.weight(1f)
+                .clickable{
+                    onClick()
+                }
+        ){
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+            Text(
+                text = content,
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp
+            )
         }
     }
 }

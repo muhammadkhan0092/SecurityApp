@@ -34,6 +34,7 @@ import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
 import com.example.securityapp.modules.intro.presentation.models.LoginEvents
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreen
+import com.example.securityapp.modules.intro.presentation.models.IntroAction
 import com.example.securityapp.permissions.PermissionScreenRoot
 import com.example.securityapp.permissions.PermissionVm
 import kotlinx.coroutines.flow.collectLatest
@@ -81,10 +82,14 @@ fun App() {
                     popEnterTransition = { slideInHorizontally() }
                 ) { entry ->
                     val sharedVm = entry.sharedHiltViewModel<IntroSharedVm>(navController)
+                    val state=  sharedVm.state.collectAsStateWithLifecycle()
                     UserTypeScreen(
+                        state = state.value,
                         onAction = {
-                            sharedVm.onAction(it)
-                            navController.navigate(Route.Login)
+                            when(it){
+                                IntroAction.OnContinueClicked -> navController.navigate(Route.Login)
+                                else -> sharedVm.onAction(it)
+                            }
                         }
                     )
                 }
