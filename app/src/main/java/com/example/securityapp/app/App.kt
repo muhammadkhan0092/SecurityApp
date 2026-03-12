@@ -29,8 +29,7 @@ import com.example.securityapp.modules.controller.presentation.screens.Controlle
 import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
 import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
-import com.example.securityapp.modules.intro.presentation.composables.PackagesScreenRoot
-import com.example.securityapp.modules.intro.presentation.vm.IntroVm
+import com.example.securityapp.modules.packages.PackagesScreenRoot
 import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
 import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
 import com.example.securityapp.modules.intro.presentation.models.LoginEvents

@@ -1,6 +1,5 @@
 package com.example.securityapp.modules.intro.presentation.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.domain.utils.Result
@@ -9,9 +8,12 @@ import com.example.securityapp.modules.intro.domain.PackageRepository
 import com.example.securityapp.modules.intro.domain.PackagesComplete
 import com.example.securityapp.modules.intro.presentation.models.PackagesAction
 import com.example.securityapp.modules.intro.presentation.models.PackagesEvent
+import com.example.securityapp.modules.intro.presentation.models.PackagesEvent.Toast
 import com.example.securityapp.modules.intro.presentation.models.PackagesState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,48 +32,75 @@ class PackagesVm @Inject constructor(
     val state = _state.asStateFlow()
     private val _events = MutableSharedFlow<PackagesEvent>(replay = 0, extraBufferCapacity = 1)
     val events = _events.asSharedFlow()
-    fun onAction(action: PackagesAction){
-        when(action){
+    var list: List<String> = packagesRepository.getInstalledApps()
+    var job: Job? = null
+    fun onAction(action: PackagesAction) {
+        when (action) {
             PackagesAction.OnNextClicked -> {
-                viewModelScope.launch(Dispatchers.IO){
-                    if(state.value.selectedPackages.isEmpty()){
-                        _events.emit(PackagesEvent.Toast("Select Atleast One App"))
+                viewModelScope.launch(Dispatchers.IO) {
+                    if (state.value.selectedPackages.isEmpty()) {
+                        _events.emit(Toast("Select Atleast One App"))
                         return@launch
                     }
                     val result = packagesComplete(state.value.selectedPackages.map {
                         UninstallDomain(it)
                     })
-                    when(result){
+                    when (result) {
                         is Result.Error<*> -> {
-                            _events.emit(PackagesEvent.Toast(result.error))
+                            _events.emit(Toast(result.error))
                         }
+
                         is Result.Success -> _events.emit(PackagesEvent.NavigateToControlledMain)
                     }
                 }
             }
+
             is PackagesAction.OnPackageClicked -> {
-                Log.d("KHAN","PACKAGE CLICKED IS ${action.name}")
                 val isPackageSelected = state.value.selectedPackages.contains(action.name)
-                when(isPackageSelected){
-                    true-> {
-                        Log.d("KHAN","IN TRUE")
+                when (isPackageSelected) {
+                    true -> {
+                        list = list.filter {
+                            it != action.name
+                        }
                         _state.update {
                             it.copy(
                                 selectedPackages = state.value.selectedPackages.filter {
-                                     it!=action.name
+                                    it != action.name
                                 }
                             )
                         }
                     }
+
                     false -> {
-                        Log.d("KHAN","IN False")
                         val newList = state.value.selectedPackages.toMutableList()
                         newList.add(action.name)
-                        Log.d("KHAN","NEW LIST IS $newList")
+                        list.toMutableList().add(action.name)
                         _state.update {
                             it.copy(
                                 selectedPackages = newList.toList()
                             )
+                        }
+                    }
+                }
+            }
+
+            is PackagesAction.OnTextChanged -> {
+                _state.update {
+                    it.copy(etValue = action.text)
+                }
+                job?.cancel()
+                job = viewModelScope.launch(Dispatchers.IO) {
+                    delay(1000)
+                    if (action.text.isEmpty()) {
+                        _state.update {
+                            it.copy(allPackages = list)
+                        }
+                    } else {
+                        val filtered = state.value.allPackages?.filter {
+                            it.contains(action.text, ignoreCase = true)
+                        }
+                        _state.update {
+                            it.copy(allPackages = filtered)
                         }
                     }
                 }
