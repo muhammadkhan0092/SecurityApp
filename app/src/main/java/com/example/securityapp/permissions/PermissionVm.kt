@@ -34,9 +34,7 @@ class PermissionVm @Inject constructor(
     fun onAction(action: PermissionAction) {
         val event = when (action) {
             PermissionAction.OnOtherAction -> {
-                Log.d("KHAN", "ON OTHER CLICKED IN VM")
                 if (!_state.value.isOtherGranted) {
-                    Log.d("KHAN", "IN OTHER IF")
                     PermissionEvent.RequestOtherPermission
                 } else return
             }

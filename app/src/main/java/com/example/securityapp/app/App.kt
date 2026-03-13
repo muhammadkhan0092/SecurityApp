@@ -51,29 +51,8 @@ fun App() {
                 GateScreen(navController)
             }
             composable<Route.Permissions> {
-                val vm = hiltViewModel<PermissionVm>()
-                val state = vm.state.collectAsStateWithLifecycle()
                 PermissionScreenRoot(
-                    state.value,
-                    vm.events,
-                    onAction = {
-                        vm.onAction(it)
-                    },
-                    onContinueEvent = {
-                        navController.navigate(Route.IntroGraph)
-                    },
-                    requestOverlayPermission = {
-                        vm.requestOverlayPermission()
-                    },
-                    requestManageAllFilesPermission = {
-                        vm.requestStoragePermission()
-                    },
-                    hasManageAllFilesPermission = {
-                        vm.hasStoragePermission()
-                    },
-                    hasOverlayPermission = {
-                        vm.hasOverlayPermission()
-                    }
+                   navController
                 )
             }
             navigation<Route.IntroGraph>(startDestination = Route.UserType) {

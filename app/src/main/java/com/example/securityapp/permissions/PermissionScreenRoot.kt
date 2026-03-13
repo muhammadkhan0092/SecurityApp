@@ -26,31 +26,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.example.securityapp.app.Route
 import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun PermissionScreenRoot(
-    state: PermissionState,
-    events : SharedFlow<PermissionEvent>,
-    onAction : (PermissionAction)-> Unit,
-    onContinueEvent :()-> Unit,
-    requestOverlayPermission : () -> Unit,
-    requestManageAllFilesPermission:()-> Unit,
-    hasManageAllFilesPermission:()-> Boolean,
-    hasOverlayPermission:()-> Boolean
+    navController : NavController
 ) {
+    val vm = hiltViewModel<PermissionVm>()
+    val state = vm.state.collectAsStateWithLifecycle()
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
         val allGranted = result.values.all { it }
         if (allGranted) {
             Log.d("Permission", "All runtime permissions granted")
-            onAction(PermissionAction.OnOtherPermissionGranted)
+            vm.onAction(PermissionAction.OnOtherPermissionGranted)
         } else {
             Log.d("Permission", "Some permissions denied")
         }
@@ -58,12 +57,12 @@ fun PermissionScreenRoot(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(Unit){
-        events.collectLatest {
+        vm.events.collectLatest {
             when(it){
                 PermissionEvent.RequestOtherPermission -> launcher.launch(RuntimePermissions.permissions)
-                PermissionEvent.RequestOverlayPermission -> requestOverlayPermission()
-                PermissionEvent.RequestStoragePermission -> requestManageAllFilesPermission()
-                PermissionEvent.NavigateToIntro -> onContinueEvent()
+                PermissionEvent.RequestOverlayPermission ->  vm.requestOverlayPermission()
+                PermissionEvent.RequestStoragePermission -> vm.requestStoragePermission()
+                PermissionEvent.NavigateToIntro -> navController.navigate(Route.IntroGraph)
                 is PermissionEvent.Toast -> Toast.makeText(context, it.str, Toast.LENGTH_SHORT).show()
             }
         }
@@ -71,11 +70,11 @@ fun PermissionScreenRoot(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                if (hasOverlayPermission()) {
-                    onAction(PermissionAction.OnOverlayPermissionGranted)
+                if (vm.hasOverlayPermission()) {
+                    vm.onAction(PermissionAction.OnOverlayPermissionGranted)
                 }
-                if (hasManageAllFilesPermission()) {
-                    onAction(PermissionAction.OnStoragePermissionGranted)
+                if (vm.hasStoragePermission()) {
+                    vm.onAction(PermissionAction.OnStoragePermissionGranted)
                 }
             }
         }
@@ -86,15 +85,21 @@ fun PermissionScreenRoot(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
     LaunchedEffect(Unit) {
-        if(hasManageAllFilesPermission()){
-            onAction(PermissionAction.OnStoragePermissionGranted)
+        if(vm.hasStoragePermission()){
+            vm.onAction(PermissionAction.OnStoragePermissionGranted)
         }
-        if(hasOverlayPermission()){
-            onAction(PermissionAction.OnOverlayPermissionGranted)
+        if(vm.hasOverlayPermission()){
+            vm.onAction(PermissionAction.OnOverlayPermissionGranted)
         }
     }
-    PermissionScreen(state,onAction)
+    PermissionScreen(
+        state.value,
+        onAction = {
+        vm.onAction(it)
+        }
+    )
 }
 @Composable
 fun PermissionScreen(state: PermissionState,onAction: (PermissionAction) -> Unit){
