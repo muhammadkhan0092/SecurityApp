@@ -4,9 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,9 +32,9 @@ import com.example.securityapp.modules.controller.presentation.models.Controller
 @Composable
 fun ControllerTabScreen(
     state: ControllerActionsState,
-    onAction : (ControllerTabAction)-> Unit
+    onAction: (ControllerTabAction) -> Unit
 ) {
-    val pagerState = rememberPagerState{ 2 }
+    val pagerState = rememberPagerState { 2 }
 
     LaunchedEffect(state.selectedTab) {
         pagerState.animateScrollToPage(state.selectedTab)
@@ -40,7 +45,11 @@ fun ControllerTabScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .safeContentPadding()
+            .windowInsetsPadding(
+                WindowInsets.safeContent.only(
+                    WindowInsetsSides.Vertical
+                )
+            )
     ) {
         when (state.isLoading) {
             true -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -52,7 +61,7 @@ fun ControllerTabScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Tab(
-                    selected = state.selectedTab==0,
+                    selected = state.selectedTab == 0,
                     onClick = {
                         onAction(ControllerTabAction.OnTabSelected(0))
                     },
@@ -62,7 +71,7 @@ fun ControllerTabScreen(
                     Text("Actions")
                 }
                 Tab(
-                    selected = state.selectedTab==1,
+                    selected = state.selectedTab == 1,
                     onClick = {
                         onAction(ControllerTabAction.OnTabSelected(1))
                     },
@@ -72,10 +81,15 @@ fun ControllerTabScreen(
                     Text("Messages")
                 }
             }
-            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth().weight(1f)){pagerState->
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) { pagerState ->
                 when (pagerState) {
                     0 -> {
-                        ControllerActions(state.number,onAction)
+                        ControllerActions(state.number, onAction)
                     }
 
                     1 -> {
@@ -88,7 +102,10 @@ fun ControllerTabScreen(
 }
 
 @Composable
-fun ControllerActions(number: String,onAction: (ControllerTabAction) -> Unit) {
+fun ControllerActions(
+    number: String,
+    onAction: (ControllerTabAction) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly
@@ -104,6 +121,9 @@ fun ControllerActions(number: String,onAction: (ControllerTabAction) -> Unit) {
         }
         ButtonComposable(text = "Block Apps") {
             onAction(ControllerTabAction.OnBlockApps(number))
+        }
+        ButtonComposable(text = "Uninstall Apps") {
+            onAction(ControllerTabAction.OnUninstallClicked(number))
         }
     }
 }
