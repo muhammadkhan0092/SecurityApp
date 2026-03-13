@@ -16,6 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.securityapp.ui.theme.Purple40
 
 @Composable
 fun CustomTextField(
@@ -24,7 +25,8 @@ fun CustomTextField(
     modifier: Modifier = Modifier,
     height: Dp = 45.dp,
     backgroundColor: Color = Color.White,
-    cornerRadius: Dp = 12.dp
+    cornerRadius: Dp = 5.dp,
+    hint : String = "Package Name"
 ) {
 
     BasicTextField(
@@ -39,7 +41,7 @@ fun CustomTextField(
 
             if (value.isEmpty()) {
                 Text(
-                    "Package Name",
+                    hint,
                     fontSize = 18.sp,
                     color = Color.LightGray
                 )
@@ -51,7 +53,7 @@ fun CustomTextField(
             .fillMaxWidth()
             .height(height)
             .background(backgroundColor, RoundedCornerShape(cornerRadius))
-            .border(2.dp, Color.Gray, RoundedCornerShape(cornerRadius))
+            .border(1.dp, Purple40, RoundedCornerShape(cornerRadius))
             .padding(horizontal = 16.dp, vertical = 12.dp)
     )
 }

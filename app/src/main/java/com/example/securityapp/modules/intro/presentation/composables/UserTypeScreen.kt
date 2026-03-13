@@ -15,8 +15,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,13 +39,15 @@ fun UserTypeScreen(
                 "User Type",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 30.sp,
-                color = Purple40
+                color = Purple40,
+                fontFamily = FontFamily.Serif
             )
             Spacer(modifier = Modifier.height(30.dp))
             Text(
                 "I Am",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
+                fontFamily = FontFamily.SansSerif
             )
             Spacer(modifier = Modifier.height(10.dp))
             UserTypeComponent(
@@ -69,7 +71,7 @@ fun UserTypeScreen(
             Button(
                 modifier = Modifier.fillMaxWidth().background(Purple40, RoundedCornerShape(10.dp)),
                 onClick ={onAction(IntroAction.OnContinueClicked)}) {
-                Text("Continue")
+                Text("Continue",fontFamily = FontFamily.Cursive)
             }
         }
     }
@@ -83,25 +85,26 @@ fun UserTypeComponent(
     onClick: () -> Unit
 ){
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable{
+            onClick()
+        }
     ){
         Radio(isSelected)
         Spacer(modifier = Modifier.width(10.dp))
         Column(
             modifier = Modifier.weight(1f)
-                .clickable{
-                    onClick()
-                }
         ){
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 25.sp,
+                fontFamily = FontFamily.Cursive
             )
             Text(
                 text = content,
                 fontWeight = FontWeight.Medium,
-                fontSize = 16.sp
+                fontSize = 22.sp,
+                fontFamily = FontFamily.Cursive
             )
         }
     }
