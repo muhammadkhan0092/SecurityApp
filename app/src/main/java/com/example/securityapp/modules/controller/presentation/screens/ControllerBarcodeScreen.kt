@@ -11,9 +11,38 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
+import com.example.securityapp.app.Route
+import com.example.securityapp.app.sharedHiltViewModel
 import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
+import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
+import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+
+@Composable
+fun ControllerBarcodeScreenRoot(navController: NavHostController, entry: NavBackStackEntry) {
+    val commonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
+    val vm = hiltViewModel<ControllerHomeVm>()
+    val state=  commonVm.state.collectAsStateWithLifecycle(null)
+    val homeState = vm.state.collectAsStateWithLifecycle()
+    when(val value =state.value){
+        null-> Unit
+        else -> vm.onStateChanged(value)
+    }
+    ControllerBarcodeScreen(
+        onBarcodeScanned = {
+            vm.connect(it,state.value)
+        },
+        state = homeState.value
+    ) {
+        commonVm.onItemClicked(it)
+        navController.navigate(Route.ControllerActions)
+    }
+}
 
 @Composable
 fun ControllerBarcodeScreen(

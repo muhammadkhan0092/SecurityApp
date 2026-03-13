@@ -8,20 +8,14 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
-import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.securityapp.modules.controlled.presentation.vm.ControlledBarcodeVm
-import com.example.securityapp.modules.controlled.presentation.screen.ControlledTabs
-import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
-import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
-import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreen
-import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
-import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
+import com.example.securityapp.modules.controlled.presentation.screen.ControlledTabsRoot
+import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreenRoot
+import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreenRoot
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
 import com.example.securityapp.modules.intro.presentation.composables.LoginScreenRoot
 import com.example.securityapp.modules.packages.PackagesScreenRoot
@@ -75,54 +69,19 @@ fun App() {
             navigation<Route.ControlledHomeGraph>(startDestination = Route.ControlledBarcode) {
                 composable<Route.ControlledBarcode>(
                 ) { entry ->
-                    val vm = hiltViewModel<ControlledBarcodeVm>()
-                    val state by vm.state.collectAsStateWithLifecycle()
-                    ControlledTabs(
-                        state = state,
-                        vm.events,
-                        onAction = {
-                            vm.onAction(it)
-                        }
-                    )
+                    ControlledTabsRoot()
                 }
             }
             navigation<Route.ControllerHomeGraph>(startDestination = Route.ControllerBarcode) {
                 composable<Route.ControllerBarcode>(
                 ) { entry ->
-                    val commonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
-                    val vm = hiltViewModel<ControllerHomeVm>()
-                    val state=  commonVm.state.collectAsStateWithLifecycle(null)
-                    val homeState = vm.state.collectAsStateWithLifecycle()
-                    when(val value =state.value){
-                        null-> Unit
-                        else -> vm.onStateChanged(value)
-                    }
-                    ControllerBarcodeScreen(
-                        onBarcodeScanned = {
-                            vm.connect(it,state.value)
-                        },
-                        onItemClicked ={it: String->
-                            commonVm.onItemClicked(it)
-                            navController.navigate(Route.ControllerActions)
-                        },
-                        state = homeState.value
-                    )
+                    ControllerBarcodeScreenRoot(navController,entry)
                 }
                 composable<Route.ControllerActions>(
                 ) { entry ->
-                    val commonControllerCommonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
-                    val commonState=  commonControllerCommonVm.state.collectAsStateWithLifecycle()
-                    val vm = hiltViewModel<ControllerActionsVm>()
-                    val state = vm.state.collectAsStateWithLifecycle()
-                    when(commonState.value){
-                        null-> Unit
-                        else -> vm.onNumberReceived(commonControllerCommonVm.selectedController)
-                    }
-                    ControllerTabScreen(
-                        state = state.value,
-                        {
-                            vm.onAction(it)
-                        }
+                    ControllerTabScreenRoot(
+                        navController,
+                        entry
                     )
                 }
             }

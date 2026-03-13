@@ -17,11 +17,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
+import com.example.securityapp.app.sharedHiltViewModel
 import com.example.securityapp.core.presentation.MessagesScreen
 import com.example.securityapp.core.TabComponent
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
+import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
+import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
 
+
+@Composable
+fun ControllerTabScreenRoot(navController: NavHostController, entry: NavBackStackEntry) {
+    val commonControllerCommonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
+    val commonState=  commonControllerCommonVm.state.collectAsStateWithLifecycle()
+    val vm = hiltViewModel<ControllerActionsVm>()
+    val state = vm.state.collectAsStateWithLifecycle()
+    when(commonState.value){
+        null-> Unit
+        else -> vm.onNumberReceived(commonControllerCommonVm.selectedController)
+    }
+    ControllerTabScreen(
+        state = state.value
+    ) {
+        vm.onAction(it)
+    }
+}
 @Composable
 fun ControllerTabScreen(
     state: ControllerActionsState,
@@ -75,13 +99,8 @@ fun ControllerTabScreen(
                     .weight(1f)
             ) { pagerState ->
                 when (pagerState) {
-                    0 -> {
-                        ControllerActionsScreen(state.number, onAction)
-                    }
-
-                    1 -> {
-                        MessagesScreen(state.messages)
-                    }
+                    0 -> ControllerActionsScreen(state.number, onAction)
+                    1 -> MessagesScreen(state.messages)
                 }
             }
         }
