@@ -3,29 +3,24 @@ package com.example.securityapp.modules.controller.presentation.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.securityapp.core.presentation.ButtonComposable
 import com.example.securityapp.core.presentation.MessagesScreen
+import com.example.securityapp.modules.controller.presentation.components.TabComponent
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
 
@@ -60,26 +55,20 @@ fun ControllerTabScreen(
                 selectedTabIndex = state.selectedTab,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Tab(
-                    selected = state.selectedTab == 0,
+                TabComponent(
+                    isSelected = state.selectedTab == 0,
                     onClick = {
                         onAction(ControllerTabAction.OnTabSelected(0))
                     },
-                    selectedContentColor = Color.Yellow,
-                    unselectedContentColor = Color.Transparent
-                ) {
-                    Text("Actions")
-                }
-                Tab(
-                    selected = state.selectedTab == 1,
+                    text = "Actions"
+                )
+                TabComponent(
+                    isSelected = state.selectedTab == 1,
                     onClick = {
                         onAction(ControllerTabAction.OnTabSelected(1))
                     },
-                    selectedContentColor = Color.Yellow,
-                    unselectedContentColor = Color.Transparent
-                ) {
-                    Text("Messages")
-                }
+                    text = "Messages"
+                )
             }
             HorizontalPager(
                 state = pagerState,
@@ -89,7 +78,7 @@ fun ControllerTabScreen(
             ) { pagerState ->
                 when (pagerState) {
                     0 -> {
-                        ControllerActions(state.number, onAction)
+                        ControllerActionsScreen(state.number, onAction)
                     }
 
                     1 -> {
@@ -97,33 +86,6 @@ fun ControllerTabScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun ControllerActions(
-    number: String,
-    onAction: (ControllerTabAction) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        ButtonComposable("Wipe Data") {
-            onAction(ControllerTabAction.OnFactoryReset(number))
-        }
-        ButtonComposable(text = "Clear Gallery") {
-            onAction(ControllerTabAction.OnWipeGallery(number))
-        }
-        ButtonComposable(text = "Fetch Location") {
-            onAction(ControllerTabAction.OnLocationFetch(number))
-        }
-        ButtonComposable(text = "Block Apps") {
-            onAction(ControllerTabAction.OnBlockApps(number))
-        }
-        ButtonComposable(text = "Uninstall Apps") {
-            onAction(ControllerTabAction.OnUninstallClicked(number))
         }
     }
 }

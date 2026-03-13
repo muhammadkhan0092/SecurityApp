@@ -5,24 +5,24 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import com.example.securityapp.core.presentation.MessagesScreen
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
+import com.example.securityapp.modules.controller.presentation.components.TabComponent
+import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 
@@ -58,36 +58,35 @@ fun ControlledTabs(
         TabRow(
             selectedTabIndex = state.selectedIndex,
             containerColor = Color.White,
-            contentColor = Color.Blue
+            contentColor = Color.Blue,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[state.selectedIndex]),
+                    color = Purple40
+                )
+            }
             ) {
-            Tab(
-                selected = state.selectedIndex==0,
+            TabComponent(
+                isSelected = state.selectedIndex==0,
                 onClick = {
                     onAction(ControlledAction.OnTabSelected(0))
-                }
-            ) {
-                Text(
-                    "Controllers",
-                    modifier = Modifier.padding(vertical = 30.dp)
-                )
-            }
-            Tab(
-                selected = state.selectedIndex==0,
+                },
+                text = "Controllers"
+            )
+            TabComponent(
+                isSelected = state.selectedIndex==1,
                 onClick = {
-                onAction(ControlledAction.OnTabSelected(1))
-                }
-            ) {
-                Text(
-                    "Messages", modifier = Modifier.padding(vertical = 30.dp)
-                )
-            }
-            Tab(selected = state.selectedIndex==0, onClick = {
-                onAction(ControlledAction.OnTabSelected(2))
-            }) {
-                Text(
-                    "Barcode", modifier = Modifier.padding(vertical = 30.dp)
-                )
-            }
+                    onAction(ControlledAction.OnTabSelected(1))
+                },
+                text = "Messages"
+            )
+            TabComponent(
+                isSelected = state.selectedIndex==2,
+                onClick = {
+                    onAction(ControlledAction.OnTabSelected(2))
+                },
+                text = "Barcode"
+            )
         }
         HorizontalPager(
             state = pagerState,

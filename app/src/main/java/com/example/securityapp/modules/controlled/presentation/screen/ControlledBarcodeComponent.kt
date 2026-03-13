@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BarcodeComposable(bitmap: Bitmap?) {
-    Log.d("KHAN","BITMAP IS $bitmap")
     when(bitmap){
         null->{
             Box(modifier = Modifier.fillMaxSize().safeContentPadding()){

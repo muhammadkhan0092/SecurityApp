@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.securityapp.modules.controller.presentation.components.ControlledDevicesComponent
 import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
