@@ -70,7 +70,6 @@ fun PackagesScreenRoot(
 }
 @Composable
 private fun PackagesScreen(state: PackagesState,onClick:(PackagesAction)-> Unit) {
-    val text = remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()

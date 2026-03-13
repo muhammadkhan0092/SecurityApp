@@ -1,11 +1,9 @@
 package com.example.securityapp.app
 
-import android.util.Log
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -16,11 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.securityapp.modules.intro.presentation.vm.IntroSharedVm
-import com.example.securityapp.modules.intro.presentation.vm.LoginCommonVm
-import com.example.securityapp.modules.intro.presentation.composables.LoginScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.securityapp.datastore.AppSettings.UserType.*
 import com.example.securityapp.modules.controlled.presentation.vm.ControlledBarcodeVm
 import com.example.securityapp.modules.controlled.presentation.screen.ControlledTabs
 import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreen
@@ -29,15 +23,10 @@ import com.example.securityapp.modules.controller.presentation.screens.Controlle
 import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
 import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
+import com.example.securityapp.modules.intro.presentation.composables.LoginScreenRoot
 import com.example.securityapp.modules.packages.PackagesScreenRoot
-import com.example.securityapp.modules.intro.presentation.vm.LoginControlledVm
-import com.example.securityapp.modules.intro.presentation.vm.LoginControllerVm
-import com.example.securityapp.modules.intro.presentation.models.LoginEvents
-import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreen
-import com.example.securityapp.modules.intro.presentation.models.IntroAction
+import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreenRoot
 import com.example.securityapp.permissions.PermissionScreenRoot
-import com.example.securityapp.permissions.PermissionVm
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun App() {
@@ -56,20 +45,10 @@ fun App() {
                 )
             }
             navigation<Route.IntroGraph>(startDestination = Route.UserType) {
-                composable<Route.UserType>(
-                    exitTransition = { slideOutHorizontally() },
-                    popEnterTransition = { slideInHorizontally() }
-                ) { entry ->
-                    val sharedVm = entry.sharedHiltViewModel<IntroSharedVm>(navController)
-                    val state=  sharedVm.state.collectAsStateWithLifecycle()
-                    UserTypeScreen(
-                        state = state.value,
-                        onAction = {
-                            when(it){
-                                IntroAction.OnContinueClicked -> navController.navigate(Route.Login)
-                                else -> sharedVm.onAction(it)
-                            }
-                        }
+                composable<Route.UserType> { entry ->
+                    UserTypeScreenRoot(
+                        navController,
+                        entry
                     )
                 }
                 composable<Route.Packages> {
@@ -87,49 +66,9 @@ fun App() {
                         }
                     }
                 ) { entry ->
-                    val sharedVm = entry.sharedHiltViewModel<IntroSharedVm>(navController)
-                    val userType = sharedVm.userType
-                    val loginCommonVm: LoginCommonVm = hiltViewModel()
-                    val loginControllerVm: LoginControllerVm = hiltViewModel()
-                    val loginControlledByVm: LoginControlledVm = hiltViewModel()
-                    val loginState by loginCommonVm.state.collectAsStateWithLifecycle()
-                    LaunchedEffect(Unit) {
-                        loginControlledByVm.events.collectLatest {
-                            when (it) {
-                                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.Packages)
-
-                                is LoginEvents.Toast -> {
-                                    Log.d("KHAN", "TOAST ${it.str}")
-                                }
-                            }
-                        }
-                    }
-                    LaunchedEffect(Unit) {
-                        loginControlledByVm.events.collectLatest {
-                            when (it) {
-                                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControlledHomeGraph) {
-                                    popUpTo(Route.IntroGraph) { inclusive = true }
-                                    launchSingleTop = true
-                                }
-
-                                is LoginEvents.Toast -> {
-                                    Log.d("KHAN", "TOAST ${it.str}")
-                                }
-                            }
-                        }
-                    }
-                    LoginScreen(
-                        loginState,
-                        {
-                            Log.d("KHAN","ON ACTION USER TYPE IS $userType")
-                            loginCommonVm.onAction(it)
-                            when (userType) {
-                                controller -> loginControllerVm.onAction(it)
-                                controlled -> loginControlledByVm.onAction(it)
-                                UNRECOGNIZED -> Unit
-                                not_set -> Unit
-                            }
-                        }
+                    LoginScreenRoot(
+                        navController,
+                        entry
                     )
                 }
             }

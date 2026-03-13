@@ -20,12 +20,30 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
+import com.example.securityapp.app.Route
+import com.example.securityapp.app.sharedHiltViewModel
 import com.example.securityapp.modules.intro.presentation.models.IntroAction
 import com.example.securityapp.modules.intro.presentation.models.IntroState
 import com.example.securityapp.modules.intro.presentation.models.UserType
+import com.example.securityapp.modules.intro.presentation.vm.IntroSharedVm
 import com.example.securityapp.modules.packages.components.Radio
 import com.example.securityapp.ui.theme.Purple40
 
+
+@Composable
+fun UserTypeScreenRoot(navController: NavHostController, entry: NavBackStackEntry) {
+    val sharedVm = entry.sharedHiltViewModel<IntroSharedVm>(navController)
+    val state=  sharedVm.state.collectAsStateWithLifecycle()
+    UserTypeScreen(state.value) {
+        when(it){
+            IntroAction.OnContinueClicked -> navController.navigate(Route.Login)
+            else -> sharedVm.onAction(it)
+        }
+    }
+}
 @Composable
 fun UserTypeScreen(
     state: IntroState,
