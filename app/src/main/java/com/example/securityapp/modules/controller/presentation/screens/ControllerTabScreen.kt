@@ -1,6 +1,5 @@
 package com.example.securityapp.modules.controller.presentation.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,9 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.securityapp.core.presentation.ButtonComposable
 import com.example.securityapp.core.presentation.MessagesScreen
-import com.example.securityapp.modules.controller.presentation.components.TabComponent
+import com.example.securityapp.core.TabComponent
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
 

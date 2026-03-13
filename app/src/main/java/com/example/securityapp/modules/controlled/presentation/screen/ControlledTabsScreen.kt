@@ -3,8 +3,10 @@ package com.example.securityapp.modules.controlled.presentation.screen
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,11 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.example.securityapp.core.presentation.MessagesScreen
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
-import com.example.securityapp.modules.controller.presentation.components.TabComponent
+import com.example.securityapp.core.TabComponent
 import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -96,11 +99,14 @@ fun ControlledTabs(
         ) { pagerState->
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
             ){
                 when (pagerState) {
-                    0 -> ControllerListComposable(state.controllers,onAction)
-                    1-> MessagesScreen(state.messages)
+                    0 -> {
+                        ControllerListComposable(state.controllers,onAction)
+                    }
+                    1-> {
+                        MessagesScreen(state.messages)
+                    }
                     2-> BarcodeComposable(bitmap = state.bitmap)
                 }
             }
