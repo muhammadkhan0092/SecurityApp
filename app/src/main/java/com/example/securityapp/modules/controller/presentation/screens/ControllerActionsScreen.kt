@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.securityapp.core.presentation.ButtonComposable
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
@@ -15,7 +16,8 @@ fun ControllerActionsScreen(
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ButtonComposable("Wipe Data") {
             onAction(ControllerTabAction.OnFactoryReset(number))

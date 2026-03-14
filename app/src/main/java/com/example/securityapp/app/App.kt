@@ -88,7 +88,6 @@ fun App() {
         }
     }
 }
-
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.sharedHiltViewModel(
     navController: NavController
