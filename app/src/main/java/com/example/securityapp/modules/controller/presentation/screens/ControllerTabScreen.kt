@@ -23,7 +23,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.example.securityapp.app.sharedHiltViewModel
 import com.example.securityapp.core.presentation.MessagesScreen
-import com.example.securityapp.core.TabComponent
+import com.example.securityapp.core.presentation.TabComponent
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
 import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm

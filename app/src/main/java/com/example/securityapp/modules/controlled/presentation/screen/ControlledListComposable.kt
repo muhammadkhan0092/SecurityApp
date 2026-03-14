@@ -2,6 +2,7 @@ package com.example.securityapp.modules.controlled.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,7 @@ fun ControllerListComposable(
         }
         false -> {
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier.fillMaxWidth(0.8f).padding(top = 10.dp).fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ){
                 items(controllers){data->

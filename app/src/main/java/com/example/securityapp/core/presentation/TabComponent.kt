@@ -1,4 +1,4 @@
-package com.example.securityapp.core
+package com.example.securityapp.core.presentation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Tab

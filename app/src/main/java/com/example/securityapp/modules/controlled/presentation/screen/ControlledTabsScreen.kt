@@ -15,18 +15,17 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import com.example.securityapp.core.presentation.MessagesScreen
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
-import com.example.securityapp.core.TabComponent
+import com.example.securityapp.core.presentation.TabComponent
 import com.example.securityapp.modules.controlled.presentation.vm.ControlledBarcodeVm
 import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.collectLatest
@@ -112,6 +111,7 @@ fun ControlledTabs(
         ) { pagerState->
             Box(
                 modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ){
                 when (pagerState) {
                     0 -> ControllerListComposable(state.controllers,onAction)

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,8 +88,14 @@ fun ControllerBarcodeScreen(
                         }
                     }
                     Button(
+                        colors = ButtonColors(
+                            containerColor = Purple40.copy(0.4f),
+                            contentColor = Color.Black,
+                            disabledContainerColor = Color.Transparent,
+                            disabledContentColor = Color.Black
+                        ),
                         modifier = Modifier.fillMaxWidth()
-                            .background(Purple40, RoundedCornerShape(10.dp))
+                            .background(shape = RoundedCornerShape(10.dp), color = Color.Transparent)
                         ,
                         onClick = {
                             val options = ScanOptions().apply {
