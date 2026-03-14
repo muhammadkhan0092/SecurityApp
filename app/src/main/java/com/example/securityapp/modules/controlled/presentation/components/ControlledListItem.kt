@@ -19,7 +19,7 @@ import com.example.securityapp.modules.controlled.presentation.models.Controlled
 import com.example.securityapp.ui.theme.Purple40
 
 @Composable
-fun ControllerListItem(
+fun ControlledListItem(
     data: ControlledDomain,
     onAction :(ControlledAction)-> Unit
 ) {

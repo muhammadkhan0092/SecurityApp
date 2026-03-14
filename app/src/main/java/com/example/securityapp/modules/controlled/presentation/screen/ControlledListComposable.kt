@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.securityapp.modules.controlled.domain.ControlledDomain
-import com.example.securityapp.modules.controlled.presentation.components.ControllerListItem
+import com.example.securityapp.modules.controlled.presentation.components.ControlledListItem
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 
 @Composable
@@ -33,7 +33,7 @@ fun ControllerListComposable(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ){
                 items(controllers){data->
-                    ControllerListItem(
+                    ControlledListItem(
                         data,
                         onAction = onAction
                     )
