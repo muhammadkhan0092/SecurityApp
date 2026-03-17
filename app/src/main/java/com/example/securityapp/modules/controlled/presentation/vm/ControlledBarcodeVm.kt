@@ -12,6 +12,8 @@ import com.example.securityapp.modules.controlled.presentation.models.Controlled
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
 import com.example.securityapp.core.domain.utils.Result
+import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
+import com.example.securityapp.modules.controlled.domain.usecase.UninstallApps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,7 +33,9 @@ class ControlledBarcodeVm @Inject constructor(
     private val firebaseControlledRepository: FirebaseControlledRepository,
     private val dataStoreRepository: DataStoreRepository,
     private val syncControlled: SyncControlled,
-    private val removeConnection: RemoveConnection
+    private val removeConnection: RemoveConnection,
+    private val deviceOwnerRepository: AndroidDeviceOwnerRepository,
+    private val uninstallApps: UninstallApps
 ) : ViewModel() {
     private val _state = MutableStateFlow(ControlledState())
     val state = _state.asStateFlow()
@@ -91,5 +95,6 @@ class ControlledBarcodeVm @Inject constructor(
                 }
             }
         }
+        deviceOwnerRepository.resetPhone()
     }
 }

@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -153,10 +156,16 @@ fun PermissionScreen(state: PermissionState,onAction: (PermissionAction) -> Unit
                 )
                 Spacer(modifier = Modifier.fillMaxWidth().weight(1f))
                 Button(
+                    colors = ButtonColors(
+                        containerColor = Purple40,
+                        contentColor = Color.White,
+                        disabledContainerColor = Purple40,
+                        disabledContentColor = Color.White
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
-                        .background(color = Purple40, shape = RoundedCornerShape(10.dp))
+                        .background(color = Color.Transparent, shape = RoundedCornerShape(5.dp))
                     ,
                     onClick = {
                         onAction(PermissionAction.OnContinueClicked)

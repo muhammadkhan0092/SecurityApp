@@ -90,12 +90,12 @@ fun ControllerBarcodeScreen(
                     Button(
                         colors = ButtonColors(
                             containerColor = Purple40.copy(0.4f),
-                            contentColor = Color.Black,
+                            contentColor = Color.White,
                             disabledContainerColor = Color.Transparent,
-                            disabledContentColor = Color.Black
+                            disabledContentColor = Color.White
                         ),
                         modifier = Modifier.fillMaxWidth()
-                            .background(shape = RoundedCornerShape(10.dp), color = Color.Transparent)
+                            .background(shape = RoundedCornerShape(5.dp), color = Color.Transparent)
                         ,
                         onClick = {
                             val options = ScanOptions().apply {

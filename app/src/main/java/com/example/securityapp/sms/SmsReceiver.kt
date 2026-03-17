@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        Log.d("KHAN","INTENT IS ${intent.action}")
         if (intent.action == "android.provider.Telephony.SMS_RECEIVED") {
             val bundle: Bundle? = intent.extras
             try {
