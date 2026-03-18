@@ -3,40 +3,41 @@ package com.example.securityapp.sms
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.telephony.SmsMessage
+import android.provider.Telephony
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("KHAN","INTENT IS ${intent.action}")
-        if (intent.action == "android.provider.Telephony.SMS_RECEIVED") {
-            val bundle: Bundle? = intent.extras
-            try {
-                if (bundle != null) {
-                    val pdus = bundle["pdus"] as Array<*>
-                    val format = bundle.getString("format")
+        Log.d("KHAN", "INTENT ACTION: ${intent.action}")
+        if (intent.action == Telephony.Sms.Intents.SMS_DELIVER_ACTION) {
 
-                    for (pdu in pdus) {
+            // Use goAsync() to keep the broadcast alive during coroutine execution
+            val pendingResult = goAsync()
 
-                        val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray, format)
+            val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
 
-                        val sender = smsMessage.displayOriginatingAddress
-                        val messageBody = smsMessage.displayMessageBody
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    for (sms in messages) {
+                        val sender = sms.displayOriginatingAddress ?: "Unknown"
+                        val messageBody = sms.displayMessageBody ?: ""
 
-                        Log.d("SMS_RECEIVED", "From: $sender")
-                        Log.d("SMS_RECEIVED", "Message: $messageBody")
-                        CoroutineScope(Dispatchers.IO).launch {
-                            SmsReceiverEntryPoint.get(context).invoke(sender,messageBody)
-                        }
+                        Log.d("SMS_RECEIVED", "From: $sender | Message: $messageBody")
+
+                        // Execute your logic
+                        SmsReceiverEntryPoint.get(context).invoke(sender, messageBody)
                     }
+                } catch (e: Exception) {
+                    Log.e("SMS_RECEIVED", "Error processing SMS: ${e.message}")
+                } finally {
+                    // MUST call finish() so the system can recycle the receiver
+                    pendingResult.finish()
                 }
-
-            } catch (e: Exception) {
-                Log.e("SMS_RECEIVED", "Error: ${e.message}")
             }
         }
     }
