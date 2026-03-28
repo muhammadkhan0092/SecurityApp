@@ -21,6 +21,7 @@ import com.example.securityapp.modules.intro.presentation.composables.LoginScree
 import com.example.securityapp.modules.packages.PackagesScreenRoot
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreenRoot
 import com.example.securityapp.modules.permissions.PermissionScreenRoot
+import com.example.securityapp.modules.settings.SettingsScreenRoot
 
 @Composable
 fun App() {
@@ -37,6 +38,9 @@ fun App() {
                 PermissionScreenRoot(
                    navController
                 )
+            }
+            composable<Route.Settings> {
+                SettingsScreenRoot(navController)
             }
             navigation<Route.IntroGraph>(startDestination = Route.UserType) {
                 composable<Route.UserType> { entry ->
@@ -69,7 +73,7 @@ fun App() {
             navigation<Route.ControlledHomeGraph>(startDestination = Route.ControlledBarcode) {
                 composable<Route.ControlledBarcode>(
                 ) { entry ->
-                    ControlledTabsRoot()
+                    ControlledTabsRoot(navController)
                 }
             }
             navigation<Route.ControllerHomeGraph>(startDestination = Route.ControllerBarcode) {

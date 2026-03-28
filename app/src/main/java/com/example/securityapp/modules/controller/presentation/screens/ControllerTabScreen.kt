@@ -1,5 +1,7 @@
 package com.example.securityapp.modules.controller.presentation.screens
 
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,23 +13,32 @@ import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.example.securityapp.app.sharedHiltViewModel
+import com.example.securityapp.core.presentation.ButtonComposable
 import com.example.securityapp.core.presentation.MessagesScreen
 import com.example.securityapp.core.presentation.TabComponent
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
+import com.example.securityapp.modules.controller.presentation.models.ControllerTabEvent
 import com.example.securityapp.modules.controller.presentation.vm.ControllerActionsVm
 import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -36,9 +47,17 @@ fun ControllerTabScreenRoot(navController: NavHostController, entry: NavBackStac
     val commonState=  commonControllerCommonVm.state.collectAsStateWithLifecycle()
     val vm = hiltViewModel<ControllerActionsVm>()
     val state = vm.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     when(commonState.value){
         null-> Unit
         else -> vm.onNumberReceived(commonControllerCommonVm.selectedController)
+    }
+    LaunchedEffect(Unit) {
+        vm.events.collectLatest {
+            when(it){
+                is ControllerTabEvent.Toast -> Toast.makeText(context, it.str, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
     ControllerTabScreen(
         state = state.value
@@ -95,6 +114,7 @@ fun ControllerTabScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
+                    .background(color = Color.Black)
                     .fillMaxWidth()
                     .weight(1f)
             ) { pagerState ->

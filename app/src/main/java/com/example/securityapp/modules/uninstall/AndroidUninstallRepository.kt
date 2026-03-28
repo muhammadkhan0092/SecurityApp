@@ -1,20 +1,12 @@
-package com.example.securityapp.core.data.repository
+package com.example.securityapp.modules.uninstall
 
 import android.app.PendingIntent
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import com.example.securityapp.core.data.ext.roomSafeFlow
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.core.domain.utils.map
-import com.example.securityapp.core.data.mappers.uninstallDomainToUninstallEntity
-import com.example.securityapp.core.data.mappers.uninstallEntityToUninstallDomain
-import com.example.securityapp.core.data.models.UninstallEntity
-import com.example.securityapp.core.data.dao.UninstallDao
 import com.example.securityapp.modules.controlled.domain.models.UninstallDomain
-import com.example.securityapp.core.domain.repository.UninstallRepository
-import com.example.securityapp.framework.MyDeviceAdminReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -56,6 +48,12 @@ class AndroidUninstallRepository @Inject constructor(
         }
         catch (e : Exception){
             Result.Error(e.message?:"Unknown Error")
+        }
+    }
+
+    override suspend fun deleteAll(): Result<Unit> {
+        return roomSafeFlow {
+            uninstallDao.deleteAll()
         }
     }
 }

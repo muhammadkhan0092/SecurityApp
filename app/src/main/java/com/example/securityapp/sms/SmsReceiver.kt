@@ -15,8 +15,6 @@ class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("KHAN", "INTENT ACTION: ${intent.action}")
         if (intent.action == Telephony.Sms.Intents.SMS_DELIVER_ACTION) {
-
-            // Use goAsync() to keep the broadcast alive during coroutine execution
             val pendingResult = goAsync()
 
             val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)

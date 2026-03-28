@@ -57,17 +57,14 @@ fun UserTypeScreen(
         ) {
             Text(
                 "User Type",
-                fontWeight = FontWeight.ExtraBold,
+                fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
-                color = Purple40,
-                fontFamily = FontFamily.Serif
             )
             Spacer(modifier = Modifier.height(30.dp))
             Text(
                 "I Am",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.ExtraBold,
-                fontFamily = FontFamily.SansSerif
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(10.dp))
             UserTypeComponent(
@@ -99,13 +96,8 @@ fun UserTypeScreen(
                 shape = RoundedCornerShape(5.dp),
                 onClick ={onAction(IntroAction.OnContinueClicked)}
             ) {
-                Text("Continue",fontFamily = FontFamily.Cursive)
+                Text("Continue")
             }
-//            Button(
-//                modifier = Modifier.fillMaxWidth().background(Purple40, RoundedCornerShape(10.dp)),
-//                onClick ={onAction(IntroAction.OnContinueClicked)}) {
-//                Text("Continue",fontFamily = FontFamily.Cursive)
-//            }
         }
     }
 }
@@ -129,15 +121,13 @@ fun UserTypeComponent(
         ){
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold,
-                fontSize = 25.sp,
-                fontFamily = FontFamily.Cursive
+                fontWeight = FontWeight.Medium    ,
+                fontSize = 25.sp
             )
             Text(
                 text = content,
-                fontWeight = FontWeight.Medium,
-                fontSize = 22.sp,
-                fontFamily = FontFamily.Cursive
+                fontWeight = FontWeight.Light,
+                fontSize = 22.sp
             )
         }
     }

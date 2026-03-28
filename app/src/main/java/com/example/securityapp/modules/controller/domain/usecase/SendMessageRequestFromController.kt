@@ -1,8 +1,8 @@
 package com.example.securityapp.modules.controller.domain.usecase
 
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
-import com.example.securityapp.core.domain.models.MessageFromController
-import com.example.securityapp.core.domain.models.MessageTypeFromControlled
+import com.example.securityapp.modules.messages.MessageFromController
+import com.example.securityapp.modules.messages.MessageTypeFromControlled
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import com.example.securityapp.core.domain.utils.Result

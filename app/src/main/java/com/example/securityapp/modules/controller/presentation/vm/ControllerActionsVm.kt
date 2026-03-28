@@ -1,10 +1,9 @@
 package com.example.securityapp.modules.controller.presentation.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.core.domain.models.MessageFromController
+import com.example.securityapp.modules.messages.MessageFromController
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.modules.controller.domain.usecase.SendMessageRequestFromController
@@ -67,7 +66,9 @@ class ControllerActionsVm @Inject constructor(
                              _events.emit(ControllerTabEvent.Toast(result.error))
                          }
                     }
-                    is Result.Success-> Log.d("KHAN","REQUEST SUCCESSFULL")
+                    is Result.Success-> {
+                        _events.emit(ControllerTabEvent.Toast("Request Sent Successfully"))
+                    }
                 }
             }
         }

@@ -1,14 +1,8 @@
 package com.example.securityapp.core.domain.repository
 
-import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.IOException
 import com.example.securityapp.datastore.AppSettings
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 interface SettingsRepository {
 

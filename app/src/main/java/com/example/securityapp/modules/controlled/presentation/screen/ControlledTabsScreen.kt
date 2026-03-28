@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
@@ -21,18 +25,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.example.securityapp.app.Route
 import com.example.securityapp.core.presentation.MessagesScreen
+import com.example.securityapp.core.presentation.TabComponent
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
-import com.example.securityapp.core.presentation.TabComponent
 import com.example.securityapp.modules.controlled.presentation.vm.ControlledBarcodeVm
 import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
-fun ControlledTabsRoot() {
+fun ControlledTabsRoot(
+    navController: NavController
+) {
     val vm = hiltViewModel<ControlledBarcodeVm>()
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -49,6 +57,9 @@ fun ControlledTabsRoot() {
         vm.events.collectLatest {
             when(it){
                 is ControlledEvents.Toast -> Toast.makeText(context, it.str, Toast.LENGTH_SHORT).show()
+                ControlledEvents.NavigateToSettings ->{
+                    navController.navigate(Route.Settings)
+                }
             }
         }
     }
@@ -118,6 +129,18 @@ fun ControlledTabs(
                     1-> MessagesScreen(state.messages)
                     2-> BarcodeComposable(bitmap = state.bitmap)
                 }
+            }
+        }
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd){
+            IconButton(
+                onClick = {
+                    onAction(ControlledAction.OnSettingsClicked)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = ""
+                )
             }
         }
     }

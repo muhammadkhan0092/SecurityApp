@@ -1,7 +1,8 @@
 package com.example.securityapp.modules.intro.domain
 
+import android.util.Log
 import com.example.securityapp.core.data.repository.DataStoreRepository
-import com.example.securityapp.core.domain.repository.UninstallRepository
+import com.example.securityapp.modules.uninstall.UninstallRepository
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controlled.domain.models.UninstallDomain
 import javax.inject.Inject
@@ -11,6 +12,7 @@ class PackagesComplete @Inject constructor(
     private val uninstallRepository: UninstallRepository
 ) {
     suspend operator fun invoke(packages : List<UninstallDomain>): Result<Unit> {
+        Log.d("KHAN","INSERTING PACKAGES $packages")
         val uninstallResult = uninstallRepository.insertData(packages)
         return when(uninstallResult){
             is Result.Error<*> -> Result.Error(uninstallResult.error)

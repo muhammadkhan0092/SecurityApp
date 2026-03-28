@@ -1,5 +1,7 @@
 package com.example.securityapp.modules.permissions
 
+import android.app.role.RoleManager
+import android.app.role.RoleManager.ROLE_SMS
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -7,6 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import android.provider.Telephony
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -60,5 +63,19 @@ class PermissionManager @Inject constructor(
             context.startActivity(intent)
         }
         else return
+    }
+    fun isDefaultMessageAppSet(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleManager = context.getSystemService(RoleManager::class.java)
+            val roleAvailable = roleManager.isRoleAvailable(ROLE_SMS)
+            if (roleAvailable) {
+                roleManager.isRoleHeld(ROLE_SMS)
+            } else {
+                false
+            }
+        } else {
+            val defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(context)
+            defaultSmsPackage == context.packageName
+        }
     }
 }

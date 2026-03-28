@@ -1,10 +1,10 @@
-package com.example.securityapp.core.data.dao
+package com.example.securityapp.modules.messages
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.securityapp.core.data.models.MessagesEntity
+import com.example.securityapp.modules.messages.MessagesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,4 +19,7 @@ interface ControllerMessagesDao{
     suspend fun getData(email : String) : List<MessagesEntity>
     @Query("SELECT * FROM controller_messages where email=:email")
     fun getFlow(email: String) : Flow<List<MessagesEntity>>
+
+    @Query("DELETE FROM controller_messages")
+    suspend fun deleteAll()
 }

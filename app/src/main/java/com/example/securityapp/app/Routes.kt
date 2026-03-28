@@ -6,6 +6,9 @@ sealed interface Route {
 
     @Serializable
     data object IntroGraph: Route
+
+    @Serializable
+    data object Settings: Route
     @Serializable
     data object UserType: Route
     @Serializable

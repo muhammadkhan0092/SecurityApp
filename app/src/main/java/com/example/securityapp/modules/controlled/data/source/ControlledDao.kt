@@ -18,4 +18,7 @@ interface ControlledDao{
 
     @Query("SELECT * FROM controlled_entity")
     suspend fun getList() : List<ControlledEntity>
+
+    @Query("DELETE FROM controlled_entity")
+    suspend fun deleteAllControlled()
 }

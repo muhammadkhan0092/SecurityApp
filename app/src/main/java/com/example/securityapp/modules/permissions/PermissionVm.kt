@@ -1,10 +1,8 @@
 package com.example.securityapp.modules.permissions
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,14 +13,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PermissionVm @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val permissionManager: PermissionManager
 ) : ViewModel() {
     private val _state = MutableStateFlow(
         PermissionState(
             isOverlayGranted = permissionManager.hasOverlayPermission(),
             isStorageGranted = permissionManager.hasManageAllFilesPermission(),
-            isOtherGranted = permissionManager.areAllRuntimePermissionsGranted()
+            isOtherGranted = permissionManager.areAllRuntimePermissionsGranted(),
+            isDefaultAppSet = permissionManager.isDefaultMessageAppSet()
         )
     )
     val state = _state.asStateFlow()
@@ -66,13 +64,20 @@ class PermissionVm @Inject constructor(
                 }
                 return
             }
-            PermissionAction.OnContinueClicked ->{
-                PermissionEvent.NavigateToIntro
-//                when{
-//                    state.value.isOtherGranted && state.value.isStorageGranted && state.value.isOverlayGranted->  PermissionEvent.NavigateToIntro
-//                    else ->PermissionEvent.Toast("Grant All Permissions")
-//                }
+
+            PermissionAction.OnContinueClicked -> {
+                when{
+                    state.value.isOtherGranted && state.value.isStorageGranted && state.value.isOverlayGranted && state.value.isDefaultAppSet->  PermissionEvent.NavigateToIntro
+                    else ->PermissionEvent.Toast("Grant All Permissions")
+                }
             }
+            is PermissionAction.DefaultAppResult -> {
+                _state.update {
+                    it.copy(isDefaultAppSet = action.bool)
+                }
+                return
+            }
+            PermissionAction.OnMessageDefaultClicked -> PermissionEvent.RequestMessageDefault
         }
         viewModelScope.launch {
             _events.emit(event)
@@ -83,4 +88,5 @@ class PermissionVm @Inject constructor(
     fun hasStoragePermission() = permissionManager.hasManageAllFilesPermission()
     fun requestStoragePermission() = permissionManager.requestManageAllFilesPermission()
     fun requestOverlayPermission() = permissionManager.requestOverlayPermission()
+    fun isDefaultAppSet() = permissionManager.isDefaultMessageAppSet()
 }

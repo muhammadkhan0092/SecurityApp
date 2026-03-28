@@ -14,4 +14,5 @@ interface ControlledRepository  {
     suspend fun deleteData(data : List<ControlledDomain>): Result<Unit>
     suspend fun getLocalData(): Result<List<ControlledDomain>>
     fun listenData(email: String): Flow<List<ControlledDomain>?>
+    suspend fun deleteAll() : Result<Unit>
 }

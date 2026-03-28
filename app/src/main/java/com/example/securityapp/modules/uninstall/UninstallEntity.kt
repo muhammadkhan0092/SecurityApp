@@ -1,4 +1,4 @@
-package com.example.securityapp.core.data.models
+package com.example.securityapp.modules.uninstall
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

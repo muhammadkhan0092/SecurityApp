@@ -23,7 +23,7 @@ fun ControllerListItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = Purple40.copy(alpha = 0.9f),
+                color = Purple40.copy(alpha = 0.6f),
                 shape = RoundedCornerShape(5.dp)
             )
             .clickable {
@@ -33,7 +33,7 @@ fun ControllerListItem(
     ){
         Text(
             email,
-            color = Color.White
+            color = Color.Black
         )
     }
 }

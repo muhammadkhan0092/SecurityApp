@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.controller.domain.models
 
-import com.example.securityapp.core.domain.models.MessageTypeFromControlled
+import com.example.securityapp.modules.messages.MessageTypeFromControlled
 
 data class MessagesDomain(
     val message : String = "",

@@ -2,17 +2,17 @@ package com.example.securityapp.di
 
 import android.os.Message
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
-import com.example.securityapp.core.data.repository.AndroidUninstallRepository
+import com.example.securityapp.modules.uninstall.AndroidUninstallRepository
 import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.core.data.repository.FirebaseConnectionRepository
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
 import com.example.securityapp.core.data.repository.SecurityLoginRepository
 import com.example.securityapp.core.domain.repository.ConnectionRepository
 import com.example.securityapp.core.domain.repository.LoginRepository
-import com.example.securityapp.core.domain.repository.MessagesRepository
+import com.example.securityapp.modules.messages.MessagesRepository
 import com.example.securityapp.core.domain.repository.SettingsRepository
-import com.example.securityapp.core.domain.repository.SmsManagerRepository
-import com.example.securityapp.core.domain.repository.UninstallRepository
+import com.example.securityapp.modules.messages.SmsManagerRepository
+import com.example.securityapp.modules.uninstall.UninstallRepository
 import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
 import com.example.securityapp.modules.controlled.data.repository.AndroidGalleryRepository
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository

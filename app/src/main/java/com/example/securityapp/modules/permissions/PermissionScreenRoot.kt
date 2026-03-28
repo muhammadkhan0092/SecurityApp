@@ -1,5 +1,12 @@
 package com.example.securityapp.modules.permissions
 
+import android.app.Activity
+import android.app.role.RoleManager
+import android.app.role.RoleManager.ROLE_SMS
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Telephony
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,6 +44,7 @@ import com.example.securityapp.app.Route
 import com.example.securityapp.ui.theme.Purple40
 import kotlinx.coroutines.flow.collectLatest
 
+
 @Composable
 fun PermissionScreenRoot(
     navController : NavController
@@ -56,6 +64,11 @@ fun PermissionScreenRoot(
     }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val messageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        vm.onAction(PermissionAction.DefaultAppResult(vm.isDefaultAppSet()))
+    }
     LaunchedEffect(Unit){
         vm.events.collectLatest {
             when(it){
@@ -64,6 +77,19 @@ fun PermissionScreenRoot(
                 PermissionEvent.RequestStoragePermission -> vm.requestStoragePermission()
                 PermissionEvent.NavigateToIntro -> navController.navigate(Route.IntroGraph)
                 is PermissionEvent.Toast -> Toast.makeText(context, it.str, Toast.LENGTH_SHORT).show()
+                PermissionEvent.RequestMessageDefault -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val roleManager = context.getSystemService(RoleManager::class.java)
+                        messageLauncher.launch(
+                            roleManager.createRequestRoleIntent(ROLE_SMS)
+                        )
+                    } else {
+                        val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT).apply {
+                            putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)
+                        }
+                        messageLauncher.launch(intent)
+                    }
+                }
             }
         }
     }
@@ -76,24 +102,24 @@ fun PermissionScreenRoot(
                 if (vm.hasStoragePermission()) {
                     vm.onAction(PermissionAction.OnStoragePermissionGranted)
                 }
+                if (vm.isDefaultAppSet()) {
+                    vm.onAction(PermissionAction.DefaultAppResult(true))
+                }
             }
         }
-
         lifecycleOwner.lifecycle.addObserver(observer)
-
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-
-    LaunchedEffect(Unit) {
-        if(vm.hasStoragePermission()){
-            vm.onAction(PermissionAction.OnStoragePermissionGranted)
-        }
-        if(vm.hasOverlayPermission()){
-            vm.onAction(PermissionAction.OnOverlayPermissionGranted)
-        }
-    }
+//    LaunchedEffect(Unit) {
+//        if(vm.hasStoragePermission()){
+//            vm.onAction(PermissionAction.OnStoragePermissionGranted)
+//        }
+//        if(vm.hasOverlayPermission()){
+//            vm.onAction(PermissionAction.OnOverlayPermissionGranted)
+//        }
+//    }
     PermissionScreen(
         state.value,
         onAction = {
@@ -150,6 +176,14 @@ fun PermissionScreen(state: PermissionState,onAction: (PermissionAction) -> Unit
                     checked = state.isOtherGranted,
                     onCheckClicked = {
                         onAction(PermissionAction.OnOtherAction)
+                    }
+                )
+                PermissionItem(
+                    heading = "Default Message App",
+                    content = "App needs to be set as default messaging app to function",
+                    checked = state.isDefaultAppSet,
+                    onCheckClicked = {
+                        onAction(PermissionAction.OnMessageDefaultClicked)
                     }
                 )
                 Spacer(modifier = Modifier.fillMaxWidth().weight(1f))

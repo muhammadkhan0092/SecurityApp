@@ -17,4 +17,7 @@ interface ControllerDao{
     fun getFlow() : Flow<List<ControllerEntity>>
     @Query("SELECT * FROM controller_entity")
     suspend fun getData() : List<ControllerEntity>
+
+    @Query("DELETE FROM controller_entity")
+    suspend fun deleteAllController()
 }

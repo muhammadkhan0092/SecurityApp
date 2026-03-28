@@ -1,11 +1,11 @@
 package com.example.securityapp.core.data.repository
 
-import com.example.securityapp.core.data.dao.ControllerMessagesDao
+import com.example.securityapp.modules.messages.ControllerMessagesDao
 import com.example.securityapp.core.data.ext.roomSafeFlow
-import com.example.securityapp.core.data.mappers.mapToMessagesDomain
-import com.example.securityapp.core.data.mappers.mapToMessagesEntity
-import com.example.securityapp.core.data.models.MessagesEntity
-import com.example.securityapp.core.domain.repository.MessagesRepository
+import com.example.securityapp.modules.messages.mapToMessagesDomain
+import com.example.securityapp.modules.messages.mapToMessagesEntity
+import com.example.securityapp.modules.messages.MessagesEntity
+import com.example.securityapp.modules.messages.MessagesRepository
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.core.domain.utils.map
@@ -33,6 +33,12 @@ class RoomMessagesRepository @Inject constructor(
             list.map {entity->
                 entity.mapToMessagesDomain()
             }
+        }
+    }
+
+    override suspend fun deleteAllMessages(): Result<Unit> {
+        return roomSafeFlow {
+            controllerMessagesDao.deleteAll()
         }
     }
 

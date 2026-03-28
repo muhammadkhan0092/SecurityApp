@@ -1,6 +1,6 @@
-package com.example.securityapp.core.data.mappers
+package com.example.securityapp.modules.uninstall
 
-import com.example.securityapp.core.data.models.UninstallEntity
+import com.example.securityapp.modules.uninstall.UninstallEntity
 import com.example.securityapp.modules.controlled.domain.models.UninstallDomain
 
 fun UninstallDomain.uninstallDomainToUninstallEntity(): UninstallEntity {

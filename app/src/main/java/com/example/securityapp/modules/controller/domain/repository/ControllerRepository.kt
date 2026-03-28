@@ -19,4 +19,5 @@ interface ControllerRepository {
     fun listenData(email: String): Flow<List<ControllerDomain>?>
 
     suspend fun getLocalData(): Result<List<ControllerDomain>>
+    suspend fun deleteAll() : Result<Unit>
 }

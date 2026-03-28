@@ -2,7 +2,7 @@ package com.example.securityapp.modules.controlled.domain.usecase
 
 import android.util.Log
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
-import com.example.securityapp.core.domain.models.MessageFromController
+import com.example.securityapp.modules.messages.MessageFromController
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import javax.inject.Inject
 import com.example.securityapp.core.domain.utils.Result

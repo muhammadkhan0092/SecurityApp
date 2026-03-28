@@ -1,7 +1,7 @@
 // SmsReceiverEntryPoint.kt
 package com.example.securityapp.sms
 
-import com.example.securityapp.core.domain.usecase.HandleMessageIntent
+import com.example.securityapp.modules.messages.HandleMessageIntent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent

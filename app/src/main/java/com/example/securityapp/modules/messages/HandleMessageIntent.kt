@@ -1,4 +1,4 @@
-package com.example.securityapp.core.domain.usecase
+package com.example.securityapp.modules.messages
 
 import android.util.Log
 import com.example.securityapp.core.data.repository.DataStoreRepository

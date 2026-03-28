@@ -27,7 +27,7 @@ fun ControlledListItem(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.background(
-            color = Purple40.copy(alpha = 0.4f),
+            color = Purple40.copy(alpha = 0.6f),
             shape = RoundedCornerShape(10.dp)
         )
             .padding(start = 10.dp)

@@ -83,4 +83,10 @@ class FirebaseControlledRepository @Inject constructor(
             }
         }
     }
+
+    override suspend fun deleteAll(): Result<Unit> {
+        return roomSafeFlow {
+            controlledDao.deleteAllControlled()
+        }
+    }
 }

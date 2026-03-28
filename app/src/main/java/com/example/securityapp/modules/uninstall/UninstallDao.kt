@@ -1,10 +1,10 @@
-package com.example.securityapp.core.data.dao
+package com.example.securityapp.modules.uninstall
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.securityapp.core.data.models.UninstallEntity
+import com.example.securityapp.modules.uninstall.UninstallEntity
 
 @Dao
 interface UninstallDao {
@@ -14,5 +14,8 @@ interface UninstallDao {
 
     @Query("SELECT * FROM uninstall_entity")
     suspend fun getList() : List<UninstallEntity>
+
+    @Query("DELETE FROM uninstall_entity")
+    suspend fun deleteAll()
 
 }

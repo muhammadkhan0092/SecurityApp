@@ -8,4 +8,6 @@ sealed interface PermissionAction {
     data object OnOverlayPermissionGranted : PermissionAction
     data object OnStoragePermissionGranted : PermissionAction
     data object OnContinueClicked : PermissionAction
+    data object OnMessageDefaultClicked : PermissionAction
+    data class DefaultAppResult(val bool: Boolean): PermissionAction
 }

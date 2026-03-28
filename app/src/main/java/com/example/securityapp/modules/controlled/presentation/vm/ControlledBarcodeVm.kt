@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.controlled.presentation.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.barcode.generateBarcode
@@ -14,6 +15,7 @@ import com.example.securityapp.modules.controlled.presentation.models.Controlled
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
 import com.example.securityapp.modules.controlled.domain.usecase.UninstallApps
+import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,8 +36,7 @@ class ControlledBarcodeVm @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val syncControlled: SyncControlled,
     private val removeConnection: RemoveConnection,
-    private val deviceOwnerRepository: AndroidDeviceOwnerRepository,
-    private val uninstallApps: UninstallApps
+    private val deviceOwnerRepository: AndroidDeviceOwnerRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(ControlledState())
     val state = _state.asStateFlow()
@@ -54,10 +55,17 @@ class ControlledBarcodeVm @Inject constructor(
             is ControlledAction.OnDeleteClicked ->{
                 viewModelScope.launch(Dispatchers.IO){
                     val result = removeConnection(action.email)
-                    when(result){
-                        is Result.Error<*> -> ControlledEvents.Toast(result.error)
-                        is Result.Success -> ControlledEvents.Toast("Controller Removed Successfully")
+                    val event = when(result){
+                        is Result.Error<*> -> Toast(result.error)
+                        is Result.Success -> Toast("Controller Removed Successfully")
                     }
+                    _events.emit(event)
+                }
+            }
+
+            ControlledAction.OnSettingsClicked -> {
+                viewModelScope.launch {
+                    _events.emit(ControlledEvents.NavigateToSettings)
                 }
             }
         }
@@ -65,6 +73,7 @@ class ControlledBarcodeVm @Inject constructor(
 
 
     init {
+        Log.d("KHAN","IN CONTROLLED BARCODE VM")
         viewModelScope.launch {
             datastore.barcode.collectLatest {
                 val barcodeBitmap = generateBarcode(useQrCode = true, data = dataStoreRepository.getBarcode())
@@ -83,6 +92,7 @@ class ControlledBarcodeVm @Inject constructor(
         viewModelScope.launch {
             firebaseControlledRepository.listenData(dataStoreRepository.getEmail())
                 .collectLatest {
+                    Log.d("KHAN","DATA FROM FIREBASE IS $it")
                     it?.let {
                         syncControlled(it)
                     }
@@ -95,6 +105,5 @@ class ControlledBarcodeVm @Inject constructor(
                 }
             }
         }
-        deviceOwnerRepository.resetPhone()
     }
 }

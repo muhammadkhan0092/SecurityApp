@@ -1,7 +1,5 @@
-package com.example.securityapp.core.domain.repository
+package com.example.securityapp.modules.messages
 
-import com.example.securityapp.core.domain.models.MessageFromControlled
-import com.example.securityapp.core.domain.models.MessageFromController
 import com.example.securityapp.core.domain.utils.Result
 
 interface SmsManagerRepository{

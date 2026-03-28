@@ -2,10 +2,10 @@ package com.example.securityapp.modules.controlled.domain.usecase
 
 import android.util.Log
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
-import com.example.securityapp.core.domain.models.MessageFromControlled
-import com.example.securityapp.core.domain.models.MessageTypeFromControlled
-import com.example.securityapp.core.domain.repository.UninstallRepository
-import com.example.securityapp.core.domain.usecase.InsertMessage
+import com.example.securityapp.modules.messages.MessageFromControlled
+import com.example.securityapp.modules.messages.MessageTypeFromControlled
+import com.example.securityapp.modules.uninstall.UninstallRepository
+import com.example.securityapp.modules.messages.InsertMessage
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controlled.domain.repository.DeviceOwnerRepository
 import javax.inject.Inject

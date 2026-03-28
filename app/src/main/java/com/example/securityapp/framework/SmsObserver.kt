@@ -4,8 +4,7 @@ import android.content.Context
 import android.database.ContentObserver
 import android.os.Handler
 import android.util.Log
-import com.example.securityapp.core.domain.usecase.HandleMessageIntent
-import com.example.securityapp.sms.SmsReceiverEntryPoint
+import com.example.securityapp.modules.messages.HandleMessageIntent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

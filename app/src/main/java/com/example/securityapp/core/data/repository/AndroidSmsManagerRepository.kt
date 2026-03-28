@@ -2,9 +2,9 @@ package com.example.securityapp.core.data.repository
 
 import android.content.Context
 import android.telephony.SmsManager
-import com.example.securityapp.core.domain.models.MessageFromControlled
-import com.example.securityapp.core.domain.models.MessageFromController
-import com.example.securityapp.core.domain.repository.SmsManagerRepository
+import com.example.securityapp.modules.messages.MessageFromControlled
+import com.example.securityapp.modules.messages.MessageFromController
+import com.example.securityapp.modules.messages.SmsManagerRepository
 import com.example.securityapp.core.domain.utils.Result
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext

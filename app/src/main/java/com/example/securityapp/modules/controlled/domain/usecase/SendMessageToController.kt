@@ -1,7 +1,7 @@
 package com.example.securityapp.modules.controlled.domain.usecase
 
 import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
-import com.example.securityapp.core.domain.models.MessageFromControlled
+import com.example.securityapp.modules.messages.MessageFromControlled
 import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 
