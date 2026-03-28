@@ -20,7 +20,7 @@ import com.example.securityapp.modules.intro.presentation.composables.GateScreen
 import com.example.securityapp.modules.intro.presentation.composables.LoginScreenRoot
 import com.example.securityapp.modules.packages.PackagesScreenRoot
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreenRoot
-import com.example.securityapp.permissions.PermissionScreenRoot
+import com.example.securityapp.modules.permissions.PermissionScreenRoot
 
 @Composable
 fun App() {

@@ -20,7 +20,11 @@ class LoginCommonVm @Inject constructor(
                     it.copy(email = action.email)
                 }
             }
-            is LoginAction.OnLoginClicked -> Unit
+            is LoginAction.OnLoginClicked -> {
+                _state.update {
+                    it.copy(isLoading = true)
+                }
+            }
             is LoginAction.OnPasswordChanged ->{
                 _state.update {
                     it.copy(password = action.password)
@@ -42,12 +46,13 @@ class LoginCommonVm @Inject constructor(
             }
         }
     }
-
-    private val _state = MutableStateFlow(LoginState(
-        numbers = phoneRepository.getSimNumbers()
-    ))
+    fun onResultReceived(){
+        _state.update {
+            it.copy(isLoading = false)
+        }
+    }
+    private val _state = MutableStateFlow(LoginState(numbers = phoneRepository.getSimNumbers()))
     val state = _state.asStateFlow()
-
     init {
         val numbers = phoneRepository.getSimNumbers()
         val selectedNumber = if(numbers.isEmpty()) "" else numbers.first()

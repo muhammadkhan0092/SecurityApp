@@ -18,9 +18,15 @@ fun GateScreen(navController: NavHostController) {
     val vm = hiltViewModel<IntroVm>()
     val state = vm.state.collectAsStateWithLifecycle()
     when(state.value){
-        GateEvents.NavigateToController -> navController.navigate(Route.ControllerHomeGraph)
-        GateEvents.NavigateToControlled -> navController.navigate(Route.ControlledHomeGraph)
-        GateEvents.NavigateToPackages -> navController.navigate(Route.Packages)
+        GateEvents.NavigateToController -> navController.navigate(Route.ControllerHomeGraph){
+            popUpTo(0)
+        }
+        GateEvents.NavigateToControlled -> navController.navigate(Route.ControlledHomeGraph){
+            popUpTo(0)
+        }
+        GateEvents.NavigateToPackages -> navController.navigate(Route.Packages){
+            popUpTo(0)
+        }
         GateEvents.NavigateToPermissions -> navController.navigate(Route.Permissions)
         GateEvents.None -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){

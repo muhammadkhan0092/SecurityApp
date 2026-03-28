@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.intro.presentation.vm
+package com.example.securityapp.modules.packages
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,10 +6,6 @@ import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controlled.domain.models.UninstallDomain
 import com.example.securityapp.modules.intro.domain.PackageRepository
 import com.example.securityapp.modules.intro.domain.PackagesComplete
-import com.example.securityapp.modules.intro.presentation.models.PackagesAction
-import com.example.securityapp.modules.intro.presentation.models.PackagesEvent
-import com.example.securityapp.modules.intro.presentation.models.PackagesEvent.Toast
-import com.example.securityapp.modules.intro.presentation.models.PackagesState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,7 +18,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class PackagesVm @Inject constructor(
     private val packagesComplete: PackagesComplete,
@@ -32,22 +27,28 @@ class PackagesVm @Inject constructor(
     val state = _state.asStateFlow()
     private val _events = MutableSharedFlow<PackagesEvent>(replay = 0, extraBufferCapacity = 1)
     val events = _events.asSharedFlow()
-    var list: List<String> = packagesRepository.getInstalledApps()
+    val packageData = packagesRepository.getInstalledApps()
+    var list: List<String> = packageData.map { it.name }
     var job: Job? = null
     fun onAction(action: PackagesAction) {
         when (action) {
             PackagesAction.OnNextClicked -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     if (state.value.selectedPackages.isEmpty()) {
-                        _events.emit(Toast("Select Atleast One App"))
+                        _events.emit(PackagesEvent.Toast("Select Atleast One App"))
                         return@launch
                     }
-                    val result = packagesComplete(state.value.selectedPackages.map {
-                        UninstallDomain(it)
-                    })
+                    val selectedPackages = packageData.filter {pack->
+                        state.value.selectedPackages.any {  pack.name==it}
+                    }
+                    val result = packagesComplete(
+                        selectedPackages.map {
+                            UninstallDomain(it.packageName)
+                        }
+                    )
                     when (result) {
                         is Result.Error<*> -> {
-                            _events.emit(Toast(result.error))
+                            _events.emit(PackagesEvent.Toast(result.error))
                         }
 
                         is Result.Success -> _events.emit(PackagesEvent.NavigateToControlledMain)
@@ -70,7 +71,6 @@ class PackagesVm @Inject constructor(
                             )
                         }
                     }
-
                     false -> {
                         val newList = state.value.selectedPackages.toMutableList()
                         newList.add(action.name)
@@ -111,7 +111,9 @@ class PackagesVm @Inject constructor(
     init {
         val list = packagesRepository.getInstalledApps()
         _state.update {
-            it.copy(allPackages = list)
+            it.copy(allPackages = list.map {
+                it.name
+            })
         }
     }
 }

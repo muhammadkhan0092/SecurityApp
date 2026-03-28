@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.intro.presentation.models
+package com.example.securityapp.modules.packages
 
 sealed interface PackagesAction {
     data class OnPackageClicked(val name : String) : PackagesAction

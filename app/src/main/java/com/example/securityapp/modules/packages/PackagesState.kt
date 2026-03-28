@@ -1,4 +1,4 @@
-package com.example.securityapp.modules.intro.presentation.models
+package com.example.securityapp.modules.packages
 
 data class PackagesState(
     val etValue : String = "",

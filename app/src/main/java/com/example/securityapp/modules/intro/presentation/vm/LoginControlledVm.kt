@@ -1,5 +1,6 @@
 package com.example.securityapp.modules.intro.presentation.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.modules.intro.domain.ControlledLoginUseCase
@@ -31,12 +32,10 @@ class LoginControlledVm @Inject constructor(
                 val id =randomId()
                 viewModelScope.launch(Dispatchers.IO){
                     val result = login(action.email,action.password,id,action.selectedNumber)
-                    withContext(Dispatchers.Main){
                         when(result){
                             is Result.Error<*> -> _events.emit(Toast(result.error))
                             is Result.Success<*> -> _events.emit(NavigateToControlledHome)
                         }
-                    }
                 }
             }
             is LoginAction.OnPasswordChanged -> Unit

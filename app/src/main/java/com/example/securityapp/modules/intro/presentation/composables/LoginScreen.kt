@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,8 +59,12 @@ fun LoginScreenRoot(navController: NavHostController, entry: NavBackStackEntry) 
     val loginState by loginCommonVm.state.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         loginControlledByVm.events.collectLatest {
+            loginCommonVm.onResultReceived()
+            Log.d("KHAN","CONTROLLED RESULT IS $it")
             when (it) {
-                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.Packages)
+                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.Packages){
+                    popUpTo(0)
+                }
                 is LoginEvents.Toast -> {
                     Log.d("KHAN", "TOAST ${it.str}")
                 }
@@ -65,11 +72,12 @@ fun LoginScreenRoot(navController: NavHostController, entry: NavBackStackEntry) 
         }
     }
     LaunchedEffect(Unit) {
-        loginControlledByVm.events.collectLatest {
+        loginControllerVm.events.collectLatest {
+            loginCommonVm.onResultReceived()
+            Log.d("KHAN","CONTROLLER RESULT IS $it")
             when (it) {
-                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControlledHomeGraph) {
-                    popUpTo(Route.IntroGraph) { inclusive = true }
-                    launchSingleTop = true
+                LoginEvents.NavigateToControlledHome -> navController.navigate(Route.ControllerHomeGraph) {
+                    popUpTo(0)
                 }
 
                 is LoginEvents.Toast -> {
@@ -82,6 +90,7 @@ fun LoginScreenRoot(navController: NavHostController, entry: NavBackStackEntry) 
         state = loginState
     ) {
         loginCommonVm.onAction(it)
+        Log.d("KHAN","USER TYPE IS $userType")
         when (userType) {
             controller -> loginControllerVm.onAction(it)
             controlled -> loginControlledByVm.onAction(it)
@@ -150,7 +159,12 @@ fun LoginScreen(
                 }
             }
             Button(
-                modifier = Modifier.fillMaxWidth().background(Purple40, RoundedCornerShape(10.dp)),
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Purple40.copy(alpha = 0.6f),
+                    contentColor = Color.Black
+                ),
+                shape = RoundedCornerShape(5.dp),
                 onClick = {
                     onAction(
                         LoginAction.OnLoginClicked(
@@ -162,6 +176,9 @@ fun LoginScreen(
                 }
             ) {
                 Text("Login")
+            }
+            if(state.isLoading){
+                CircularProgressIndicator()
             }
         }
     }

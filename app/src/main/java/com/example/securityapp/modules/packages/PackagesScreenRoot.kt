@@ -2,43 +2,30 @@ package com.example.securityapp.modules.packages
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.securityapp.app.Route
-import com.example.securityapp.modules.intro.presentation.models.PackagesAction
-import com.example.securityapp.modules.intro.presentation.models.PackagesEvent
-import com.example.securityapp.modules.intro.presentation.models.PackagesState
-import com.example.securityapp.modules.intro.presentation.vm.PackagesVm
+import com.example.securityapp.core.presentation.ButtonComposable
 import com.example.securityapp.modules.packages.components.CustomTextField
 import com.example.securityapp.modules.packages.components.PackagesList
 import com.example.securityapp.ui.theme.Purple40
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -53,8 +40,7 @@ fun PackagesScreenRoot(
             when(it){
                 PackagesEvent.NavigateToControlledMain -> {
                     navController.navigate(Route.ControlledHomeGraph) {
-                        popUpTo(Route.IntroGraph) { inclusive = true }
-                        launchSingleTop = true
+                        popUpTo(0)
                     }
                 }
                 is PackagesEvent.Toast -> Toast.makeText(context, it.str, Toast.LENGTH_SHORT).show()
@@ -111,16 +97,9 @@ private fun PackagesScreen(state: PackagesState,onClick:(PackagesAction)-> Unit)
                     Spacer(modifier = Modifier.height(10.dp))
                     PackagesList(list = state.allPackages, selectedList = state.selectedPackages, onClick = onClick, modifier = Modifier.weight(1f))
                     Spacer(modifier = Modifier.height(10.dp))
-                    Button(
-                        modifier = Modifier.fillMaxWidth().background(Purple40, shape = RoundedCornerShape(10.dp)),
-                        onClick = {onClick(PackagesAction.OnNextClicked)}
-                    ) {
-                        Text(
-                            "Continue",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                   ButtonComposable(text = "Continue") {
+                       onClick(PackagesAction.OnNextClicked)
+                   }
                 }
             }
         }

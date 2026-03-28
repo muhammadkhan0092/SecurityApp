@@ -4,7 +4,7 @@ import com.example.securityapp.core.domain.usecase.InsertMessage
 import com.example.securityapp.core.domain.models.MessageFromControlled
 import com.example.securityapp.core.domain.models.MessageTypeFromControlled
 import com.example.securityapp.modules.controlled.data.repository.AndroidGalleryRepository
-import com.example.securityapp.permissions.PermissionManager
+import com.example.securityapp.modules.permissions.PermissionManager
 import javax.inject.Inject
 
 class WipeGallery @Inject constructor(

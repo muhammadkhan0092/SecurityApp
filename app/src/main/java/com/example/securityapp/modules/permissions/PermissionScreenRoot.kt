@@ -1,10 +1,9 @@
-package com.example.securityapp.permissions
+package com.example.securityapp.modules.permissions
 
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -156,17 +154,14 @@ fun PermissionScreen(state: PermissionState,onAction: (PermissionAction) -> Unit
                 )
                 Spacer(modifier = Modifier.fillMaxWidth().weight(1f))
                 Button(
-                    colors = ButtonColors(
-                        containerColor = Purple40,
-                        contentColor = Color.White,
-                        disabledContainerColor = Purple40,
-                        disabledContentColor = Color.White
-                    ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                        .background(color = Color.Transparent, shape = RoundedCornerShape(5.dp))
-                    ,
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Purple40.copy(alpha = 0.6f),
+                        contentColor = Color.Black
+                    ),
+                    shape = RoundedCornerShape(5.dp),
                     onClick = {
                         onAction(PermissionAction.OnContinueClicked)
                     }

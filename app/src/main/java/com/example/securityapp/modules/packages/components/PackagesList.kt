@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.securityapp.modules.intro.presentation.models.PackagesAction
+import com.example.securityapp.modules.packages.PackagesAction
 
 @Composable
  fun PackagesList(list : List<String>,selectedList: List<String>,onClick:(PackagesAction)-> Unit,modifier: Modifier){

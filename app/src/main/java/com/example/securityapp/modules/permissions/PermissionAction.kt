@@ -1,4 +1,4 @@
-package com.example.securityapp.permissions
+package com.example.securityapp.modules.permissions
 
 sealed interface PermissionAction {
     data object OnOverlayAction : PermissionAction

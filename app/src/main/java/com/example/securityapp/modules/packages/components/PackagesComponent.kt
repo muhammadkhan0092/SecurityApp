@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.securityapp.modules.intro.presentation.models.PackagesAction
+import com.example.securityapp.modules.packages.PackagesAction
 import com.example.securityapp.ui.theme.Purple40
 
 @Composable fun PackagesComponent(name : String, selected : Boolean, onClick:(PackagesAction)-> Unit){

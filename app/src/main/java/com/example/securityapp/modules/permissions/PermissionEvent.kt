@@ -1,4 +1,4 @@
-package com.example.securityapp.permissions
+package com.example.securityapp.modules.permissions
 
 sealed interface PermissionEvent {
     data object RequestOtherPermission : PermissionEvent

@@ -25,6 +25,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.example.securityapp.app.Route
 import com.example.securityapp.app.sharedHiltViewModel
+import com.example.securityapp.core.presentation.ButtonComposable
 import com.example.securityapp.modules.controller.presentation.models.ControllerHomeState
 import com.example.securityapp.modules.controller.presentation.vm.ControllerCommonVm
 import com.example.securityapp.modules.controller.presentation.vm.ControllerHomeVm
@@ -36,15 +37,15 @@ import com.journeyapps.barcodescanner.ScanOptions
 fun ControllerBarcodeScreenRoot(navController: NavHostController, entry: NavBackStackEntry) {
     val commonVm = entry.sharedHiltViewModel<ControllerCommonVm>(navController)
     val vm = hiltViewModel<ControllerHomeVm>()
-    val state=  commonVm.state.collectAsStateWithLifecycle(null)
+    val state = commonVm.state.collectAsStateWithLifecycle(null)
     val homeState = vm.state.collectAsStateWithLifecycle()
-    when(val value =state.value){
-        null-> Unit
+    when (val value = state.value) {
+        null -> Unit
         else -> vm.onStateChanged(value)
     }
     ControllerBarcodeScreen(
         onBarcodeScanned = {
-            vm.connect(it,state.value)
+            vm.connect(it, state.value)
         },
         state = homeState.value
     ) {
@@ -67,12 +68,15 @@ fun ControllerBarcodeScreen(
         }
     }
     Box(
-        modifier = Modifier.fillMaxSize().safeContentPadding(),
-    ){
-        when(state.isLoading){
+        modifier = Modifier
+            .fillMaxSize()
+            .safeContentPadding(),
+    ) {
+        when (state.isLoading) {
             true -> CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
+
             false -> {
                 Column {
                     Text(
@@ -81,33 +85,25 @@ fun ControllerBarcodeScreen(
                         fontSize = 25.sp
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    Box(modifier = Modifier.fillMaxWidth().weight(1f)){
-                        when(state.isEmpty){
-                            true -> Text("No Devices Yet", modifier = Modifier.align(Alignment.Center))
-                            false ->  ControllerListScreen(state.controlledEmails,onItemClicked)
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)) {
+                        when (state.isEmpty) {
+                            true -> Text(
+                                "No Devices Yet",
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                            false -> ControllerListScreen(state.controlledEmails, onItemClicked)
                         }
                     }
-                    Button(
-                        colors = ButtonColors(
-                            containerColor = Purple40.copy(0.4f),
-                            contentColor = Color.White,
-                            disabledContainerColor = Color.Transparent,
-                            disabledContentColor = Color.White
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                            .background(shape = RoundedCornerShape(5.dp), color = Color.Transparent)
-                        ,
-                        onClick = {
-                            val options = ScanOptions().apply {
-                                setDesiredBarcodeFormats(listOf(ScanOptions.QR_CODE)) // QR instead of CODE_128
-                                setPrompt("Scan QR code")
-                                setBeepEnabled(true)
-                                setOrientationLocked(true)
-                            }
-                            scanLauncher.launch(options)
+                    ButtonComposable("Scan Qr Code") {
+                        val options = ScanOptions().apply {
+                            setDesiredBarcodeFormats(listOf(ScanOptions.QR_CODE))
+                            setPrompt("Scan QR code")
+                            setBeepEnabled(true)
+                            setOrientationLocked(true)
                         }
-                    ) {
-                        Text("Scan Barcode")
+                        scanLauncher.launch(options)
                     }
                 }
             }
