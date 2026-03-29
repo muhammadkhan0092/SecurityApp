@@ -19,19 +19,19 @@ class WipeGallery @Inject constructor(
     ){
         if(!permissionManager.hasManageAllFilesPermission()){
             val messageFromControlled = MessageFromControlled(
-                string = "Gallery Wipe Permission Error",
+                string = "Request : Gallery Wipe\nStatus : Failed\nReason : Permission Error",
                 type = MessageTypeFromControlled.ERROR
             )
-            insertMessage(email,"Gallery Wipe From $email Permission Error", MessageTypeFromControlled.NORMAL)
+            insertMessage(email,"Request : Gallery Wipe From $email\nStatus : Failed\nReason : Permission Error", MessageTypeFromControlled.NORMAL)
             sendMessageToController(numbers,messageFromControlled)
         }
         else{
             androidGalleryRepository.deleteAllGalleryFiles()
             val messageFromControlled = MessageFromControlled(
-                string = "Gallery Wipe Complete",
+                string = "Request : Gallery Wipe\nStatus : Success",
                 type = MessageTypeFromControlled.NORMAL
             )
-            insertMessage(email,"Gallery Wipe From $email", MessageTypeFromControlled.NORMAL)
+            insertMessage(email,"Request : Gallery Wipe From $email\nStatus : Success", MessageTypeFromControlled.NORMAL)
             sendMessageToController(numbers,messageFromControlled)
         }
     }

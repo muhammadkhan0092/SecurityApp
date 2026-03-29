@@ -24,7 +24,7 @@ class GetLocation @Inject constructor(
                 string = locationString,
                 type = MessageTypeFromControlled.NORMAL
             )
-            insertMessage(email, "Location Sent to $email", MessageTypeFromControlled.NORMAL)
+            insertMessage(email, "Request : Location From $email\nStatus : Success" , MessageTypeFromControlled.NORMAL)
             val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
             when (serializedMessage) {
                 is Result.Error<*> -> {

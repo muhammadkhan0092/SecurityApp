@@ -21,28 +21,28 @@ class UninstallApps @Inject constructor(
         val isDeviceOwner = deviceOwnerRepository.isDeviceOwner()
         Log.d("KHAN","AFTER DEVICE OWNER $isDeviceOwner")
         if(!isDeviceOwner){
-            insertMessage(email,"Not Device Owner, Requested From $email", type = MessageTypeFromControlled.ERROR)
-            sendMessageToOtherDevice("Not Device Owner", MessageTypeFromControlled.ERROR,number)
+            insertMessage(email,"Request : Uninstall Apps From $email\nStatus : Failed\nReason : App not Device Owner", type = MessageTypeFromControlled.ERROR)
+            sendMessageToOtherDevice("Request : Uninstall Apps\nStatus : Failed\nReason : App not Device Owner", MessageTypeFromControlled.ERROR,number)
             return
         }
         val result = uninstallRepository.getData()
         when(result){
             is Result.Error<*> -> {
-                insertMessage(email,"Uninstall Db Error, Requested From $email", type = MessageTypeFromControlled.ERROR)
-                sendMessageToOtherDevice("Uninstall Db Error", MessageTypeFromControlled.ERROR,number)
+                insertMessage(email,"Request : Uninstall Apps From $email\nStatus : Failed\nReason : Db Error", type = MessageTypeFromControlled.ERROR)
+                sendMessageToOtherDevice("Request : Uninstall Apps\nStatus : Failed\nReason : Db Error", MessageTypeFromControlled.ERROR,number)
             }
             is Result.Success->{
                 when(result.data.isEmpty()){
                     true ->  {
-                        insertMessage(email,"No Apps To Uninstall, Requested From $email", type = MessageTypeFromControlled.ERROR)
-                        sendMessageToOtherDevice("NO APPS TO UNINSTALL", MessageTypeFromControlled.ERROR,number)
+                        insertMessage(email,"Request : Uninstall Apps From $email\nStatus : Failed\nReason : No Apps to Uninstall", type = MessageTypeFromControlled.ERROR)
+                        sendMessageToOtherDevice("Request : Uninstall Apps\nStatus : Failed\nReason : No Apps to Uninstall", MessageTypeFromControlled.ERROR,number)
                     }
                     false -> {
                         result.data.forEach {
                             uninstallRepository.uninstallApp(it.packageName)
                         }
-                        insertMessage(email,"${result.data.size} Apps Deleted, Requested From $email", type = MessageTypeFromControlled.NORMAL)
-                        sendMessageToOtherDevice("${result.data.size} Apps Deleted", MessageTypeFromControlled.NORMAL,number)
+                        insertMessage(email,"Request : Uninstall Apps From $email\nStatus : ${result.data.size} Apps Deleted", type = MessageTypeFromControlled.NORMAL)
+                        sendMessageToOtherDevice("Request : Uninstall Apps\nStatus: ${result.data.size} Apps Deleted", MessageTypeFromControlled.NORMAL,number)
                     }
                 }
             }

@@ -22,8 +22,7 @@ class HandleControllerMessageIntent @Inject constructor(
                 val filteredData = data.firstOrNull() {
                     sender == it.number
                 }
-                val deserializedMessageResult =
-                    androidSmsManagerRepository.deserializeToMessageFromControlled(message)
+                val deserializedMessageResult = androidSmsManagerRepository.deserializeToMessageFromControlled(message)
                 when {
                     filteredData != null && deserializedMessageResult is Result.Success -> {
                         val deserializedMessage = deserializedMessageResult.data

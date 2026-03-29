@@ -17,14 +17,14 @@ class BlockApps @Inject constructor(
 ) {
     suspend operator fun invoke(firstNumber: String, email: String = "") {
         val messageFromControlled = MessageFromControlled(
-            string = "Block Apps Complete",
+            string = "Request : Block Screen\nStatus : Success",
             type = MessageTypeFromControlled.NORMAL
         )
         overlayRepository.startOverlayService()
         val result = dataStoreRepository.setShouldBlock(true)
         when (result) {
             true -> {
-                insertMessage(email, "Blocking Apps From $email", MessageTypeFromControlled.NORMAL)
+                insertMessage(email, "Request : Block Screen From $email\nStatus : Success", MessageTypeFromControlled.NORMAL)
                 val serializedMessage =
                     androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
@@ -41,7 +41,7 @@ class BlockApps @Inject constructor(
             false -> {
                 insertMessage(
                     email,
-                    "Error Blocking Apps From $email",
+                    "Request : Block Screen From $email\nStatus : Failed",
                     MessageTypeFromControlled.ERROR
                 )
                 androidSmsManagerRepository.sendSms(firstNumber, "Error Blocking Apps")

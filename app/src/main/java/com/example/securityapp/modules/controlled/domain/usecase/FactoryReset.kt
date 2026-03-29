@@ -19,16 +19,14 @@ class FactoryReset @Inject constructor(
             is Result.Error<*> -> {
                 insertMessage(
                     email,
-                    "Factory Reset From $email Failed",
+                    "Request : Factory Reset From $email\nStatus : Failed\nReason : App Not Device Owner",
                     MessageTypeFromControlled.ERROR
                 )
                 val messageFromControlled = MessageFromControlled(
-                    string = "Factory Reset Failed",
+                    string = "Request : Factory Reset\nStatus : Failed\nReason : App Not Device Owner",
                     type = MessageTypeFromControlled.ERROR
                 )
-                insertMessage(email, "Factory Reset From $email", MessageTypeFromControlled.NORMAL)
-                val serializedMessage =
-                    androidSmsManagerRepository.serializeToString(messageFromControlled)
+                val serializedMessage = androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
                     is Result.Error<*> -> {
                         androidSmsManagerRepository.sendSms(firstNumber, serializedMessage.error)
@@ -42,10 +40,10 @@ class FactoryReset @Inject constructor(
 
             is Result.Success -> {
                 val messageFromControlled = MessageFromControlled(
-                    string = "Factory Reset Complete",
+                    string = "Request : Factory Reset\nStatus : Success",
                     type = MessageTypeFromControlled.NORMAL
                 )
-                insertMessage(email, "Factory Reset From $email", MessageTypeFromControlled.NORMAL)
+                insertMessage(email, "Request : Factory Reset From $email\nStatus : Success", MessageTypeFromControlled.NORMAL)
                 val serializedMessage =
                     androidSmsManagerRepository.serializeToString(messageFromControlled)
                 when (serializedMessage) {
