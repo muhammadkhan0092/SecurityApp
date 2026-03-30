@@ -4,13 +4,13 @@ import com.example.securityapp.core.data.ext.firebaseGetSafeCall
 import com.example.securityapp.core.data.ext.firebaseUpsertSafeCall
 import com.example.securityapp.core.data.ext.roomSafeFlow
 import com.example.securityapp.core.data.mappers.mapToControlledDomain
-import com.example.securityapp.core.data.models.ControlledDeviceDto
+import com.example.securityapp.modules.controlled.data.models.ControlledDeviceDto
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controlled.data.mappers.mapControlledEntityControlledDomain
 import com.example.securityapp.modules.controlled.data.mappers.mapToControlledEntity
 import com.example.securityapp.modules.controlled.data.source.ControlledDao
-import com.example.securityapp.modules.controlled.domain.ControlledDomain
+import com.example.securityapp.modules.controlled.domain.models.ControlledDomain
 import com.example.securityapp.modules.controlled.domain.repository.ControlledRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

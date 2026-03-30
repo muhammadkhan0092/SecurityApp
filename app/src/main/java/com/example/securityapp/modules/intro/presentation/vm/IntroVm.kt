@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.datastore.AppSettings
-import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
+import com.example.securityapp.modules.phone.domain.PhoneRepository
 import com.example.securityapp.modules.intro.presentation.models.GateEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

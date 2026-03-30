@@ -6,15 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.securityapp.barcode.generateBarcode
 import com.example.securityapp.core.data.repository.DataStoreRepository
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.modules.controlled.domain.usecase.RemoveConnection
+import com.example.securityapp.modules.connection.domain.RemoveConnection
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import com.example.securityapp.modules.controlled.domain.usecase.SyncControlled
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
 import com.example.securityapp.core.domain.utils.Result
-import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
-import com.example.securityapp.modules.controlled.domain.usecase.UninstallApps
+import com.example.securityapp.modules.device_owner.data.AndroidDeviceOwnerRepository
+import com.example.securityapp.modules.uninstall.domain.UninstallApps
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,6 @@ class ControlledBarcodeVm @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val syncControlled: SyncControlled,
     private val removeConnection: RemoveConnection,
-    private val deviceOwnerRepository: AndroidDeviceOwnerRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(ControlledState())
     val state = _state.asStateFlow()

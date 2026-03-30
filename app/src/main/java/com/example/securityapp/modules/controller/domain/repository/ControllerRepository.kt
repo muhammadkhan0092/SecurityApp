@@ -1,6 +1,6 @@
 package com.example.securityapp.modules.controller.domain.repository
 
-import com.example.securityapp.core.data.models.ControllerDeviceDto
+import com.example.securityapp.modules.controller.data.models.ControllerDeviceDto
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import kotlinx.coroutines.flow.Flow

@@ -21,7 +21,7 @@ import com.example.securityapp.modules.intro.presentation.composables.LoginScree
 import com.example.securityapp.modules.packages.PackagesScreenRoot
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreenRoot
 import com.example.securityapp.modules.permissions.PermissionScreenRoot
-import com.example.securityapp.modules.settings.SettingsScreenRoot
+import com.example.securityapp.modules.settings.presentation.SettingsScreenRoot
 
 @Composable
 fun App() {

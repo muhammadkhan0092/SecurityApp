@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.content.ContextCompat
 import com.example.securityapp.modules.controlled.presentation.service.OverlayService
-import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
+import com.example.securityapp.modules.overlay.domain.OverlayRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

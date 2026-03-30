@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.securityapp.app.Route
-import com.example.securityapp.core.presentation.MessagesScreen
+import com.example.securityapp.modules.messages.presentation.MessagesScreen
 import com.example.securityapp.core.presentation.TabComponent
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents

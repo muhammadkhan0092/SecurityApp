@@ -54,32 +54,18 @@
         android:theme="@style/Theme.SecurityApp"
         tools:targetApi="31">
 
-        <receiver android:name=".framework.BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".framework.SmsMonitorService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync"/>
         <activity
             android:name=".core.presentation.ConversationActivity"
             android:exported="true">
-
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="sms"/>
-                <data android:scheme="smsto"/>
-                <data android:scheme="mms"/>
-                <data android:scheme="mmsto"/>
+            <action android:name="android.intent.action.SEND" />
+            <action android:name="android.intent.action.SENDTO" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="sms" />
+            <data android:scheme="smsto" />
+            <data android:scheme="mms" />
+            <data android:scheme="mmsto" />
             </intent-filter>
 
         </activity>
@@ -93,21 +79,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SmsActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <action android:name="android.intent.action.SENDTO" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="sms" />
-                <data android:scheme="smsto" />
-                <data android:scheme="mms" />
-                <data android:scheme="mmsto" />
-            </intent-filter>
-        </activity>
-
-        <receiver android:name=".sms.SmsReceiver"
+        <receiver android:name=".modules.messages.data.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS"
             android:exported="true">
             <intent-filter>
@@ -115,7 +87,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".sms.MmsReceiver"
+        <receiver android:name=".modules.messages.data.MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH"
             android:exported="true">
             <intent-filter>
@@ -124,7 +96,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".sms.HeadlessSmsSendService"
+        <service android:name=".modules.messages.data.HeadlessSmsSendService"
             android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
             android:exported="true">
             <intent-filter>
@@ -136,29 +108,6 @@
                 <data android:scheme="mmsto" />
             </intent-filter>
         </service>
-        <activity
-            android:name=".ProvisioningModeActivity"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN"
-            android:testOnly="false"
-            >
-            <intent-filter>
-                <action android:name="android.app.action.GET_PROVISIONING_MODE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".AdminPolicyComplianceActivity"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN"
-            android:testOnly="false"
-            >
-            <intent-filter>
-                <action android:name="android.app.action.ADMIN_POLICY_COMPLIANCE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <receiver
             android:name=".framework.MyDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"

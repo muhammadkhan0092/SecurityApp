@@ -1,7 +1,7 @@
 package com.example.securityapp.modules.controller.domain.usecase
 
 import android.util.Log
-import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
+import com.example.securityapp.modules.messages.data.AndroidSmsManagerRepository
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
 import com.example.securityapp.modules.controller.data.repository.FirebaseControllerRepository
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain

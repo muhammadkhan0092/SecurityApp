@@ -10,8 +10,8 @@ import com.example.securityapp.core.data.db.SecurityDb
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.controlled.data.source.ControlledDao
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
-import com.example.securityapp.modules.messages.ControllerMessagesDao
-import com.example.securityapp.modules.uninstall.UninstallDao
+import com.example.securityapp.modules.messages.data.ControllerMessagesDao
+import com.example.securityapp.modules.uninstall.data.UninstallDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

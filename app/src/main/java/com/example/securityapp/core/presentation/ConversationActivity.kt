@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import com.example.securityapp.app.App
-import com.example.securityapp.framework.SmsMonitorService
 import com.example.securityapp.ui.theme.SecurityAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 

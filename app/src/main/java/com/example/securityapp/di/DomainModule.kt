@@ -1,29 +1,28 @@
 package com.example.securityapp.di
 
-import android.os.Message
-import com.example.securityapp.core.data.repository.AndroidSmsManagerRepository
-import com.example.securityapp.modules.uninstall.AndroidUninstallRepository
+import com.example.securityapp.modules.messages.data.AndroidSmsManagerRepository
+import com.example.securityapp.modules.uninstall.data.UninstallRepoImpl
 import com.example.securityapp.core.data.repository.DataStoreRepository
-import com.example.securityapp.core.data.repository.FirebaseConnectionRepository
+import com.example.securityapp.modules.connection.data.FirebaseConnectionRepository
 import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.core.data.repository.SecurityLoginRepository
-import com.example.securityapp.core.domain.repository.ConnectionRepository
-import com.example.securityapp.core.domain.repository.LoginRepository
-import com.example.securityapp.modules.messages.MessagesRepository
-import com.example.securityapp.core.domain.repository.SettingsRepository
-import com.example.securityapp.modules.messages.SmsManagerRepository
-import com.example.securityapp.modules.uninstall.UninstallRepository
-import com.example.securityapp.modules.controlled.data.repository.AndroidDeviceOwnerRepository
-import com.example.securityapp.modules.controlled.data.repository.AndroidGalleryRepository
+import com.example.securityapp.modules.intro.data.SecurityLoginRepository
+import com.example.securityapp.modules.connection.domain.ConnectionRepository
+import com.example.securityapp.modules.intro.data.LoginRepository
+import com.example.securityapp.modules.messages.domain.MessagesRepository
+import com.example.securityapp.modules.intro.domain.SettingsRepository
+import com.example.securityapp.modules.messages.domain.SmsManagerRepository
+import com.example.securityapp.modules.uninstall.domain.UninstallRepository
+import com.example.securityapp.modules.device_owner.data.AndroidDeviceOwnerRepository
+import com.example.securityapp.modules.gallery.data.AndroidGalleryRepository
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
-import com.example.securityapp.modules.controlled.data.repository.FusedLocationRepository
-import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
-import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
-import com.example.securityapp.modules.controlled.data.repository.TelephoneRepository
+import com.example.securityapp.modules.location.data.FusedLocationRepository
+import com.example.securityapp.modules.phone.domain.PhoneRepository
+import com.example.securityapp.modules.overlay.domain.OverlayRepository
+import com.example.securityapp.modules.phone.data.TelephoneRepository
 import com.example.securityapp.modules.controlled.domain.repository.ControlledRepository
-import com.example.securityapp.modules.controlled.domain.repository.DeviceOwnerRepository
-import com.example.securityapp.modules.controlled.domain.repository.GalleryRepository
-import com.example.securityapp.modules.controlled.domain.repository.LocationRepository
+import com.example.securityapp.modules.device_owner.domain.DeviceOwnerRepository
+import com.example.securityapp.modules.gallery.domain.GalleryRepository
+import com.example.securityapp.modules.location.domain.LocationRepository
 import com.example.securityapp.modules.controlled.presentation.service.OverlayControllerImpl
 import com.example.securityapp.modules.controller.data.repository.FirebaseControllerRepository
 import com.example.securityapp.modules.controller.domain.repository.ControllerRepository
@@ -131,7 +130,7 @@ object DomainModule {
 
     @Singleton
     @Provides
-    fun providesUninstallRepository(repo : AndroidUninstallRepository) : UninstallRepository {
+    fun providesUninstallRepository(repo : UninstallRepoImpl) : UninstallRepository {
         return repo
     }
 }

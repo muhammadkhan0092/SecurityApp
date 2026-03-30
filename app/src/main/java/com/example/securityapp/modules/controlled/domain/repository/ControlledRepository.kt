@@ -1,8 +1,8 @@
 package com.example.securityapp.modules.controlled.domain.repository
 
-import com.example.securityapp.core.data.models.ControlledDeviceDto
+import com.example.securityapp.modules.controlled.data.models.ControlledDeviceDto
 import com.example.securityapp.core.domain.utils.Result
-import com.example.securityapp.modules.controlled.domain.ControlledDomain
+import com.example.securityapp.modules.controlled.domain.models.ControlledDomain
 import kotlinx.coroutines.flow.Flow
 
 interface ControlledRepository  {

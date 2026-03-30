@@ -3,7 +3,7 @@ package com.example.securityapp.core.data.repository
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.IOException
-import com.example.securityapp.core.domain.repository.SettingsRepository
+import com.example.securityapp.modules.intro.domain.SettingsRepository
 import com.example.securityapp.datastore.AppSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

@@ -1,10 +1,9 @@
 package com.example.securityapp.modules.intro.domain
 
 import android.util.Log
-import com.example.securityapp.core.data.models.ControlledDeviceDto
-import com.example.securityapp.core.data.repository.SecurityLoginRepository
-import com.example.securityapp.modules.controlled.domain.ControlledDomainDevice
-import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
+import com.example.securityapp.modules.controlled.data.models.ControlledDeviceDto
+import com.example.securityapp.modules.intro.data.SecurityLoginRepository
+import com.example.securityapp.modules.controlled.domain.models.ControlledDomainDevice
 import com.example.securityapp.modules.controlled.domain.usecase.StoreControlledInfoUseCase
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.core.domain.utils.Result.Error

@@ -2,7 +2,7 @@ package com.example.securityapp.modules.controlled.domain.usecase
 
 import android.util.Log
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
-import com.example.securityapp.modules.controlled.domain.ControlledDomain
+import com.example.securityapp.modules.controlled.domain.models.ControlledDomain
 import com.example.securityapp.core.domain.utils.Result
 import javax.inject.Inject
 

@@ -3,7 +3,7 @@ package com.example.securityapp.modules.packages
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.securityapp.core.domain.utils.Result
-import com.example.securityapp.modules.controlled.domain.models.UninstallDomain
+import com.example.securityapp.modules.uninstall.domain.UninstallDomainModel
 import com.example.securityapp.modules.intro.domain.PackageRepository
 import com.example.securityapp.modules.intro.domain.PackagesComplete
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +43,7 @@ class PackagesVm @Inject constructor(
                     }
                     val result = packagesComplete(
                         selectedPackages.map {
-                            UninstallDomain(it.packageName)
+                            UninstallDomainModel(it.packageName)
                         }
                     )
                     when (result) {

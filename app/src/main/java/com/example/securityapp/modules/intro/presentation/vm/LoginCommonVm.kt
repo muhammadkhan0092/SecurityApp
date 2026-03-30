@@ -1,7 +1,7 @@
 package com.example.securityapp.modules.intro.presentation.vm
 
 import androidx.lifecycle.ViewModel
-import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
+import com.example.securityapp.modules.phone.domain.PhoneRepository
 import com.example.securityapp.modules.intro.presentation.models.LoginState
 import com.example.securityapp.modules.intro.presentation.models.LoginAction
 import dagger.hilt.android.lifecycle.HiltViewModel

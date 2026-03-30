@@ -4,7 +4,7 @@ import com.example.securityapp.core.data.ext.firebaseGetSafeCall
 import com.example.securityapp.core.data.ext.firebaseUpsertSafeCall
 import com.example.securityapp.core.data.ext.roomSafeFlow
 import com.example.securityapp.core.data.mappers.mapToControllerDomain
-import com.example.securityapp.core.data.models.ControllerDeviceDto
+import com.example.securityapp.modules.controller.data.models.ControllerDeviceDto
 import com.example.securityapp.core.data.sources.FirebaseRemoteDataSource
 import com.example.securityapp.modules.controller.data.dao.ControllerDao
 import com.example.securityapp.modules.controller.data.mappers.mapToControllerEntity

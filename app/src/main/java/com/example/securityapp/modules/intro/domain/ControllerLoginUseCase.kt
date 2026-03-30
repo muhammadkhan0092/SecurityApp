@@ -1,11 +1,11 @@
 package com.example.securityapp.modules.intro.domain
 
 import android.util.Log
-import com.example.securityapp.core.data.models.ControllerDeviceDto
-import com.example.securityapp.core.data.repository.SecurityLoginRepository
+import com.example.securityapp.modules.controller.data.models.ControllerDeviceDto
+import com.example.securityapp.modules.intro.data.SecurityLoginRepository
 import com.example.securityapp.modules.controller.domain.usecase.StoreControllerInfoUseCase
 import com.example.securityapp.firebase.DtoControllerUser
-import com.example.securityapp.modules.controlled.domain.repository.PhoneRepository
+import com.example.securityapp.modules.phone.domain.PhoneRepository
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.core.domain.utils.Result.Error
 import javax.inject.Inject

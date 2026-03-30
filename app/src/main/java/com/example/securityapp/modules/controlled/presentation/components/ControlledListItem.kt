@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.securityapp.modules.controlled.domain.ControlledDomain
+import com.example.securityapp.modules.controlled.domain.models.ControlledDomain
 import com.example.securityapp.modules.controlled.presentation.models.ControlledAction
 import com.example.securityapp.ui.theme.Purple40
 

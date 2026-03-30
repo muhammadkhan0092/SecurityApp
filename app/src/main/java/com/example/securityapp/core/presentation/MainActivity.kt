@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.securityapp.app.App
-import com.example.securityapp.modules.controlled.domain.repository.OverlayRepository
+import com.example.securityapp.modules.overlay.domain.OverlayRepository
 import com.example.securityapp.ui.theme.SecurityAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -1,11 +1,11 @@
 package com.example.securityapp.core.data.repository
 
-import com.example.securityapp.modules.messages.ControllerMessagesDao
+import com.example.securityapp.modules.messages.data.ControllerMessagesDao
 import com.example.securityapp.core.data.ext.roomSafeFlow
-import com.example.securityapp.modules.messages.mapToMessagesDomain
-import com.example.securityapp.modules.messages.mapToMessagesEntity
-import com.example.securityapp.modules.messages.MessagesEntity
-import com.example.securityapp.modules.messages.MessagesRepository
+import com.example.securityapp.modules.messages.data.mapToMessagesDomain
+import com.example.securityapp.modules.messages.data.mapToMessagesEntity
+import com.example.securityapp.modules.messages.data.MessagesEntity
+import com.example.securityapp.modules.messages.domain.MessagesRepository
 import com.example.securityapp.modules.controller.domain.models.MessagesDomain
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.core.domain.utils.map
