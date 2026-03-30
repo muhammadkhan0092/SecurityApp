@@ -6,5 +6,6 @@ sealed interface PermissionEvent {
     data object RequestOverlayPermission : PermissionEvent
     data object RequestMessageDefault : PermissionEvent
     data object NavigateToIntro : PermissionEvent
+    data object RequestBackgroundLocationPermission : PermissionEvent
     data class Toast(val str : String) : PermissionEvent
 }

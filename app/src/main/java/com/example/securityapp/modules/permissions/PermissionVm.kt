@@ -2,6 +2,7 @@ package com.example.securityapp.modules.permissions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.securityapp.modules.permissions.PermissionEvent.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ class PermissionVm @Inject constructor(
             isOverlayGranted = permissionManager.hasOverlayPermission(),
             isStorageGranted = permissionManager.hasManageAllFilesPermission(),
             isOtherGranted = permissionManager.areAllRuntimePermissionsGranted(),
-            isDefaultAppSet = permissionManager.isDefaultMessageAppSet()
+            isDefaultAppSet = permissionManager.isDefaultMessageAppSet(),
+            isBackgroundPermissionGranted = permissionManager.isBackgroundLocationGranted()
         )
     )
     val state = _state.asStateFlow()
@@ -32,16 +34,16 @@ class PermissionVm @Inject constructor(
         val event = when (action) {
             PermissionAction.OnOtherAction -> {
                 if (!_state.value.isOtherGranted) {
-                    PermissionEvent.RequestOtherPermission
+                    RequestOtherPermission
                 } else return
             }
 
             PermissionAction.OnOverlayAction -> {
-                PermissionEvent.RequestOverlayPermission
+                RequestOverlayPermission
             }
 
             PermissionAction.OnStorageAction -> {
-                PermissionEvent.RequestStoragePermission
+                RequestStoragePermission
             }
 
             PermissionAction.OnOtherPermissionGranted -> {
@@ -67,8 +69,8 @@ class PermissionVm @Inject constructor(
 
             PermissionAction.OnContinueClicked -> {
                 when{
-                    state.value.isOtherGranted && state.value.isStorageGranted && state.value.isOverlayGranted && state.value.isDefaultAppSet->  PermissionEvent.NavigateToIntro
-                    else ->PermissionEvent.Toast("Grant All Permissions")
+                    state.value.isOtherGranted && state.value.isStorageGranted && state.value.isOverlayGranted && state.value.isDefaultAppSet-> NavigateToIntro
+                    else -> Toast("Grant All Permissions")
                 }
             }
             is PermissionAction.DefaultAppResult -> {
@@ -77,7 +79,18 @@ class PermissionVm @Inject constructor(
                 }
                 return
             }
-            PermissionAction.OnMessageDefaultClicked -> PermissionEvent.RequestMessageDefault
+            PermissionAction.OnMessageDefaultClicked -> RequestMessageDefault
+            PermissionAction.OnBackgroundPermissionGranted -> {
+                _state.update {
+                    it.copy(isBackgroundPermissionGranted = true)
+                }
+                return
+            }
+
+            PermissionAction.OnBackGroundAction -> {
+                if(permissionManager.areAllRuntimePermissionsGranted()) RequestBackgroundLocationPermission
+                else Toast("Grant Other Permissions First")
+            }
         }
         viewModelScope.launch {
             _events.emit(event)
@@ -89,4 +102,5 @@ class PermissionVm @Inject constructor(
     fun requestStoragePermission() = permissionManager.requestManageAllFilesPermission()
     fun requestOverlayPermission() = permissionManager.requestOverlayPermission()
     fun isDefaultAppSet() = permissionManager.isDefaultMessageAppSet()
+    fun isBackgroundLocationGranted() = permissionManager.isBackgroundLocationGranted()
 }

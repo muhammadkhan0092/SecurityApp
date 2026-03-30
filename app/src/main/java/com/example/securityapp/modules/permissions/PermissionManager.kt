@@ -78,4 +78,10 @@ class PermissionManager @Inject constructor(
             defaultSmsPackage == context.packageName
         }
     }
+
+    fun isBackgroundLocationGranted(): Boolean {
+        return RuntimePermissions.backgroundLocation.all {
+            isPermissionGranted(it)
+        }
+    }
 }

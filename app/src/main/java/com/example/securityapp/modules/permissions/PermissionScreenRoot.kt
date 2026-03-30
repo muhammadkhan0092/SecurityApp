@@ -62,6 +62,17 @@ fun PermissionScreenRoot(
             Log.d("Permission", "Some permissions denied")
         }
     }
+    val backgroundLocationLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
+        val allGranted = result.values.all { it }
+        if (allGranted) {
+            Log.d("Permission", "All runtime permissions granted")
+            vm.onAction(PermissionAction.OnBackgroundPermissionGranted)
+        } else {
+            Log.d("Permission", "Some permissions denied")
+        }
+    }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val messageLauncher = rememberLauncherForActivityResult(
@@ -72,7 +83,10 @@ fun PermissionScreenRoot(
     LaunchedEffect(Unit){
         vm.events.collectLatest {
             when(it){
-                PermissionEvent.RequestOtherPermission -> launcher.launch(RuntimePermissions.permissions)
+                PermissionEvent.RequestOtherPermission -> {
+                    Log.d("KHAN","REQUESTING RUNTIME PERMISSIONS")
+                    launcher.launch(RuntimePermissions.permissions)
+                }
                 PermissionEvent.RequestOverlayPermission ->  vm.requestOverlayPermission()
                 PermissionEvent.RequestStoragePermission -> vm.requestStoragePermission()
                 PermissionEvent.NavigateToIntro -> navController.navigate(Route.IntroGraph)
@@ -90,6 +104,9 @@ fun PermissionScreenRoot(
                         messageLauncher.launch(intent)
                     }
                 }
+
+                PermissionEvent.RequestBackgroundLocationPermission -> backgroundLocationLauncher.launch(
+                    RuntimePermissions.backgroundLocation)
             }
         }
     }
@@ -112,14 +129,6 @@ fun PermissionScreenRoot(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-//    LaunchedEffect(Unit) {
-//        if(vm.hasStoragePermission()){
-//            vm.onAction(PermissionAction.OnStoragePermissionGranted)
-//        }
-//        if(vm.hasOverlayPermission()){
-//            vm.onAction(PermissionAction.OnOverlayPermissionGranted)
-//        }
-//    }
     PermissionScreen(
         state.value,
         onAction = {
@@ -176,6 +185,14 @@ fun PermissionScreen(state: PermissionState,onAction: (PermissionAction) -> Unit
                     checked = state.isOtherGranted,
                     onCheckClicked = {
                         onAction(PermissionAction.OnOtherAction)
+                    }
+                )
+                PermissionItem(
+                    heading = "Background Location",
+                    content = "Background Location is required to send location when app is in background",
+                    checked = state.isBackgroundPermissionGranted,
+                    onCheckClicked = {
+                        onAction(PermissionAction.OnBackGroundAction)
                     }
                 )
                 PermissionItem(
