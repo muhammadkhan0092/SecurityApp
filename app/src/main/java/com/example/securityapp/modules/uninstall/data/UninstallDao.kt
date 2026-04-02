@@ -8,11 +8,11 @@ import androidx.room.Query
 @Dao
 interface UninstallDao {
     @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
-    suspend fun upsert(data : List<UninstallEntity>)
+    suspend fun upsert(data : List<UninstallDataModel>)
 
 
     @Query("SELECT * FROM uninstall_entity")
-    suspend fun getList() : List<UninstallEntity>
+    suspend fun getList() : List<UninstallDataModel>
 
     @Query("DELETE FROM uninstall_entity")
     suspend fun deleteAll()

@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +30,7 @@ import com.example.securityapp.modules.intro.presentation.models.IntroAction
 import com.example.securityapp.modules.intro.presentation.models.IntroState
 import com.example.securityapp.modules.intro.presentation.models.UserType
 import com.example.securityapp.modules.intro.presentation.vm.IntroSharedVm
-import com.example.securityapp.modules.packages.components.Radio
+import com.example.securityapp.modules.packages.presentation.ui.Radio
 import com.example.securityapp.ui.theme.Purple40
 
 

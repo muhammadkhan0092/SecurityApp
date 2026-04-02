@@ -10,9 +10,9 @@ import com.example.securityapp.modules.messages.data.ControllerMessagesDao
 import com.example.securityapp.modules.uninstall.data.UninstallDao
 import com.example.securityapp.modules.controller.data.models.ControllerEntity
 import com.example.securityapp.modules.messages.data.MessagesEntity
-import com.example.securityapp.modules.uninstall.data.UninstallEntity
+import com.example.securityapp.modules.uninstall.data.UninstallDataModel
 
-@Database(entities = [ControlledEntity::class, ControllerEntity::class, MessagesEntity::class, UninstallEntity::class], version = 1)
+@Database(entities = [ControlledEntity::class, ControllerEntity::class, MessagesEntity::class, UninstallDataModel::class], version = 1)
 @TypeConverters(StringListConverter::class)
 abstract class SecurityDb : RoomDatabase(){
     abstract fun controllerDao() : ControllerDao

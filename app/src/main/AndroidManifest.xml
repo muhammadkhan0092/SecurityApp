@@ -79,7 +79,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".modules.messages.data.SmsReceiver"
+        <receiver android:name=".modules.messages.data.framework.SmsReceiver"
             android:permission="android.permission.BROADCAST_SMS"
             android:exported="true">
             <intent-filter>
@@ -87,7 +87,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".modules.messages.data.MmsReceiver"
+        <receiver android:name=".modules.messages.data.framework.MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH"
             android:exported="true">
             <intent-filter>
@@ -96,7 +96,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".modules.messages.data.HeadlessSmsSendService"
+        <service android:name=".modules.messages.data.framework.HeadlessSmsSendService"
             android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
             android:exported="true">
             <intent-filter>
@@ -109,7 +109,7 @@
             </intent-filter>
         </service>
         <receiver
-            android:name=".framework.MyDeviceAdminReceiver"
+            android:name=".modules.device_owner.data.MyDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
             android:exported="true">
 
@@ -123,7 +123,7 @@
         </receiver>
 
         <service
-            android:name=".modules.controlled.presentation.service.OverlayService"
+            android:name=".modules.overlay.domain.OverlayService"
             android:exported="false"
             android:foregroundServiceType="specialUse"
             />

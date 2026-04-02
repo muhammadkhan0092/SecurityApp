@@ -3,7 +3,7 @@ package com.example.securityapp.modules.intro.presentation.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.app_settings.data.AppAppSettingsRepoImpl
 import com.example.securityapp.datastore.AppSettings
 import com.example.securityapp.modules.phone.domain.PhoneRepository
 import com.example.securityapp.modules.intro.presentation.models.GateEvents
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IntroVm @Inject constructor(
-    private val datastore : DataStoreRepository,
+    private val datastore : AppAppSettingsRepoImpl,
     private val phoneRepository: PhoneRepository
 ) : ViewModel(){
     private val _state = MutableStateFlow(GateEvents.None)

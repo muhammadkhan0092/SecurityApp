@@ -1,16 +1,16 @@
 package com.example.securityapp.di
 
-import com.example.securityapp.modules.messages.data.AndroidSmsManagerRepository
+import com.example.securityapp.modules.messages.data.repository.AndroidMessageSerializer
 import com.example.securityapp.modules.uninstall.data.UninstallRepoImpl
-import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.app_settings.data.AppAppSettingsRepoImpl
+import com.example.securityapp.modules.app_settings.domain.AppSettingsRepository
 import com.example.securityapp.modules.connection.data.FirebaseConnectionRepository
-import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.modules.intro.data.SecurityLoginRepository
+import com.example.securityapp.modules.messages.data.repository.RoomMessagesRepository
+import com.example.securityapp.modules.login.data.SecurityLoginRepository
 import com.example.securityapp.modules.connection.domain.ConnectionRepository
-import com.example.securityapp.modules.intro.data.LoginRepository
-import com.example.securityapp.modules.messages.domain.MessagesRepository
-import com.example.securityapp.modules.intro.domain.SettingsRepository
-import com.example.securityapp.modules.messages.domain.SmsManagerRepository
+import com.example.securityapp.modules.login.domain.LoginRepository
+import com.example.securityapp.modules.messages.domain.repository.MessagesRepository
+import com.example.securityapp.modules.messages.domain.repository.MessageSerializer
 import com.example.securityapp.modules.uninstall.domain.UninstallRepository
 import com.example.securityapp.modules.device_owner.data.AndroidDeviceOwnerRepository
 import com.example.securityapp.modules.gallery.data.AndroidGalleryRepository
@@ -23,11 +23,13 @@ import com.example.securityapp.modules.controlled.domain.repository.ControlledRe
 import com.example.securityapp.modules.device_owner.domain.DeviceOwnerRepository
 import com.example.securityapp.modules.gallery.domain.GalleryRepository
 import com.example.securityapp.modules.location.domain.LocationRepository
-import com.example.securityapp.modules.controlled.presentation.service.OverlayControllerImpl
+import com.example.securityapp.modules.overlay.data.OverlayControllerImpl
 import com.example.securityapp.modules.controller.data.repository.FirebaseControllerRepository
 import com.example.securityapp.modules.controller.domain.repository.ControllerRepository
-import com.example.securityapp.modules.intro.data.AndroidPackageRepository
-import com.example.securityapp.modules.intro.domain.PackageRepository
+import com.example.securityapp.modules.packages.data.AndroidPackageRepository
+import com.example.securityapp.modules.packages.domain.PackageRepository
+import com.example.securityapp.modules.permissions.data.PermissionRepoImpl
+import com.example.securityapp.modules.permissions.domain.PermissionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -73,14 +75,20 @@ object DomainModule {
 
     @Singleton
     @Provides
-    fun providesSettingsRepository(repo : DataStoreRepository) : SettingsRepository {
+    fun providesSettingsRepository(repo : AppAppSettingsRepoImpl) : AppSettingsRepository {
         return repo
     }
 
 
     @Singleton
     @Provides
-    fun providesSmsManagerRepository(repo : AndroidSmsManagerRepository) : SmsManagerRepository {
+    fun providesSmsManagerRepository(repo : AndroidMessageSerializer) : MessageSerializer {
+        return repo
+    }
+
+    @Singleton
+    @Provides
+    fun providesPermissionRepository(repo : PermissionRepoImpl) : PermissionRepository {
         return repo
     }
 

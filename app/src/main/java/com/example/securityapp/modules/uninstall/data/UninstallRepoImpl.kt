@@ -26,7 +26,7 @@ class UninstallRepoImpl @Inject constructor(
     }
 
     override suspend fun getData(): Result<List<UninstallDomainModel>> {
-        return roomSafeFlow<List<UninstallEntity>>(action = { uninstallDao.getList() }).map { list ->
+        return roomSafeFlow<List<UninstallDataModel>>(action = { uninstallDao.getList() }).map { list ->
             list.map {
                 it.uninstallEntityToUninstallDomain()
             }

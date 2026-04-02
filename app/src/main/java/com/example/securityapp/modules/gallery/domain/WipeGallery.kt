@@ -1,16 +1,16 @@
 package com.example.securityapp.modules.gallery.domain
 
 import com.example.securityapp.modules.gallery.data.AndroidGalleryRepository
-import com.example.securityapp.modules.messages.domain.InsertMessage
-import com.example.securityapp.modules.messages.domain.MessageFromControlled
-import com.example.securityapp.modules.messages.domain.MessageTypeFromControlled
-import com.example.securityapp.modules.messages.domain.SendMessageToController
-import com.example.securityapp.modules.permissions.PermissionManager
+import com.example.securityapp.modules.messages.domain.usecase.InsertMessage
+import com.example.securityapp.modules.messages.domain.models.MessageFromControlled
+import com.example.securityapp.modules.messages.domain.models.MessageTypeFromControlled
+import com.example.securityapp.modules.messages.domain.usecase.SendMessageToController
+import com.example.securityapp.modules.permissions.domain.PermissionRepository
 import javax.inject.Inject
 
 class WipeGallery @Inject constructor(
     private val insertMessage: InsertMessage,
-    private val permissionManager: PermissionManager,
+    private val permissionManager: PermissionRepository,
     private val androidGalleryRepository: AndroidGalleryRepository,
     private val sendMessageToController: SendMessageToController
 ) {

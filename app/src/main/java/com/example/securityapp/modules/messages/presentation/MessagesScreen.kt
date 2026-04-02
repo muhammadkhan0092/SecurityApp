@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.securityapp.modules.messages.domain.MessageTypeFromControlled
-import com.example.securityapp.modules.controller.domain.models.MessagesDomain
+import com.example.securityapp.modules.messages.domain.models.MessageTypeFromControlled
+import com.example.securityapp.modules.messages.domain.models.MessagesDomain
 import com.example.securityapp.ui.theme.Purple40
 
 @Composable

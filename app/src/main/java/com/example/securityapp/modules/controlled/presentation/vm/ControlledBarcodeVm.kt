@@ -3,9 +3,9 @@ package com.example.securityapp.modules.controlled.presentation.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.barcode.generateBarcode
-import com.example.securityapp.core.data.repository.DataStoreRepository
-import com.example.securityapp.core.data.repository.RoomMessagesRepository
+import com.example.securityapp.modules.barcode.generateBarcode
+import com.example.securityapp.modules.app_settings.data.AppAppSettingsRepoImpl
+import com.example.securityapp.modules.messages.data.repository.RoomMessagesRepository
 import com.example.securityapp.modules.connection.domain.RemoveConnection
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
 import com.example.securityapp.modules.controlled.domain.usecase.SyncControlled
@@ -13,8 +13,6 @@ import com.example.securityapp.modules.controlled.presentation.models.Controlled
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents
 import com.example.securityapp.modules.controlled.presentation.models.ControlledState
 import com.example.securityapp.core.domain.utils.Result
-import com.example.securityapp.modules.device_owner.data.AndroidDeviceOwnerRepository
-import com.example.securityapp.modules.uninstall.domain.UninstallApps
 import com.example.securityapp.modules.controlled.presentation.models.ControlledEvents.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,15 +23,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class ControlledBarcodeVm @Inject constructor(
-    private val datastore: DataStoreRepository,
+    private val datastore: AppAppSettingsRepoImpl,
     private val messagesRepository: RoomMessagesRepository,
     private val firebaseControlledRepository: FirebaseControlledRepository,
-    private val dataStoreRepository: DataStoreRepository,
+    private val appSettingsRepoImpl: AppAppSettingsRepoImpl,
     private val syncControlled: SyncControlled,
     private val removeConnection: RemoveConnection,
 ) : ViewModel() {
@@ -61,7 +58,6 @@ class ControlledBarcodeVm @Inject constructor(
                     _events.emit(event)
                 }
             }
-
             ControlledAction.OnSettingsClicked -> {
                 viewModelScope.launch {
                     _events.emit(ControlledEvents.NavigateToSettings)
@@ -72,10 +68,9 @@ class ControlledBarcodeVm @Inject constructor(
 
 
     init {
-        Log.d("KHAN","IN CONTROLLED BARCODE VM")
         viewModelScope.launch {
             datastore.barcode.collectLatest {
-                val barcodeBitmap = generateBarcode(useQrCode = true, data = dataStoreRepository.getBarcode())
+                val barcodeBitmap = generateBarcode(useQrCode = true, data = appSettingsRepoImpl.getBarcode())
                 _state.update {
                     it.copy(bitmap = barcodeBitmap)
                 }
@@ -89,9 +84,8 @@ class ControlledBarcodeVm @Inject constructor(
             }
         }
         viewModelScope.launch {
-            firebaseControlledRepository.listenData(dataStoreRepository.getEmail())
+            firebaseControlledRepository.listenData(appSettingsRepoImpl.getEmail())
                 .collectLatest {
-                    Log.d("KHAN","DATA FROM FIREBASE IS $it")
                     it?.let {
                         syncControlled(it)
                     }

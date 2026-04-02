@@ -2,14 +2,14 @@ package com.example.securityapp.modules.factory_reset.domain
 
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.device_owner.data.AndroidDeviceOwnerRepository
-import com.example.securityapp.modules.messages.data.AndroidSmsManagerRepository
-import com.example.securityapp.modules.messages.domain.InsertMessage
-import com.example.securityapp.modules.messages.domain.MessageFromControlled
-import com.example.securityapp.modules.messages.domain.MessageTypeFromControlled
+import com.example.securityapp.modules.messages.data.repository.AndroidMessageSerializer
+import com.example.securityapp.modules.messages.domain.usecase.InsertMessage
+import com.example.securityapp.modules.messages.domain.models.MessageFromControlled
+import com.example.securityapp.modules.messages.domain.models.MessageTypeFromControlled
 import javax.inject.Inject
 
 class FactoryReset @Inject constructor(
-    private val androidSmsManagerRepository: AndroidSmsManagerRepository,
+    private val androidSmsManagerRepository: AndroidMessageSerializer,
     private val androidDeviceOwnerRepository: AndroidDeviceOwnerRepository,
     private val insertMessage: InsertMessage
 ) {

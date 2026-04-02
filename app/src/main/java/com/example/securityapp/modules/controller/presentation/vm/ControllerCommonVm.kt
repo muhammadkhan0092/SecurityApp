@@ -2,7 +2,7 @@ package com.example.securityapp.modules.controller.presentation.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.app_settings.data.AppAppSettingsRepoImpl
 import com.example.securityapp.modules.controller.data.repository.FirebaseControllerRepository
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
 import com.example.securityapp.modules.controller.domain.usecase.SyncController
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ControllerCommonVm @Inject constructor(
     private val firebaseControllerRepository: FirebaseControllerRepository,
-    private val dataStoreRepository: DataStoreRepository,
+    private val appSettingsRepoImpl: AppAppSettingsRepoImpl,
     private val syncController : SyncController
 ) : ViewModel() {
     val state = firebaseControllerRepository.getFlow().stateIn(
@@ -34,7 +34,7 @@ class ControllerCommonVm @Inject constructor(
     }
     init {
         viewModelScope.launch {
-            firebaseControllerRepository.listenData(dataStoreRepository.getEmail()).collectLatest {
+            firebaseControllerRepository.listenData(appSettingsRepoImpl.getEmail()).collectLatest {
                 it?.let {
                     syncController(it)
                 }

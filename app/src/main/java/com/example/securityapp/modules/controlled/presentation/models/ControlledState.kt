@@ -2,7 +2,7 @@ package com.example.securityapp.modules.controlled.presentation.models
 
 import android.graphics.Bitmap
 import com.example.securityapp.modules.controlled.domain.models.ControlledDomain
-import com.example.securityapp.modules.controller.domain.models.MessagesDomain
+import com.example.securityapp.modules.messages.domain.models.MessagesDomain
 
 data class ControlledState(
     val bitmap : Bitmap? = null,

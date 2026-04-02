@@ -9,8 +9,8 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import com.example.securityapp.core.domain.utils.Result
-import com.example.securityapp.framework.MyDeviceAdminReceiver
 import com.example.securityapp.modules.device_owner.domain.DeviceOwnerRepository
+import com.example.securityapp.modules.permissions.data.RuntimePermissions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -76,5 +76,36 @@ class AndroidDeviceOwnerRepository @Inject constructor(
     override fun isDeviceOwner(): Boolean {
         val dpm = context.getSystemService(DevicePolicyManager::class.java)
         return dpm.isDeviceOwnerApp("com.example.securityapp")
+    }
+    override fun grantPermissions(){
+        val dpm = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val adminComponent = ComponentName(context, MyDeviceAdminReceiver::class.java)
+        RuntimePermissions.permissions.forEach { permission ->
+            val success = dpm.setPermissionGrantState(
+                adminComponent,
+                context.packageName,
+                permission,
+                DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED
+            )
+
+            if (success) {
+                RuntimePermissions.backgroundLocation.forEach { permission ->
+                    val success = dpm.setPermissionGrantState(
+                        adminComponent,
+                        context.packageName,
+                        permission,
+                        DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED
+                    )
+
+                    if (success) {
+                        Log.d("DPC", "Successfully granted $permission")
+                    } else {
+                        Log.e("DPC", "Failed to grant $permission. Is the app Device Owner?")
+                    }
+                }
+            } else {
+                Log.e("DPC", "Failed to grant $permission. Is the app Device Owner?")
+            }
+        }
     }
 }

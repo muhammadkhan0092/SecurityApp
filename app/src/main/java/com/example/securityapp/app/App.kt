@@ -17,10 +17,10 @@ import com.example.securityapp.modules.controlled.presentation.screen.Controlled
 import com.example.securityapp.modules.controller.presentation.screens.ControllerBarcodeScreenRoot
 import com.example.securityapp.modules.controller.presentation.screens.ControllerTabScreenRoot
 import com.example.securityapp.modules.intro.presentation.composables.GateScreen
-import com.example.securityapp.modules.intro.presentation.composables.LoginScreenRoot
-import com.example.securityapp.modules.packages.PackagesScreenRoot
+import com.example.securityapp.modules.login.presentation.ui.LoginScreenRoot
+import com.example.securityapp.modules.packages.presentation.ui.PackagesScreenRoot
 import com.example.securityapp.modules.intro.presentation.composables.UserTypeScreenRoot
-import com.example.securityapp.modules.permissions.PermissionScreenRoot
+import com.example.securityapp.modules.permissions.presentation.ui.PermissionScreenRoot
 import com.example.securityapp.modules.settings.presentation.SettingsScreenRoot
 
 @Composable

@@ -2,7 +2,7 @@ package com.example.securityapp.modules.connection.domain
 
 import com.example.securityapp.modules.controlled.data.models.ControlledDeviceDto
 import com.example.securityapp.modules.controller.data.models.ControllerDeviceDto
-import com.example.securityapp.core.data.repository.DataStoreRepository
+import com.example.securityapp.modules.app_settings.data.AppAppSettingsRepoImpl
 import com.example.securityapp.modules.connection.data.FirebaseConnectionRepository
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controlled.data.repository.FirebaseControlledRepository
@@ -11,10 +11,10 @@ import javax.inject.Inject
 class RemoveConnection @Inject constructor(
     private val firebaseControlledRepository: FirebaseControlledRepository,
     private val firebaseConnectionRepository: FirebaseConnectionRepository,
-    private val dataStoreRepository: DataStoreRepository
+    private val appSettingsRepoImpl: AppAppSettingsRepoImpl
 ) {
     suspend operator fun invoke(controllerEmail: String): Result<Unit> {
-        val controlledEmail = dataStoreRepository.getEmail()
+        val controlledEmail = appSettingsRepoImpl.getEmail()
         val bothDeviceResult = firebaseConnectionRepository.getControllerAndControlledData(controlledEmail =controlledEmail, controllerEmail = controllerEmail)
         return when(bothDeviceResult){
             is Result.Error<*> -> Result.Error(bothDeviceResult.error)

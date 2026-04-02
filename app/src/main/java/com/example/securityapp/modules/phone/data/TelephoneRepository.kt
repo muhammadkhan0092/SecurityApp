@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.provider.Settings
 import android.telephony.SubscriptionManager
-import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.example.securityapp.modules.phone.domain.PhoneRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,7 +18,6 @@ class TelephoneRepository @Inject constructor(
             context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
         val simNumbers = mutableListOf<String>()
         val activeSubs = subscriptionManager.activeSubscriptionInfoList
-        Log.d("KHAN","ACTIVE SUBS ARE $activeSubs")
         if (activeSubs != null) {
             for (sub in activeSubs) {
                 val phoneNumber = sub.number

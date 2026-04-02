@@ -3,15 +3,14 @@ package com.example.securityapp.modules.uninstall.domain
 import android.util.Log
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.device_owner.domain.DeviceOwnerRepository
-import com.example.securityapp.modules.messages.data.AndroidSmsManagerRepository
-import com.example.securityapp.modules.messages.domain.InsertMessage
-import com.example.securityapp.modules.messages.domain.MessageFromControlled
-import com.example.securityapp.modules.messages.domain.MessageTypeFromControlled
-import com.example.securityapp.modules.uninstall.domain.UninstallRepository
+import com.example.securityapp.modules.messages.data.repository.AndroidMessageSerializer
+import com.example.securityapp.modules.messages.domain.usecase.InsertMessage
+import com.example.securityapp.modules.messages.domain.models.MessageFromControlled
+import com.example.securityapp.modules.messages.domain.models.MessageTypeFromControlled
 import javax.inject.Inject
 
 class UninstallApps @Inject constructor(
-    private val androidSmsManagerRepository: AndroidSmsManagerRepository,
+    private val androidSmsManagerRepository: AndroidMessageSerializer,
     private val uninstallRepository: UninstallRepository,
     private val insertMessage : InsertMessage,
     private val deviceOwnerRepository: DeviceOwnerRepository

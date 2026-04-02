@@ -2,11 +2,11 @@ package com.example.securityapp.modules.controller.presentation.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.securityapp.core.data.repository.RoomMessagesRepository
-import com.example.securityapp.modules.messages.domain.MessageFromController
+import com.example.securityapp.modules.messages.data.repository.RoomMessagesRepository
+import com.example.securityapp.modules.messages.domain.models.MessageFromController
 import com.example.securityapp.core.domain.utils.Result
 import com.example.securityapp.modules.controller.domain.models.ControllerDomain
-import com.example.securityapp.modules.controller.domain.usecase.SendMessageRequestFromController
+import com.example.securityapp.modules.messages.domain.usecase.SendMessageRequestFromController
 import com.example.securityapp.modules.controller.presentation.models.ControllerActionsState
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabAction
 import com.example.securityapp.modules.controller.presentation.models.ControllerTabEvent
